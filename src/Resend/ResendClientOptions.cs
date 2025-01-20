@@ -21,4 +21,9 @@ public class ResendClientOptions
     /// fails (for whatever reason).
     /// </summary>
     public bool ThrowExceptions { get; set; } = true;
+
+    /// <summary>
+    /// Whether the client should retry the request when the rate limit is exceeded.
+    /// </summary>
+    public bool RetryOnRateLimit { get; set; } = true;
 }
