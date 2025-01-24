@@ -24,6 +24,7 @@ Send email with:
 * [ASP.NET - Minimal API](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi)
 * [ASP.NET - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor)
 * [Console app](https://github.com/resend/resend-dotnet/tree/master/examples/ConsoleNoDi)
+* [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire)
 
 
 Setup

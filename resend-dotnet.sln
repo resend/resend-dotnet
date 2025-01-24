@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMinimalApi", "examples\W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRazor", "examples\WebRazor\WebRazor.csproj", "{F6AB312D-E84C-4A39-95BB-7C7261523E46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncHangfire", "examples\AsyncHangfire\AsyncHangfire.csproj", "{FBF92129-17DD-44E9-8F99-25AE43AE2E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{F6AB312D-E84C-4A39-95BB-7C7261523E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6AB312D-E84C-4A39-95BB-7C7261523E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6AB312D-E84C-4A39-95BB-7C7261523E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBF92129-17DD-44E9-8F99-25AE43AE2E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBF92129-17DD-44E9-8F99-25AE43AE2E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBF92129-17DD-44E9-8F99-25AE43AE2E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBF92129-17DD-44E9-8F99-25AE43AE2E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{8FA908C3-1351-439C-A680-F1E10771D966} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 		{BE54A01B-074B-40CF-87DF-E7BCE1C908A3} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 		{F6AB312D-E84C-4A39-95BB-7C7261523E46} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
+		{FBF92129-17DD-44E9-8F99-25AE43AE2E29} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15EEB6F3-A067-45F5-987C-824BD8FDEAF9}

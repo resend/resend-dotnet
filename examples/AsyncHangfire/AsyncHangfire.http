@@ -1,0 +1,6 @@
+@AsyncHangfire_HostAddress = http://localhost:5002
+
+GET {{AsyncHangfire_HostAddress}}/test/
+Accept: application/json
+
+###
