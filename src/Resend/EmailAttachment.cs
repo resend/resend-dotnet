@@ -14,7 +14,8 @@ public class EmailAttachment
     public string Filename { get; set; } = default!;
 
     /// <summary>
-    /// Path where the attachment file is hosted.
+    /// Path where the attachment file is hosted. This resource must be publicly
+    /// available from Resend servers.
     /// </summary>
     /// <remarks>
     /// One of <see cref="Path"/> or <see cref="Content"/> must be set.
