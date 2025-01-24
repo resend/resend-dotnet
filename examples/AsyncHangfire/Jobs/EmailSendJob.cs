@@ -26,10 +26,39 @@ public class EmailSendJob
 
 
         /*
+         * 
+         */
+        if ( message.Attachments?.Count > 0 )
+        {
+            foreach ( var att in message.Attachments )
+            {
+                if ( att.Path?.StartsWith( "load:" ) == false )
+                    continue;
+
+                _logger.LogDebug( "Attachment: Load {Filename} based on {LoadPath}", att.Filename, att.Path );
+
+                att.Content = await ContentLoadAsync( att.Path!, cancellationToken );
+                att.Path = null;
+            }
+        }
+
+
+        /*
          * Send email
          */
         var resp = await _resend.EmailSendAsync( message, cancellationToken );
 
         _logger.LogInformation( "Sent with Id {EmailId}", resp.Content );
+    }
+
+
+    /// <summary />
+    private async Task<byte[]> ContentLoadAsync( string attachmentPath, CancellationToken cancellationToken )
+    {
+        await Task.Delay( 1_000, cancellationToken );
+
+        // TODO: Load based on attachmentPath
+
+        throw new NotImplementedException();
     }
 }
