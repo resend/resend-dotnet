@@ -25,8 +25,8 @@ namespace WebRazor.Pages
         {
             this.From = "you@domain.com";
             this.To = "user@gmail.com";
-            this.Subject = "Hello!";
-            this.TextBody = "Email from Razor";
+            this.Subject = "Hello from Razor";
+            this.TextBody = "Email using Resend .NET SDK";
         }
 
 
@@ -53,11 +53,11 @@ namespace WebRazor.Pages
 
         /// <summary />
         [TempData]
-        public string SentTo { get; set; }
+        public string? SentTo { get; set; }
 
         /// <summary />
         [TempData]
-        public string EmailId { get; set; }
+        public string? EmailId { get; set; }
 
 
         /// <summary />

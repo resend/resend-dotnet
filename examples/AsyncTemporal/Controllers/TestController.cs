@@ -32,8 +32,8 @@ public class TestController : ControllerBase
         var message = new EmailMessage();
         message.From = "you@domain.com";
         message.To.Add( "user@gmail.com" );
-        message.Subject = "Hello!";
-        message.TextBody = "Email from Minimal API";
+        message.Subject = "Hello from Async Temporal";
+        message.TextBody = "Email using Resend .NET SDK";
 
 
         /*
@@ -41,11 +41,11 @@ public class TestController : ControllerBase
          */
         var instanceId = Guid.NewGuid().ToString().ToLowerInvariant();
 
-        var workflowId = await _temporal.ExecuteWorkflowAsync(
+        var handle = await _temporal.StartWorkflowAsync(
             ( EmailSendWorkflow wf ) => wf.RunAsync( message ),
             new WorkflowOptions( id: $"resend-{instanceId}", taskQueue: TemporalWorker.TaskQueue ) );
 
-        _logger.LogInformation( "Email {InstanceId} = Temporal {WorkflowId}", instanceId, workflowId );
+        _logger.LogInformation( "Email: Temporal {HandleId} - {RunId}", handle.Id, handle.RunId );
 
         return Ok();
     }

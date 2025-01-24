@@ -34,8 +34,8 @@ try
     {
         From = "you@example.com",
         To = "user@gmail.com",
-        Subject = "Console - No DI",
-        HtmlBody = "<p>Congrats on sending your <strong>first email</strong>!</p>",
+        Subject = "Hello from Console",
+        HtmlBody = "<p>Email using <strong>Resend .NET SDK</strong></p>",
     } );
 
     Console.WriteLine( "Id={0}", resp.Content );

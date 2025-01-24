@@ -26,8 +26,8 @@ app.MapPost( "/email/send", async ( [FromServices] IResend resend, [FromServices
     var message = new EmailMessage();
     message.From = "you@domain.com";
     message.To.Add( "user@gmail.com" );
-    message.Subject = "Hello!";
-    message.TextBody = "Email from Minimal API";
+    message.Subject = "Hello from Minimal API";
+    message.TextBody = "Email using Resend .NET SDK";
 
     var resp = await resend.EmailSendAsync( message );
 
