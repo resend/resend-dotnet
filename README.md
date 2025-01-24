@@ -24,7 +24,8 @@ Send email with:
 * [ASP.NET - Minimal API](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi)
 * [ASP.NET - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor)
 * [Console app](https://github.com/resend/resend-dotnet/tree/master/examples/ConsoleNoDi)
-* [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire)
+* [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire): Send email as a background job using [Hangfire](https://www.hangfire.io/)
+* [Async - Temporal](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncTemporal): Send email in durable workflow using [Temporal](https://temporal.io/)
 
 
 Setup

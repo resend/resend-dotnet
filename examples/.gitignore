@@ -3,3 +3,6 @@
 *.cmd
 
 AsyncHangfire/z-jobs.*
+
+AsyncTemporal/temporal-cli/temporal
+AsyncTemporal/temporal-cli/temporal.exe

@@ -1,0 +1,6 @@
+@AsyncTemporal_HostAddress = http://localhost:5004
+
+GET {{AsyncTemporal_HostAddress}}/test/
+Accept: application/json
+
+###
