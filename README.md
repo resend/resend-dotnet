@@ -27,6 +27,7 @@ Send email with:
 * [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire) - Send email as a background job using [Hangfire](https://www.hangfire.io/)
 * [Async - Temporal](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncTemporal) - Send email in durable workflow using [Temporal](https://temporal.io/)
 * [Render - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor) - Render an HTML body using Razor views
+* [Render - Liquid](https://github.com/resend/resend-dotnet/tree/master/examples/RenderLiquid) - Render an HTML body using [Fluid](https://github.com/sebastienros/fluid), a [Liquid](https://shopify.github.io/liquid/) template language
 
 
 Setup
