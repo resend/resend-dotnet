@@ -1,0 +1,18 @@
+﻿@model HelloModel
+@{
+    Layout = "_Email";
+}
+
+<div>
+    <p>Hi @Model.DisplayName,</p>
+
+    <ul>
+        @foreach (var item in Model.Items)
+        {
+            <li>@item</li>
+        }
+    </ul>
+
+    <p>Regards,</p>
+    <p>@Model.SenderName</p>
+</div>

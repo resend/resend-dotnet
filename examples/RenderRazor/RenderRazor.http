@@ -1,0 +1,11 @@
+@RenderRazor_HostAddress = http://localhost:5005
+
+GET {{RenderRazor_HostAddress}}/email/render
+Accept: application/json
+
+###
+
+GET {{RenderRazor_HostAddress}}/email/send
+Accept: application/json
+
+###

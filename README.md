@@ -26,6 +26,7 @@ Send email with:
 * [Console app](https://github.com/resend/resend-dotnet/tree/master/examples/ConsoleNoDi) - Send email from console app (without dependency injection)
 * [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire) - Send email as a background job using [Hangfire](https://www.hangfire.io/)
 * [Async - Temporal](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncTemporal) - Send email in durable workflow using [Temporal](https://temporal.io/)
+* [Render - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor) - Render an HTML body using Razor views
 
 
 Setup
