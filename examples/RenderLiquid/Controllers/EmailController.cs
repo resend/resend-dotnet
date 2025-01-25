@@ -59,7 +59,7 @@ public class EmailController : ControllerBase
         var message = new EmailMessage();
         message.From = "you@domain.com";
         message.To.Add( "user@gmail.com" );
-        message.Subject = "Hello from Render Razor";
+        message.Subject = "Hello from Render Liquid";
         message.HtmlBody = html;
 
         var resp = await _resend.EmailSendAsync( message );
