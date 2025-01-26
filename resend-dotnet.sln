@@ -40,6 +40,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resend.FluentEmail.Tests", "tests\Resend.FluentEmail.Tests\Resend.FluentEmail.Tests.csproj", "{8404802E-9A45-4F0D-8CB5-02BF05ABFF94}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{121B647E-18F4-41CB-AC00-49D5F06D5320}"
+	ProjectSection(SolutionItems) = preProject
+		examples\README.md = examples\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleNoDi", "examples\ConsoleNoDi\ConsoleNoDi.csproj", "{8FA908C3-1351-439C-A680-F1E10771D966}"
 EndProject
