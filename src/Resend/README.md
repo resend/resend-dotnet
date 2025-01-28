@@ -53,7 +53,7 @@ builder.Services.Configure<ResendClientOptions>( o =>
 {
     o.ApiToken = Environment.GetEnvironmentVariable( "RESEND_APITOKEN" )!;
 } );
-builder.Services.AddTransient<IResend, ResendClient>()
+builder.Services.AddTransient<IResend, ResendClient>();
 ```
 
 
