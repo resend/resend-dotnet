@@ -1,0 +1,16 @@
+@WebControllerApi_HostAddress = http://localhost:5000
+
+GET {{WebControllerApi_HostAddress}}/email/send
+Accept: application/json
+
+###
+
+POST {{WebControllerApi_HostAddress}}/email/send
+Content-Type: application/json
+Accept: application/json
+
+{
+    "to": "user@gmail.com"
+}
+
+###

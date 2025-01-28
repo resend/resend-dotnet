@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderRazor", "examples\Ren
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderLiquid", "examples\RenderLiquid\RenderLiquid.csproj", "{FD4407E3-551D-48F8-9FFB-63E409F4C4BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebControllerApi", "examples\WebControllerApi\WebControllerApi.csproj", "{64049053-1C1E-43D6-A23B-5A609354934B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,10 @@ Global
 		{FD4407E3-551D-48F8-9FFB-63E409F4C4BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4407E3-551D-48F8-9FFB-63E409F4C4BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD4407E3-551D-48F8-9FFB-63E409F4C4BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64049053-1C1E-43D6-A23B-5A609354934B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64049053-1C1E-43D6-A23B-5A609354934B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64049053-1C1E-43D6-A23B-5A609354934B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64049053-1C1E-43D6-A23B-5A609354934B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{0B0219DF-FAFC-4BB6-B642-0F966D075400} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 		{C33A6269-8657-4487-8CDD-588210E20B65} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 		{FD4407E3-551D-48F8-9FFB-63E409F4C4BB} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
+		{64049053-1C1E-43D6-A23B-5A609354934B} = {121B647E-18F4-41CB-AC00-49D5F06D5320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15EEB6F3-A067-45F5-987C-824BD8FDEAF9}

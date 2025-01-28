@@ -8,6 +8,7 @@
 | [ConsoleNoDi](https://github.com/resend/resend-dotnet/tree/master/examples/ConsoleNoDi)     | n/a  | Send email from console app (without dependency injection)
 | [RenderLiquid](https://github.com/resend/resend-dotnet/tree/master/examples/RenderLiquid)   | 5006 | Render an HTML body using [Fluid](https://github.com/sebastienros/fluid), a [Liquid](https://shopify.github.io/liquid/) template language
 | [RenderRazor](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor)     | 5005 | Render an HTML body using Razor views
+| [WebControllerApi](https://github.com/resend/resend-dotnet/tree/master/examples/WebControllerApi) | 5000 | Send email from a controller
 | [WebMinimalApi](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi) | 5001 | Send email from a (minimal) API
 | [WebRazor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor)           | 5002 | Send email from a Razor form
 
