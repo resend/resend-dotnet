@@ -26,7 +26,7 @@ public class ApiKeyDeleteCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        await _resend.ApiKeyDelete( this.KeyId!.Value );
+        await _resend.ApiKeyDeleteAsync( this.KeyId!.Value );
 
         return 0;
     }

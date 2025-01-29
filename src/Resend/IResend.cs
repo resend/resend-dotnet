@@ -227,7 +227,7 @@ public interface IResend
     /// Task.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/api-keys/delete-api-key" />
-    Task<ResendResponse> ApiKeyDelete( Guid apiKeyId, CancellationToken cancellationToken = default );
+    Task<ResendResponse> ApiKeyDeleteAsync( Guid apiKeyId, CancellationToken cancellationToken = default );
 
 
     /// <summary>

@@ -202,7 +202,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ApiKeyDelete()
     {
-        var resp = await _resend.ApiKeyDelete( Guid.NewGuid() );
+        var resp = await _resend.ApiKeyDeleteAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
     }

@@ -205,7 +205,7 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> ApiKeyDelete( Guid apiKeyId, CancellationToken cancellationToken = default )
+    public async Task<ResendResponse> ApiKeyDeleteAsync( Guid apiKeyId, CancellationToken cancellationToken = default )
     {
         var path = $"/api-keys/{apiKeyId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
