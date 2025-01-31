@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Resend.Webhooks;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -12,6 +10,7 @@ public static class WebApplicationExtensions
     /// 
     /// </summary>
     /// <param name="services"></param>
+    /// <param name="configureOptions"></param>
     /// <returns></returns>
     public static IServiceCollection AddResendWebhooks( this IServiceCollection services, Action<WebhookValidatorOptions>? configureOptions = null )
     {
