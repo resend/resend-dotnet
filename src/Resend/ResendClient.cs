@@ -113,7 +113,7 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region, CancellationToken cancellationToken = default )
+    public async Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default )
     {
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -652,5 +652,43 @@ public class ResendClient : IResend
         var v = headers.GetValues( name ).First();
 
         return (T) Convert.ChangeType( v, typeof( T ) );
+    }
+
+
+    /// <summary>
+    /// Creates an instance of Resend client with the given client
+    /// options.
+    /// </summary>
+    /// <param name="options">Resend client options.</param>
+    /// <returns>Instance of Resend client.</returns>
+    /// <remarks>
+    /// Utility method for examples/one-off apps. For most use-cases it is
+    /// preferable to use dependency injection to configure/inject `IResend`
+    /// instances.
+    /// </remarks>
+    public static IResend Create( ResendClientOptions options )
+    {
+        var opt = Options.Create( options );
+
+        return new ResendClient( opt, new HttpClient() );
+    }
+
+
+    /// <summary>
+    /// Creates an instance of Resend with the given API token.
+    /// </summary>
+    /// <param name="apiToken">API token</param>
+    /// <returns>Instance of Resend client.</returns>
+    /// <remarks>
+    /// Utility method for examples/one-off apps. For most use-cases it is
+    /// preferable to use dependency injection to configure/inject `IResend`
+    /// instances.
+    /// </remarks>
+    public static IResend Create( string apiToken )
+    {
+        var opt = new ResendClientOptions();
+        opt.ApiToken = apiToken;
+
+        return Create( opt );
     }
 }

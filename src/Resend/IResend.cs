@@ -110,7 +110,7 @@ public interface IResend
     /// Domain.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/domains/create-domain"/>
-    Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default );
 
 
     /// <summary>
