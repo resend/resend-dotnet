@@ -232,7 +232,6 @@ public class Program
                 Console.Write( "aok" );
                 Console.ForegroundColor = fg;
 
-                Console.Write( " " );
                 Console.WriteLine( " {0} - ln {1}", rel, line );
 
                 return 1;
