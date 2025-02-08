@@ -298,6 +298,23 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task ContactUpdateByEmail()
+    {
+        var req = new ContactData()
+        {
+            FirstName = "Carl",
+            LastName = "Test",
+            IsUnsubscribed = true,
+        };
+
+        var resp = await _resend.ContactUpdateByEmailAsync( Guid.NewGuid(), "test@email.com", req );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task ContactList()
     {
         var resp = await _resend.ContactListAsync( Guid.NewGuid() );
@@ -311,6 +328,16 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     public async Task ContactDelete()
     {
         var resp = await _resend.ContactDeleteAsync( Guid.NewGuid(), Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactDeleteByEmail()
+    {
+        var resp = await _resend.ContactDeleteByEmailAsync( Guid.NewGuid(), "test@email.com" );
 
         Assert.NotNull( resp );
     }

@@ -53,7 +53,7 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpPatch]
-    [Route( "audiences/{audienceId}/contacts/{contactId}" )]
+    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
     public ObjectId ContactUpdate( [FromRoute] Guid audienceId, [FromRoute] Guid contactId, [FromBody] ContactData message )
     {
         _logger.LogDebug( "ContactUpdate" );
@@ -67,11 +67,37 @@ public class ContactController : ControllerBase
 
 
     /// <summary />
+    [HttpPatch]
+    [Route( "audiences/{audienceId}/contacts/{email}" )]
+    public ObjectId ContactUpdateByEmail( [FromRoute] Guid audienceId, [FromRoute] string email, [FromBody] ContactData message )
+    {
+        _logger.LogDebug( "ContactUpdate" );
+
+        return new ObjectId()
+        {
+            Object = "contact",
+            Id = Guid.NewGuid(),
+        };
+    }
+
+
+    /// <summary />
     [HttpDelete]
-    [Route( "audiences/{audienceId}/contacts/{contactId}" )]
-    public ActionResult ContactDelete( [FromRoute] Guid audienceId, Guid? contactId )
+    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
+    public ActionResult ContactDelete( [FromRoute] Guid audienceId, Guid contactId )
     {
         _logger.LogDebug( "ContactDelete" );
+
+        return Ok();
+    }
+
+
+    /// <summary />
+    [HttpDelete]
+    [Route( "audiences/{audienceId}/contacts/{email}" )]
+    public ActionResult ContactDeleteByEmail( [FromRoute] Guid audienceId, string email )
+    {
+        _logger.LogDebug( "ContactDeleteByEmail" );
 
         return Ok();
     }
