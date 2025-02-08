@@ -65,7 +65,7 @@ public interface IResend
     /// Cancellation token.
     /// </param>
     /// <see href="https://www.resend.com/docs/api-reference/emails/update-email"/>
-    Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTime rescheduleFor, CancellationToken cancellationToken = default );
+    Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default );
 
 
     /// <summary>

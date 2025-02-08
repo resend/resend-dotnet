@@ -89,7 +89,7 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTime rescheduleFor, CancellationToken cancellationToken = default )
+    public async Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );

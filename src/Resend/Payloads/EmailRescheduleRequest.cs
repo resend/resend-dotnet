@@ -7,6 +7,5 @@ public class EmailRescheduleRequest
 {
     /// <summary />
     [JsonPropertyName( "scheduled_at" )]
-    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
-    public DateTime MomentSchedule { get; set; }
+    public DateTimeOrHuman MomentSchedule { get; set; }
 }
