@@ -77,55 +77,95 @@ public class Program
     public async Task<int> OnExecute()
     {
         var dir = new DirectoryInfo( this.RootFolder! );
+        var failCount = 0;
 
         foreach ( var f in dir.GetFiles( "*.mdx", SearchOption.AllDirectories ) )
         {
-            await FileCheck( dir, f );
+            failCount += await FileCheck( dir, f );
         }
 
-        return 0;
+        return failCount;
     }
 
 
     /// <summary />
-    private async Task FileCheck( DirectoryInfo root, FileInfo f )
+    private async Task<int> FileCheck( DirectoryInfo root, FileInfo f )
     {
         var rel = GetRelativePath( root, f );
-        var mdx = await File.ReadAllTextAsync( f.FullName );
+        var mdx = await File.ReadAllLinesAsync( f.FullName );
 
 
         /*
          * 
          */
-        var startIx = mdx.IndexOf( "```csharp" );
+        var blocks = new Dictionary<int, string>();
 
-        if ( startIx < 0 )
-            return;
+        var sb = new StringBuilder();
+        int? blockStart = null;
 
-        var endIx = mdx.IndexOf( "```", startIx + 4 );
+        foreach ( var line in mdx.Select( ( x, i ) => (Index: i, Content: x) ) )
+        {
+            if ( blockStart.HasValue == true )
+            {
+                if ( line.Content.StartsWith( "```" ) == true )
+                {
+                    blocks.Add( blockStart.Value, sb.ToString() );
 
+                    sb.Clear();
+                    blockStart = null;
+                }
+                else
+                {
+                    sb.AppendLine( line.Content );
+                }
 
-        var fragment = mdx.Substring( startIx, endIx - startIx + 3 );
+                continue;
+            }
+
+            if ( line.Content.StartsWith( "```csharp .NET" ) == true )
+            {
+                blockStart = line.Index;
+
+                continue;
+            }
+        }
 
 
         /*
          * 
          */
-        var lines = fragment.Split( "\n" );
+        var failCount = 0;
+
+        foreach ( var b in blocks )
+            failCount += BlockCheck( rel, b.Key, b.Value );
+
+        return failCount;
+    }
+
+
+    /// <summary />
+    private int BlockCheck( string rel, int line, string block )
+    {
+        /*
+         * 
+         */
+        var lines = block.Split( "\n" );
 
         var sb = new StringBuilder();
         sb.AppendLine( "using System;" );
         sb.AppendLine( "using System.Threading.Tasks;" );
 
         foreach ( var l in lines )
+        {
             if ( l.StartsWith( "using " ) == true )
                 sb.AppendLine( l );
+        }
 
         sb.AppendLine();
         sb.AppendLine( "public class Program {" );
         sb.AppendLine( "public static async Task<int> Main( string[] args ) {" );
 
-        foreach ( var l in lines.Skip( 1 ).Take( lines.Count() - 2 ) )
+        foreach ( var l in lines )
         {
             if ( l.StartsWith( "using " ) == true )
                 continue;
@@ -176,13 +216,14 @@ public class Program
                 Console.Write( "err" );
                 Console.ForegroundColor = fg;
 
-                Console.Write( " " );
-                Console.WriteLine( rel );
+                Console.WriteLine( " {0} - ln {1}", rel, line );
 
                 foreach ( Diagnostic diagnostic in failures )
                 {
                     Console.Error.WriteLine( "{0}: {1}", diagnostic.Id, diagnostic.GetMessage() );
                 }
+
+                return 1;
             }
             else
             {
@@ -192,7 +233,9 @@ public class Program
                 Console.ForegroundColor = fg;
 
                 Console.Write( " " );
-                Console.WriteLine( rel );
+                Console.WriteLine( " {0} - ln {1}", rel, line );
+
+                return 1;
             }
         }
     }
