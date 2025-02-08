@@ -87,9 +87,8 @@ public class EmailMessage
     /// Moment for which the email is scheduled for/at.
     /// </summary>
     [JsonPropertyName( "scheduled_at" )]
-    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public DateTime? MomentSchedule { get; set; }
+    public DateTimeOrHuman? MomentSchedule { get; set; }
 
     /// <summary>
     /// Moment in which the email was created.

@@ -67,6 +67,12 @@ public class EmailReceipt
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? HtmlBody { get; set; }
 
+    /// <summary>
+    /// Moment for which the email is scheduled for/at.
+    /// </summary>
+    [JsonPropertyName( "scheduled_at" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DateTimeOrHuman? MomentSchedule { get; set; }
 
     /// <summary />
     [JsonPropertyName( "created_at" )]

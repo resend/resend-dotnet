@@ -65,7 +65,7 @@ public interface IResend
     /// Cancellation token.
     /// </param>
     /// <see href="https://www.resend.com/docs/api-reference/emails/update-email"/>
-    Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTime rescheduleFor, CancellationToken cancellationToken = default );
+    Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default );
 
 
     /// <summary>
@@ -345,10 +345,32 @@ public interface IResend
     /// Cancelation token.
     /// </param>
     /// <returns>
-    /// Contact Id. 
+    /// Task.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/contacts/update-contact" />
     Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Update an existing contact.
+    /// </summary>
+    /// <param name="audienceId">
+    /// Audience identifier.
+    /// </param>
+    /// <param name="email">
+    /// Email.
+    /// </param>
+    /// <param name="data">
+    /// Contact data.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancelation token.
+    /// </param>
+    /// <returns>
+    /// Task.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/contacts/update-contact" />
+    Task<ResendResponse> ContactUpdateByEmailAsync( Guid audienceId, string email, ContactData data, CancellationToken cancellationToken = default );
 
 
     /// <summary>
@@ -364,7 +386,7 @@ public interface IResend
     /// Cancelation token.
     /// </param>
     /// <returns>
-    /// Task
+    /// Task.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/contacts/delete-contact" />
     Task<ResendResponse> ContactDeleteAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default );

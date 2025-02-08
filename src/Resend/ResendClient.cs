@@ -89,7 +89,7 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTime rescheduleFor, CancellationToken cancellationToken = default )
+    public async Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
@@ -296,6 +296,17 @@ public class ResendClient : IResend
     public async Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{contactId}";
+        var req = new HttpRequestMessage( HttpMethod.Patch, path );
+        req.Content = JsonContent.Create( data );
+
+        return await Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
+    public async Task<ResendResponse> ContactUpdateByEmailAsync( Guid audienceId, string email, ContactData data, CancellationToken cancellationToken = default )
+    {
+        var path = $"/audiences/{audienceId}/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
