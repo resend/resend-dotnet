@@ -63,14 +63,19 @@ public class DateTimeOrHumanTests
         var tgt = JsonSerializer.Deserialize<DateTimeOrHuman>( json );
 
         Assert.True( tgt.IsMoment );
+        Assert.True( tgt.Moment.HasValue );
+
+        // 
+        var srcv = src.Moment!.Value;
+        var tgtv = tgt.Moment!.Value;
 
         // Note: There's a loss of precision when roundtripping through JSON
-        Assert.Equal( src.Moment.Year, tgt.Moment.Year );
-        Assert.Equal( src.Moment.Month, tgt.Moment.Month );
-        Assert.Equal( src.Moment.Day, tgt.Moment.Day );
-        Assert.Equal( src.Moment.Hour, tgt.Moment.Hour );
-        Assert.Equal( src.Moment.Minute, tgt.Moment.Minute );
-        Assert.Equal( src.Moment.Second, tgt.Moment.Second );
+        Assert.Equal( srcv.Year, tgtv.Year );
+        Assert.Equal( srcv.Month, tgtv.Month );
+        Assert.Equal( srcv.Day, tgtv.Day );
+        Assert.Equal( srcv.Hour, tgtv.Hour );
+        Assert.Equal( srcv.Minute, tgtv.Minute );
+        Assert.Equal( srcv.Second, tgtv.Second );
     }
 
 

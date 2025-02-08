@@ -4,10 +4,10 @@ namespace Resend;
 
 /// <summary />
 [JsonConverter( typeof( DateTimeOrHumanConverter ) )]
-public struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
+public readonly struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
 {
-    private DateTime? _dateTime;
-    private string? _human;
+    private readonly DateTime? _dateTime;
+    private readonly string? _human;
 
 
     /// <summary />
@@ -30,50 +30,19 @@ public struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
     public bool IsMoment { get => this._dateTime.HasValue; }
 
     /// <summary />
-    public DateTime Moment
-    {
-        get
-        {
-            if ( _dateTime.HasValue == false )
-                throw new InvalidOperationException();
-
-            return _dateTime.Value;
-        }
-
-        set
-        {
-            _human = null;
-            _dateTime = value;
-        }
-    }
-
+    public DateTime? Moment { get => _dateTime; }
 
     /// <summary />
-    public string Human
-    {
-        get
-        {
-            if ( _human == null )
-                throw new InvalidOperationException();
-
-            return _human!;
-        }
-
-        set
-        {
-            _human = value;
-            _dateTime = null;
-        }
-    }
+    public string? Human { get => _human; }
 
 
     /// <summary />
     public override string ToString()
     {
         if ( this.IsMoment == true )
-            return this.Moment.ToString();
+            return this.Moment!.Value.ToString();
         else
-            return this.Human;
+            return this.Human!;
     }
 
 
@@ -84,7 +53,7 @@ public struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
             throw new NotSupportedException( "Cannot compare DateTimeOrHuman values of different kind" );
 
         if ( this.IsMoment == true )
-            return this.Moment.CompareTo( other.Moment );
+            return this.Moment!.Value.CompareTo( other.Moment!.Value );
         else
             return this.Human!.CompareTo( other.Human );
     }
@@ -94,7 +63,7 @@ public struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
     public static implicit operator DateTime( DateTimeOrHuman value )
     {
         if ( value.IsMoment == true )
-            return value.Moment;
+            return value.Moment!.Value;
 
         throw new InvalidOperationException( "Value is not a DateTime" );
     }

@@ -47,6 +47,8 @@ public class EmailController : ControllerBase
             From = "from@example.com",
             To = "to@example.com",
             HtmlBody = "This is HTML!",
+            MomentCreated = DateTime.UtcNow,
+            LastEvent = EmailStatus.Delivered,
         };
     }
 
@@ -72,24 +74,30 @@ public class EmailController : ControllerBase
     /// <summary />
     [HttpPatch]
     [Route( "emails/{id}" )]
-    public ActionResult<ObjectId> EmailReschedule( [FromRoute] Guid emailId, [FromBody] EmailRescheduleRequest request )
+    public ActionResult<ObjectId> EmailReschedule( [FromRoute] Guid id, [FromBody] EmailRescheduleRequest request )
     {
         _logger.LogDebug( "EmailReschedule" );
 
-        if ( request.MomentSchedule < DateTime.UtcNow )
+        if ( request.MomentSchedule.IsMoment == true )
         {
-            return BadRequest( new ErrorResponse()
+            if ( request.MomentSchedule < DateTime.UtcNow )
             {
-                StatusCode = (int) HttpStatusCode.BadRequest,
-                ErrorType = ErrorType.ApplicationError,
-                Message = "Moment in past",
-            } );
+                return BadRequest( new ErrorResponse()
+                {
+                    StatusCode = (int) HttpStatusCode.BadRequest,
+                    ErrorType = ErrorType.ApplicationError,
+                    Message = "Moment in past",
+                } );
+            }
         }
+
+        if ( request.MomentSchedule.IsMoment == false )
+            _logger.LogInformation( "Resend will reschedule for: {MomentSchedule}", request.MomentSchedule.Human );
 
         return new ObjectId()
         {
             Object = "email",
-            Id = emailId,
+            Id = id,
         };
     }
 
@@ -97,14 +105,14 @@ public class EmailController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "emails/{id}/cancel" )]
-    public ObjectId EmailCancel( [FromRoute] Guid emailId )
+    public ObjectId EmailCancel( [FromRoute] Guid id )
     {
         _logger.LogDebug( "EmailCancel" );
 
         return new ObjectId()
         {
             Object = "email",
-            Id = emailId,
+            Id = id,
         };
     }
 }

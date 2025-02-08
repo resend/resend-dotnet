@@ -68,7 +68,7 @@ public class DateTimeOrHumanConverter : JsonConverter<DateTimeOrHuman>
     {
         if ( value.IsMoment == true )
         {
-            writer.WriteStringValue( value.Moment.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ" ) );
+            writer.WriteStringValue( value.Moment!.Value.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ" ) );
         }
         else
         {
