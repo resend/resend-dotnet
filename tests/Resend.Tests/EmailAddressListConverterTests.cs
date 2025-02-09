@@ -14,7 +14,7 @@ public class EmailAddressListConverterTests
 
         Assert.NotNull( list );
         Assert.Single( list );
-        Assert.Equal( Email, list.Single() );
+        Assert.Equal( Email, list.Single().Email );
     }
 
 
@@ -29,7 +29,7 @@ public class EmailAddressListConverterTests
 
         Assert.NotNull( list );
         Assert.Single( list );
-        Assert.Equal( Email, list.Single() );
+        Assert.Equal( Email, list.Single().Email );
     }
 
 
@@ -47,8 +47,8 @@ public class EmailAddressListConverterTests
 
         Assert.NotNull( tgt );
         Assert.Equal( 2, tgt.Count );
-        Assert.Equal( src[ 0 ], tgt[ 0 ] );
-        Assert.Equal( src[ 1 ], tgt[ 1 ] );
+        Assert.Equal( src[ 0 ].Email, tgt[ 0 ].Email );
+        Assert.Equal( src[ 1 ].Email, tgt[ 1 ].Email );
     }
 
 

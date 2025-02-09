@@ -5,17 +5,33 @@ public class EmailAddressListTests
 {
     /// <summary />
     [Fact]
-    public void FromArray()
+    public void FromEmailString()
     {
-        var array = new string[] { "a@example.com", "b@example.com" };
-        var enumz = array.AsEnumerable();
+        var email = "a@example.com";
 
-        var list = EmailAddressList.From( enumz );
+        var message = new EmailMessage();
+        message.To = email;
 
-        Assert.NotNull( list );
-        Assert.Equal( 2, list.Count );
-        Assert.Equal( array[ 0 ], list[ 0 ] );
-        Assert.Equal( array[ 1 ], list[ 1 ] );
+        Assert.NotNull( message.To );
+        Assert.Single( message.To );
+        Assert.Equal( email, message.To.First().Email );
+        Assert.Null( message.To.First().DisplayName );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void FromEmailStringWithDisplayName()
+    {
+        var value = "Filipe Toscano <a@example.com>";
+
+        var message = new EmailMessage();
+        message.To = value;
+
+        Assert.NotNull( message.To );
+        Assert.Single( message.To );
+        Assert.Equal( "a@example.com", message.To.First().Email );
+        Assert.Equal( "Filipe Toscano", message.To.First().DisplayName );
     }
 
 
@@ -27,5 +43,21 @@ public class EmailAddressListTests
 
         Assert.NotNull( list );
         Assert.Equal( 2, list.Count );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void FromArray()
+    {
+        var array = new string[] { "a@example.com", "b@example.com" };
+        var enumz = array.AsEnumerable();
+
+        var list = EmailAddressList.From( enumz );
+
+        Assert.NotNull( list );
+        Assert.Equal( 2, list.Count );
+        Assert.Equal( array[ 0 ], list[ 0 ].Email );
+        Assert.Equal( array[ 1 ], list[ 1 ].Email );
     }
 }
