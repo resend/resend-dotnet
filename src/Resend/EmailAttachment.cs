@@ -63,6 +63,7 @@ public class EmailAttachment
     /// Creates an attachment from a local file.
     /// </summary>
     /// <param name="filename">Path to local file.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Attachment.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the file does not exist.</exception>
     public static async ValueTask<EmailAttachment> FromAsync( string filename, CancellationToken cancellationToken = default )
