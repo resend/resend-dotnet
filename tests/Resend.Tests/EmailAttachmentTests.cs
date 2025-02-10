@@ -7,7 +7,8 @@ public class EmailAttachmentTests
     [Fact]
     public void FromOk()
     {
-        var path = Path.Combine( AppContext.BaseDirectory, @"..\\..\\..\\", "EmailAttachmentTests.cs" );
+        var relPath = OperatingSystem.IsWindows() == true ? @"..\\..\\..\\" : "../../../";
+        var path = Path.Combine( AppContext.BaseDirectory, relPath, "EmailAttachmentTests.cs" );
         var size = new FileInfo( path ).Length;
 
         var attach = EmailAttachment.From( path );
@@ -66,7 +67,8 @@ public class EmailAttachmentTests
     [Fact]
     public void FromAsyncNotFound()
     {
-        var path = Path.Combine( AppContext.BaseDirectory, @"..\\..\\..\\", "NOTFOUND.cs" );
+        var relPath = OperatingSystem.IsWindows() == true ? @"..\\..\\..\\" : "../../../";
+        var path = Path.Combine( AppContext.BaseDirectory, relPath, "NOTFOUND.cs" );
 
         Action act = () => EmailAttachment.FromAsync( path ).GetAwaiter().GetResult();
 
