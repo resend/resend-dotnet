@@ -20,8 +20,18 @@ public class EmailAddress
     public string? DisplayName { get; set; }
 
 
-    /// <summary />
+    /// <inheritdoc />
     public override string ToString()
+    {
+        return ToJson();
+    }
+
+
+    /// <summary>
+    /// Converts to single string JSON representation.
+    /// </summary>
+    /// <returns></returns>
+    public string ToJson()
     {
         string addr;
 
@@ -37,7 +47,9 @@ public class EmailAddress
     private static readonly Regex _fn = new Regex( "^(?<displayName>.*) <(?<email>.*)>$" );
 
 
-    /// <summary />
+    /// <summary>
+    /// Parses value from single string JSON representation.
+    /// </summary>
     public static EmailAddress Parse( string addr )
     {
         /*
@@ -70,6 +82,8 @@ public class EmailAddress
     }
 
 
-    /// <summary />
+    /// <summary>
+    /// Implicitly convert a string to <see cref="EmailAddress" /> value.
+    /// </summary>
     public static implicit operator EmailAddress( string email ) => Parse( email );
 }

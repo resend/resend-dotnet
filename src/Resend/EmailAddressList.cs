@@ -14,7 +14,9 @@ public class EmailAddressList : List<EmailAddress>
     }
 
 
-    /// <summary />
+    /// <summary>
+    /// Implicitly create an email address list from a single email string.
+    /// </summary>
     public static implicit operator EmailAddressList( string email )
     {
         var list = new EmailAddressList();
@@ -24,7 +26,9 @@ public class EmailAddressList : List<EmailAddress>
     }
 
 
-    /// <summary />
+    /// <summary>
+    /// Implicitly create an email address list from an array of email strings.
+    /// </summary>
     public static implicit operator EmailAddressList( string[] emails )
     {
         var list = new EmailAddressList();
