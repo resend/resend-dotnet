@@ -5,7 +5,7 @@ public class EmailAddressListTests
 {
     /// <summary />
     [Fact]
-    public void FromEmailString()
+    public void ImplicitFromString()
     {
         var email = "a@example.com";
 
@@ -21,9 +21,9 @@ public class EmailAddressListTests
 
     /// <summary />
     [Fact]
-    public void FromEmailStringWithDisplayName()
+    public void ImplicitFromStringWithDisplayName()
     {
-        var value = "Filipe Toscano <a@example.com>";
+        var value = "John Doe <a@example.com>";
 
         var message = new EmailMessage();
         message.To = value;
@@ -31,7 +31,34 @@ public class EmailAddressListTests
         Assert.NotNull( message.To );
         Assert.Single( message.To );
         Assert.Equal( "a@example.com", message.To.First().Email );
-        Assert.Equal( "Filipe Toscano", message.To.First().DisplayName );
+        Assert.Equal( "John Doe", message.To.First().DisplayName );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void ImplicitFromArray()
+    {
+        var value = new string[] {
+            "John Doe <a@example.com>",
+            "Jane Doe <b@example.com>",
+            "c@example.com"
+        };
+
+        var message = new EmailMessage();
+        message.To = value;
+
+        Assert.NotNull( message.To );
+        Assert.Equal( 3, message.To.Count );
+
+        Assert.Equal( "a@example.com", message.To[ 0 ].Email );
+        Assert.Equal( "John Doe", message.To[ 0 ].DisplayName );
+
+        Assert.Equal( "b@example.com", message.To[ 1 ].Email );
+        Assert.Equal( "Jane Doe", message.To[ 1 ].DisplayName );
+
+        Assert.Equal( "c@example.com", message.To[ 2 ].Email );
+        Assert.Null( message.To[ 2 ].DisplayName );
     }
 
 
