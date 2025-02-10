@@ -50,7 +50,7 @@ public readonly struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
     public int CompareTo( DateTimeOrHuman other )
     {
         if ( this.IsMoment != other.IsMoment )
-            throw new NotSupportedException( "Cannot compare DateTimeOrHuman values of different kind" );
+            throw new NotSupportedException( "DH001: Cannot compare DateTimeOrHuman values of different kind" );
 
         if ( this.IsMoment == true )
             return this.Moment!.Value.CompareTo( other.Moment!.Value );
@@ -65,7 +65,7 @@ public readonly struct DateTimeOrHuman : IComparable<DateTimeOrHuman>
         if ( value.IsMoment == true )
             return value.Moment!.Value;
 
-        throw new InvalidOperationException( "Value is not a DateTime" );
+        throw new InvalidOperationException( "DH002: Value is not a DateTime" );
     }
 
 
