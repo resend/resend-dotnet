@@ -14,9 +14,6 @@ public class ResendRateLimitExceededException : ResendException, IHasRateLimit
         : base( statusCode, ErrorType.RateLimitExceeded, message )
     {
         this.Limits = rateLimit;
-        string retryMessage = "Rate limit exceeded: please wait {0}s before retrying";
-        retryMessage.replace("{0}", rateLimit.RetryAfter.ToString());
-        this.Message = retryMessage;
     }
 
     /// <summary>
@@ -26,9 +23,6 @@ public class ResendRateLimitExceededException : ResendException, IHasRateLimit
         : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
     {
         this.Limits = rateLimit;
-        string retryMessage = "Rate limit exceeded: please wait {0}s before retrying";
-        retryMessage.replace("{0}", rateLimit.RetryAfter.ToString());
-        this.Message = retryMessage;
     }
 
     /// <summary>
