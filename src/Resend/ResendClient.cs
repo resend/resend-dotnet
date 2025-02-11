@@ -14,7 +14,6 @@ public class ResendClient : IResend
 {
     private readonly bool _throw;
     private readonly HttpClient _http;
-    private readonly bool _retryOnRateLimit;
 
 
     /// <summary>
@@ -55,7 +54,6 @@ public class ResendClient : IResend
 
         _http = httpClient;
         _throw = options.Value.ThrowExceptions;
-        _retryOnRateLimit = options.Value.RetryOnRateLimit;
     }
 
 
@@ -474,10 +472,7 @@ public class ResendClient : IResend
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
-                var rateLimitEx = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
-                if (_retryOnRateLimit == true)
-                    await RateLimitExtensions.RetryAfterDelay( rateLimitEx, async () => await Execute( req, cancellationToken ), cancellationToken );
-                ex = rateLimitEx;
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -560,6 +555,10 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            {
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
