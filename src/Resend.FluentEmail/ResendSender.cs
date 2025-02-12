@@ -77,16 +77,16 @@ public class ResendSender : ISender
          */
         message.Subject = email.Data.Subject;
         message.From = ToEmailAddress( email.Data.FromAddress );
-        message.To.AddRange( email.Data.ToAddresses.Select( x => x.EmailAddress ) );
+        message.To = ToEmailAddressList( email.Data.ToAddresses );
 
         if ( email.Data.CcAddresses.Count > 0 )
-            message.Cc = EmailAddressList.From( email.Data.CcAddresses.Select( x => x.ToString() ) );
+            message.Cc = ToEmailAddressList( email.Data.CcAddresses );
 
         if ( email.Data.BccAddresses.Count > 0 )
-            message.Bcc = EmailAddressList.From( email.Data.BccAddresses.Select( x => x.ToString() ) );
+            message.Bcc = ToEmailAddressList( email.Data.BccAddresses );
 
         if ( email.Data.ReplyToAddresses.Count > 0 )
-            message.ReplyTo = EmailAddressList.From( email.Data.ReplyToAddresses.Select( x => x.ToString() ) );
+            message.ReplyTo = ToEmailAddressList( email.Data.ReplyToAddresses );
 
 
         /*
@@ -177,6 +177,18 @@ public class ResendSender : ISender
         }
 
         return message;
+    }
+
+
+    /// <summary />
+    private static EmailAddressList ToEmailAddressList( IList<Address> fluentAddresses )
+    {
+        var list = new EmailAddressList();
+
+        foreach ( var addr in fluentAddresses )
+            list.Add( ToEmailAddress( addr ) );
+
+        return list;
     }
 
 

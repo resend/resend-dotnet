@@ -17,6 +17,103 @@ public class DateTimeOrHumanTests
 
     /// <summary />
     [Fact]
+    public void DateTimeToString()
+    {
+        var dt = DateTime.UtcNow;
+        DateTimeOrHuman src = dt;
+
+        Assert.Equal( dt.ToString(), src.ToString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DateTimeCast()
+    {
+        var dt = DateTime.UtcNow;
+        DateTimeOrHuman src = dt;
+        DateTime tgt = src;
+
+        Assert.Equal( dt, tgt );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DateTimeCastFromHuman()
+    {
+        DateTimeOrHuman src = "in 5 mins";
+
+        Action act = () =>
+        {
+            DateTime tgt = src;
+        };
+
+        var ex = Assert.Throws<InvalidOperationException>( act );
+        Assert.NotNull( ex.Message );
+        Assert.StartsWith( "DH002:", ex.Message );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DateTimeComparable()
+    {
+        var dt1 = DateTime.UtcNow;
+        var dt2 = DateTime.UtcNow.AddDays( 1 );
+
+        DateTimeOrHuman src1 = dt1;
+        DateTimeOrHuman src2 = dt2;
+
+        Assert.Equal( dt1.CompareTo( dt2 ), src1.CompareTo( src2 ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void HumanToString()
+    {
+        var str = "in 5 mins";
+        DateTimeOrHuman v = str;
+
+        Assert.Equal( str, v.ToString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void HumanComparable()
+    {
+        var str1 = "in 5 mins";
+        var str2 = "tomorrow 5:00 am";
+
+        DateTimeOrHuman v1 = str1;
+        DateTimeOrHuman v2 = str2;
+
+        Assert.Equal( str1.CompareTo( str2 ), v1.CompareTo( v2 ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void MixedComparable()
+    {
+        var str = "in 5 mins";
+        var dt = DateTime.UtcNow;
+
+        DateTimeOrHuman v1 = str;
+        DateTimeOrHuman v2 = dt;
+
+        Action act = () => v1.CompareTo( v2 );
+
+        var ex = Assert.Throws<NotSupportedException>( act );
+        Assert.NotNull( ex.Message );
+        Assert.StartsWith( "DH001:", ex.Message );
+    }
+
+
+    /// <summary />
+    [Fact]
     public void PropertyNotNull()
     {
         var src = new WrapperClass()

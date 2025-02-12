@@ -55,7 +55,7 @@ public class EmailAddressListConverter : JsonConverter<EmailAddressList>
         writer.WriteStartArray();
 
         foreach ( var s in value )
-            writer.WriteStringValue( s );
+            writer.WriteStringValue( s.ToString() );
 
         writer.WriteEndArray();
     }

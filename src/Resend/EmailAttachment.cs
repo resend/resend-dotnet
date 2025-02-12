@@ -37,4 +37,44 @@ public class EmailAttachment
     [JsonPropertyName( "content_type" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? ContentType { get; set; }
+
+
+
+    /// <summary>
+    /// Creates an attachment from a local file.
+    /// </summary>
+    /// <param name="filename">Path to local file.</param>
+    /// <returns>Attachment.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the file does not exist.</exception>
+    public static EmailAttachment From( string filename )
+    {
+        if ( File.Exists( filename ) == false )
+            throw new InvalidOperationException( $"EA001: File '{filename}' does not exist" );
+
+        var attachment = new EmailAttachment();
+        attachment.Filename = System.IO.Path.GetFileName( filename );
+        attachment.Content = File.ReadAllBytes( filename );
+
+        return attachment;
+    }
+
+
+    /// <summary>
+    /// Creates an attachment from a local file.
+    /// </summary>
+    /// <param name="filename">Path to local file.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Attachment.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the file does not exist.</exception>
+    public static async ValueTask<EmailAttachment> FromAsync( string filename, CancellationToken cancellationToken = default )
+    {
+        if ( File.Exists( filename ) == false )
+            throw new InvalidOperationException( $"EA002: File '{filename}' does not exist" );
+
+        var attachment = new EmailAttachment();
+        attachment.Filename = System.IO.Path.GetFileName( filename );
+        attachment.Content = await File.ReadAllBytesAsync( filename, cancellationToken );
+
+        return attachment;
+    }
 }
