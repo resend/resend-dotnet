@@ -470,6 +470,10 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            {
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
@@ -551,6 +555,10 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            {
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
@@ -625,7 +633,8 @@ public class ResendClient : IResend
         return new ResendResponse<T2>( res, rrl );
     }
 
-
+    /// <summary>
+    /// Rate limit info from the HTTP response headers.
     /// <summary />
     private ResendRateLimit FromHeaders( HttpResponseHeaders headers )
     {
