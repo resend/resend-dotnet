@@ -473,6 +473,9 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            } else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            {
+                ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -558,6 +561,9 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            } else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            {
+                ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
