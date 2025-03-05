@@ -6,7 +6,7 @@ namespace Resend;
 /// List of email addresses.
 /// </summary>
 [JsonConverter( typeof( EmailAddressListConverter ) )]
-public class EmailAddressList : List<string>
+public class EmailAddressList : List<EmailAddress>
 {
     /// <summary />
     public EmailAddressList()
@@ -14,7 +14,9 @@ public class EmailAddressList : List<string>
     }
 
 
-    /// <summary />
+    /// <summary>
+    /// Implicitly create an email address list from a single email string.
+    /// </summary>
     public static implicit operator EmailAddressList( string email )
     {
         var list = new EmailAddressList();
@@ -24,11 +26,27 @@ public class EmailAddressList : List<string>
     }
 
 
+    /// <summary>
+    /// Implicitly create an email address list from an array of email strings.
+    /// </summary>
+    public static implicit operator EmailAddressList( string[] emails )
+    {
+        var list = new EmailAddressList();
+
+        foreach ( var email in emails )
+            list.Add( email );
+
+        return list;
+    }
+
+
     /// <summary />
     public static EmailAddressList From( IEnumerable<string> emails )
     {
         var list = new EmailAddressList();
-        list.AddRange( emails );
+
+        foreach ( var em in emails )
+            list.Add( em );
 
         return list;
     }
@@ -38,7 +56,9 @@ public class EmailAddressList : List<string>
     public static EmailAddressList From( params string[] emails )
     {
         var list = new EmailAddressList();
-        list.AddRange( emails );
+
+        foreach ( var em in emails )
+            list.Add( em );
 
         return list;
     }

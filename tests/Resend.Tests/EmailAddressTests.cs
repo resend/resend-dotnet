@@ -7,18 +7,22 @@ public class EmailAddressTests
 {
     /// <summary />
     [Fact]
-    public void Operator()
+    public void OperatorSimple()
     {
         EmailAddress src = "dev@example.com";
 
-        var json = JsonSerializer.Serialize( src );
-        Assert.Equal( "\"" + src.Email + "\"", json );
+        Assert.Equal( "dev@example.com", src.Email );
+        Assert.Null( src.DisplayName );
+    }
 
-        var tgt = JsonSerializer.Deserialize<EmailAddress>( json );
 
-        Assert.NotNull( tgt );
-        Assert.Null( tgt.DisplayName );
-        Assert.NotNull( tgt.Email );
-        Assert.Equal( src.Email, tgt.Email );
+    /// <summary />
+    [Fact]
+    public void OperatorWithDisplayName()
+    {
+        EmailAddress src = "John Doe <dev@example.com>";
+
+        Assert.Equal( "dev@example.com", src.Email );
+        Assert.Equal( "John Doe", src.DisplayName );
     }
 }

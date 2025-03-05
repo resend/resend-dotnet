@@ -34,7 +34,7 @@ public static class MailMessageExtension
         var email = new EmailMessage();
         email.Subject = message.Subject;
         email.From = ToEmailAddress( message.From );
-        email.To.AddRange( message.To.Select( x => x.Address ) );
+        email.To.AddRange( message.To.Select( x => ToEmailAddress( x ) ) );
 
         email.Cc = ToAddressList( message.CC );
         email.Bcc = ToAddressList( message.Bcc );
@@ -93,7 +93,7 @@ public static class MailMessageExtension
         {
             email.Attachments = new List<EmailAttachment>();
 
-            foreach ( var att in  message.Attachments )
+            foreach ( var att in message.Attachments )
             {
                 var ms = new MemoryStream();
                 att.ContentStream.CopyTo( ms );
@@ -131,7 +131,7 @@ public static class MailMessageExtension
             return null;
 
         var list = new EmailAddressList();
-        list.AddRange( collection.Select( x => x.Address ) );
+        list.AddRange( collection.Select( x => ToEmailAddress( x ) ) );
 
         return list;
     }

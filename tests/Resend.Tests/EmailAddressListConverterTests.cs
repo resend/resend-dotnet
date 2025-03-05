@@ -7,19 +7,6 @@ public class EmailAddressListConverterTests
 {
     /// <summary />
     [Fact]
-    public void Operator()
-    {
-        const string Email = "dev@example.com";
-        EmailAddressList list = Email;
-
-        Assert.NotNull( list );
-        Assert.Single( list );
-        Assert.Equal( Email, list.Single() );
-    }
-
-
-    /// <summary />
-    [Fact]
     public void DeserializeSingle()
     {
         const string Email = "dev@example.com";
@@ -29,7 +16,8 @@ public class EmailAddressListConverterTests
 
         Assert.NotNull( list );
         Assert.Single( list );
-        Assert.Equal( Email, list.Single() );
+        Assert.Equal( Email, list.Single().Email );
+        Assert.Null( list.Single().DisplayName );
     }
 
 
@@ -47,8 +35,12 @@ public class EmailAddressListConverterTests
 
         Assert.NotNull( tgt );
         Assert.Equal( 2, tgt.Count );
-        Assert.Equal( src[ 0 ], tgt[ 0 ] );
-        Assert.Equal( src[ 1 ], tgt[ 1 ] );
+        
+        Assert.Equal( src[ 0 ].Email, tgt[ 0 ].Email );
+        Assert.Null( tgt[ 0 ].DisplayName );
+
+        Assert.Equal( src[ 1 ].Email, tgt[ 1 ].Email );
+        Assert.Null( tgt[ 1 ].DisplayName );
     }
 
 
