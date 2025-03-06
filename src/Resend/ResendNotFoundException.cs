@@ -11,13 +11,13 @@ public class ResendNotFoundException : ResendException
     /// Initializes a new instance of the <see cref="ResendNotFoundException"/> class.
     /// <summary />
     public ResendNotFoundException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.RateLimitExceeded, message )
+        : base( statusCode, ErrorType.NotFound, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendNotFoundException"/> class.
     /// <summary />
     public ResendNotFoundException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
+        : base( statusCode, ErrorType.NotFound, message, innerException )
     { }
 }
