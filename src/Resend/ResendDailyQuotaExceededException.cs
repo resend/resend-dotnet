@@ -11,7 +11,7 @@ public class ResendDailyQuotaExceededException : ResendException, IHasRateLimit
     /// Initializes a new instance of the <see cref="ResendDailyQuotaExceededException"/> class.
     /// <summary />
     public ResendDailyQuotaExceededException( HttpStatusCode? statusCode, string message, ResendRateLimit? rateLimit )
-        : base( statusCode, ErrorType.RateLimitExceeded, message )
+        : base( statusCode, ErrorType.DailyQuotaExceeded, message )
     {
         this.Limits = rateLimit;
     }
@@ -20,7 +20,7 @@ public class ResendDailyQuotaExceededException : ResendException, IHasRateLimit
     /// Initializes a new instance of the <see cref="ResendDailyQuotaExceededException"/> class.
     /// <summary />
     public ResendDailyQuotaExceededException( HttpStatusCode? statusCode, string message, Exception? innerException, ResendRateLimit? rateLimit )
-        : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
+        : base( statusCode, ErrorType.DailyQuotaExceeded, message, innerException )
     {
         this.Limits = rateLimit;
     }

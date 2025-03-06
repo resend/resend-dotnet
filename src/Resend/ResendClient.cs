@@ -540,11 +540,15 @@ public class ResendClient : IResend
             }
             else if ( err.ErrorType == ErrorType.RestrictedApiKey )
             {
-                ex = new ResendException( HttpStatusCode.Forbidden, err.ErrorType, err.Message );
+                ex = new ResendRestrictedApiKeyException( HttpStatusCode.Forbidden, err.Message );
             }
             else if ( err.ErrorType == ErrorType.NotFound )
             {
-                ex = new ResendException( HttpStatusCode.NotFound, err.ErrorType, err.Message );
+                ex = new ResendNotFoundException( HttpStatusCode.NotFound, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.InvalidAttachment )
+            {
+                ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
@@ -556,9 +560,6 @@ public class ResendClient : IResend
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
-
-            if ( _throw == true )
-                throw ex;
 
             return new ResendResponse( ex, rrl );
         }
@@ -645,11 +646,15 @@ public class ResendClient : IResend
             }
             else if ( err.ErrorType == ErrorType.RestrictedApiKey )
             {
-                ex = new ResendException( HttpStatusCode.Forbidden, err.ErrorType, err.Message );
+                ex = new ResendRestrictedApiKeyException( HttpStatusCode.Forbidden, err.Message );
             }
             else if ( err.ErrorType == ErrorType.NotFound )
             {
-                ex = new ResendException( HttpStatusCode.NotFound, err.ErrorType, err.Message );
+                ex = new ResendNotFoundException( HttpStatusCode.NotFound, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.InvalidAttachment )
+            {
+                ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
@@ -661,9 +666,6 @@ public class ResendClient : IResend
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
-
-            if ( _throw == true )
-                throw ex;
 
             if ( _throw == true )
                 throw ex;

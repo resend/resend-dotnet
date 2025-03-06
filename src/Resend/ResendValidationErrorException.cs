@@ -11,13 +11,13 @@ public class ResendValidationErrorException : ResendException
     /// Initializes a new instance of the <see cref="ResendValidationErrorException"/> class.
     /// <summary />
     public ResendValidationErrorException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.RateLimitExceeded, message )
+        : base( statusCode, ErrorType.ValidationError, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendValidationErrorException"/> class.
     /// <summary />
     public ResendValidationErrorException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
+        : base( statusCode, ErrorType.ValidationError, message, innerException )
     { }
 }

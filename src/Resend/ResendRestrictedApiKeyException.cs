@@ -11,13 +11,13 @@ public class ResendRestrictedApiKeyException : ResendException
     /// Initializes a new instance of the <see cref="ResendRestrictedApiKeyException"/> class.
     /// <summary />
     public ResendRestrictedApiKeyException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.RateLimitExceeded, message )
+        : base( statusCode, ErrorType.RestrictedApiKey, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendRestrictedApiKeyException"/> class.
     /// <summary />
     public ResendRestrictedApiKeyException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
+        : base( statusCode, ErrorType.RestrictedApiKey, message, innerException )
     { }
 }
