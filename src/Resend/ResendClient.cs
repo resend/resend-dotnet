@@ -476,7 +476,7 @@ public class ResendClient : IResend
     private async Task<ResendResponse> Execute( HttpRequestMessage req, CancellationToken cancellationToken )
     {
         /*
-         * 
+         *
          */
         HttpResponseMessage resp;
 
@@ -500,7 +500,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         var rrl = FromHeaders( resp.Headers );
 
@@ -533,9 +533,14 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
-            } else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            }
+            else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -548,7 +553,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         return new ResendResponse( rrl );
     }
@@ -560,7 +565,7 @@ public class ResendClient : IResend
         CancellationToken cancellationToken )
     {
         /*
-         * 
+         *
          */
         HttpResponseMessage resp;
 
@@ -584,13 +589,13 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         var rrl = FromHeaders( resp.Headers );
 
 
         /*
-         * 
+         *
          */
         if ( resp.IsSuccessStatusCode == false )
         {
@@ -621,9 +626,14 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
-            } else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            }
+            else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -636,7 +646,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         T1? obj;
 
@@ -660,7 +670,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         if ( obj == null )
         {
