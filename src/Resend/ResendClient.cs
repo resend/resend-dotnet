@@ -478,6 +478,14 @@ public class ResendClient : IResend
             {
                 ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
+            else if ( err.ErrorType == ErrorType.RestrictedApiKey )
+            {
+                ex = new ResendException( HttpStatusCode.Forbidden, err.ErrorType, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.NotFound )
+            {
+                ex = new ResendException( HttpStatusCode.NotFound, err.ErrorType, err.Message );
+            }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
@@ -575,6 +583,14 @@ public class ResendClient : IResend
             {
                 ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
+            else if ( err.ErrorType == ErrorType.RestrictedApiKey )
+            {
+                ex = new ResendException( HttpStatusCode.Forbidden, err.ErrorType, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.NotFound )
+            {
+                ex = new ResendException( HttpStatusCode.NotFound, err.ErrorType, err.Message );
+            }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
@@ -585,6 +601,9 @@ public class ResendClient : IResend
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
+
+            if ( _throw == true )
+                throw ex;
 
             if ( _throw == true )
                 throw ex;
