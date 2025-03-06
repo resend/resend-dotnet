@@ -3,7 +3,7 @@ using System.Net;
 namespace Resend;
 
 /// <summary>
-/// Status code 429. User has hit their rate limit and should wait before resending the request.
+/// Status code 429. User has hit their daily quota and should wait before resending the request.
 /// <summary />
 public class ResendDailyQuotaExceededException : ResendException, IHasRateLimit
 {
