@@ -490,6 +490,10 @@ public class ResendClient : IResend
             {
                 ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
             }
+            else if ( err.ErrorType == ErrorType.MissingRequiredField )
+            {
+                ex = new ResendMissingRequiredFieldException( HttpStatusCode.UnprocessableContent, err.Message );
+            }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
@@ -501,6 +505,8 @@ public class ResendClient : IResend
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
+            if ( _throw == true )
+                throw ex;
             return new ResendResponse( ex, rrl );
         }
 
@@ -595,6 +601,10 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.InvalidAttachment )
             {
                 ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingRequiredField )
+            {
+                ex = new ResendMissingRequiredFieldException( HttpStatusCode.UnprocessableContent, err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
