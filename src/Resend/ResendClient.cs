@@ -470,17 +470,21 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
-            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            else if ( err.ErrorType == ErrorType.ValidationError )
             {
-                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendValidationErrorException( HttpStatusCode.BadRequest, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
-            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
-                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -563,17 +567,21 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
-            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            else if ( err.ErrorType == ErrorType.ValidationError )
             {
-                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendValidationErrorException( HttpStatusCode.BadRequest, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
                 ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
-            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
-                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
+                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
