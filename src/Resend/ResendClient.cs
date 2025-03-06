@@ -562,11 +562,20 @@ public class ResendClient : IResend
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
             }
+            else if ( err.ErrorType == ErrorType.SecurityError )
+            {
+                ex = new ResendSecurityErrorException( HttpStatusCode.UnavailableForLegalReasons, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.ApplicationError )
+            {
+                ex = new ResendApplicationErrorException( HttpStatusCode.InternalServerError, err.Message );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
             if ( _throw == true )
                 throw ex;
+
             return new ResendResponse( ex, rrl );
         }
 
@@ -673,6 +682,14 @@ public class ResendClient : IResend
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
                 ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.SecurityError )
+            {
+                ex = new ResendSecurityErrorException( HttpStatusCode.UnavailableForLegalReasons, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.ApplicationError )
+            {
+                ex = new ResendApplicationErrorException( HttpStatusCode.InternalServerError, err.Message );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
