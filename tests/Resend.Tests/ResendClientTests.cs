@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Options;
 using Resend.ApiServer;
 
 namespace Resend.Tests;
@@ -18,12 +17,12 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         var http = _factory.CreateClient();
 
-        var opt = Options.Create( new ResendClientOptions()
+        var opt = new ResendClientOptions()
         {
             ApiUrl = http.BaseAddress!.ToString(),
-        } );
+        };
 
-        _resend = new ResendClient( opt, http );
+        _resend = ResendClient.Create( opt, http );
     }
 
 
