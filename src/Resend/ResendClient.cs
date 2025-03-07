@@ -25,7 +25,7 @@ public class ResendClient : IResend
     /// <param name="httpClient">
     /// HTTP client instance.
     /// </param>
-    public ResendClient( IOptions<ResendClientOptions> options, HttpClient httpClient )
+    public ResendClient( IOptionsSnapshot<ResendClientOptions> options, HttpClient httpClient )
     {
         /*
          * Authentication
@@ -677,11 +677,11 @@ public class ResendClient : IResend
     /// preferable to use dependency injection to configure/inject `IResend`
     /// instances.
     /// </remarks>
-    public static IResend Create( ResendClientOptions options )
+    public static IResend Create( ResendClientOptions options, HttpClient? http = null )
     {
-        var opt = Options.Create( options );
+        var snap = new OptionsSnapshot<ResendClientOptions>( options );
 
-        return new ResendClient( opt, new HttpClient() );
+        return new ResendClient( snap, http ?? new HttpClient() );
     }
 
 

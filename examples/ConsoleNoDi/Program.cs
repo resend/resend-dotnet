@@ -17,12 +17,12 @@ if ( apiToken == null )
 /*
  * 
  */
-var options = Options.Create( new ResendClientOptions()
+var options = new ResendClientOptions()
 {
     ApiToken = apiToken,
-} );
+};
 
-var resend = new ResendClient( options, new HttpClient() );
+var resend = ResendClient.Create( options );
 
 
 /*

@@ -16,7 +16,7 @@ public static class DiExtensions
 
         var sd1 = ServiceDescriptor.Transient<IResend>( ( sp ) =>
         {
-            var opt = sp.GetRequiredService<IOptions<ResendClientOptions>>();
+            var opt = sp.GetRequiredService<IOptionsSnapshot<ResendClientOptions>>();
             var http = sp.GetRequiredService<HttpClient>();
 
             return new ResendClient( opt, http );
