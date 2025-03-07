@@ -532,43 +532,43 @@ public class ResendClient : IResend
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
             else if ( err.ErrorType == ErrorType.ValidationError )
             {
-                ex = new ResendValidationErrorException( HttpStatusCode.BadRequest, err.Message );
+                ex = new ResendValidationErrorException( (HttpStatusCode) err.StatusCode, err.Message );
             }
             else if ( err.ErrorType == ErrorType.MissingApiKey )
             {
-                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
+                ex = new ResendMissingApiKeyException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.RestrictedApiKey )
             {
-                ex = new ResendRestrictedApiKeyException( HttpStatusCode.Forbidden, err.Message );
+                ex = new ResendRestrictedApiKeyException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.NotFound )
             {
-                ex = new ResendNotFoundException( HttpStatusCode.NotFound, err.Message );
+                ex = new ResendNotFoundException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.InvalidAttachment )
             {
-                ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
+                ex = new ResendInvalidAttachmentException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.MissingRequiredField )
             {
-                ex = new ResendMissingRequiredFieldException( HttpStatusCode.UnprocessableContent, err.Message );
+                ex = new ResendMissingRequiredFieldException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
-                ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendDailyQuotaExceededException( err.Message, rrl );
             }
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
-                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendRateLimitExceededException( err.Message, rrl );
             }
             else if ( err.ErrorType == ErrorType.SecurityError )
             {
-                ex = new ResendSecurityErrorException( HttpStatusCode.UnavailableForLegalReasons, err.Message );
+                ex = new ResendSecurityErrorException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.ApplicationError )
             {
-                ex = new ResendApplicationErrorException( HttpStatusCode.InternalServerError, err.Message );
+                ex = new ResendApplicationErrorException( err.Message );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
@@ -653,43 +653,43 @@ public class ResendClient : IResend
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
             else if ( err.ErrorType == ErrorType.ValidationError )
             {
-                ex = new ResendValidationErrorException( HttpStatusCode.BadRequest, err.Message );
+                ex = new ResendValidationErrorException( (HttpStatusCode) err.StatusCode, err.Message );
             }
             else if ( err.ErrorType == ErrorType.MissingApiKey )
             {
-                ex = new ResendMissingApiKeyException( HttpStatusCode.Unauthorized, err.Message );
+                ex = new ResendMissingApiKeyException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.RestrictedApiKey )
             {
-                ex = new ResendRestrictedApiKeyException( HttpStatusCode.Forbidden, err.Message );
+                ex = new ResendRestrictedApiKeyException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.NotFound )
             {
-                ex = new ResendNotFoundException( HttpStatusCode.NotFound, err.Message );
+                ex = new ResendNotFoundException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.InvalidAttachment )
             {
-                ex = new ResendInvalidAttachmentException( HttpStatusCode.UnprocessableContent, err.Message );
+                ex = new ResendInvalidAttachmentException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.MissingRequiredField )
             {
-                ex = new ResendMissingRequiredFieldException( HttpStatusCode.UnprocessableContent, err.Message );
+                ex = new ResendMissingRequiredFieldException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
             {
-                ex = new ResendDailyQuotaExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendDailyQuotaExceededException( err.Message, rrl );
             }
             else if ( err.ErrorType == ErrorType.RateLimitExceeded )
             {
-                ex = new ResendRateLimitExceededException( HttpStatusCode.TooManyRequests, err.Message, rrl );
+                ex = new ResendRateLimitExceededException( err.Message, rrl );
             }
             else if ( err.ErrorType == ErrorType.SecurityError )
             {
-                ex = new ResendSecurityErrorException( HttpStatusCode.UnavailableForLegalReasons, err.Message );
+                ex = new ResendSecurityErrorException( err.Message );
             }
             else if ( err.ErrorType == ErrorType.ApplicationError )
             {
-                ex = new ResendApplicationErrorException( HttpStatusCode.InternalServerError, err.Message );
+                ex = new ResendApplicationErrorException( err.Message );
             }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );

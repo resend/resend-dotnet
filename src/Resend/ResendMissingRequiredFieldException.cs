@@ -10,15 +10,15 @@ public class ResendMissingRequiredFieldException : ResendException
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendMissingRequiredFieldException"/> class.
     /// <summary />
-    public ResendMissingRequiredFieldException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.MissingRequiredField, message )
+    public ResendMissingRequiredFieldException( string message )
+        : base( HttpStatusCode.UnprocessableContent, ErrorType.MissingRequiredField, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendMissingRequiredFieldException"/> class.
     /// <summary />
-    public ResendMissingRequiredFieldException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.MissingRequiredField, message, innerException )
+    public ResendMissingRequiredFieldException( string message, Exception? innerException )
+        : base( HttpStatusCode.UnprocessableContent, ErrorType.MissingRequiredField, message, innerException )
     {
     }
 }

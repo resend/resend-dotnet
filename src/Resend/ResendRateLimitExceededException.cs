@@ -10,8 +10,8 @@ public class ResendRateLimitExceededException : ResendException, IHasRateLimit
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendRateLimitExceededException"/> class.
     /// <summary />
-    public ResendRateLimitExceededException( HttpStatusCode? statusCode, string message, ResendRateLimit? rateLimit )
-        : base( statusCode, ErrorType.RateLimitExceeded, message )
+    public ResendRateLimitExceededException( string message, ResendRateLimit? rateLimit )
+        : base( HttpStatusCode.TooManyRequests, ErrorType.RateLimitExceeded, message )
     {
         this.Limits = rateLimit;
     }
@@ -19,8 +19,8 @@ public class ResendRateLimitExceededException : ResendException, IHasRateLimit
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendRateLimitExceededException"/> class.
     /// <summary />
-    public ResendRateLimitExceededException( HttpStatusCode? statusCode, string message, Exception? innerException, ResendRateLimit? rateLimit )
-        : base( statusCode, ErrorType.RateLimitExceeded, message, innerException )
+    public ResendRateLimitExceededException( string message, Exception? innerException, ResendRateLimit? rateLimit )
+        : base( HttpStatusCode.TooManyRequests, ErrorType.RateLimitExceeded, message, innerException )
     {
         this.Limits = rateLimit;
     }
