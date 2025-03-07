@@ -10,14 +10,14 @@ public class ResendInvalidAttachmentException : ResendException
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendInvalidAttachmentException"/> class.
     /// <summary />
-    public ResendInvalidAttachmentException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.InvalidAttachment, message )
+    public ResendInvalidAttachmentException( string message )
+        : base( HttpStatusCode.UnprocessableContent, ErrorType.InvalidAttachment, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendInvalidAttachmentException"/> class.
     /// <summary />
-    public ResendInvalidAttachmentException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.InvalidAttachment, message, innerException )
+    public ResendInvalidAttachmentException( string message, Exception? innerException )
+        : base( HttpStatusCode.UnprocessableContent, ErrorType.InvalidAttachment, message, innerException )
     { }
 }

@@ -10,15 +10,15 @@ public class ResendMissingApiKeyException : ResendException
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendMissingApiKeyException"/> class.
     /// <summary />
-    public ResendMissingApiKeyException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.MissingApiKey, message )
+    public ResendMissingApiKeyException( string message )
+        : base( HttpStatusCode.Unauthorized, ErrorType.MissingApiKey, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendMissingApiKeyException"/> class.
     /// <summary />
-    public ResendMissingApiKeyException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.MissingApiKey, message, innerException )
+    public ResendMissingApiKeyException( string message, Exception? innerException )
+        : base( HttpStatusCode.Unauthorized, ErrorType.MissingApiKey, message, innerException )
     {
     }
 }

@@ -10,14 +10,14 @@ public class ResendRestrictedApiKeyException : ResendException
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendRestrictedApiKeyException"/> class.
     /// <summary />
-    public ResendRestrictedApiKeyException( HttpStatusCode? statusCode, string message )
-        : base( statusCode, ErrorType.RestrictedApiKey, message )
+    public ResendRestrictedApiKeyException( string message )
+        : base( HttpStatusCode.Forbidden, ErrorType.RestrictedApiKey, message )
     { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResendRestrictedApiKeyException"/> class.
     /// <summary />
-    public ResendRestrictedApiKeyException( HttpStatusCode? statusCode, string message, Exception? innerException )
-        : base( statusCode, ErrorType.RestrictedApiKey, message, innerException )
+    public ResendRestrictedApiKeyException( string message, Exception? innerException )
+        : base( HttpStatusCode.Forbidden, ErrorType.RestrictedApiKey, message, innerException )
     { }
 }
