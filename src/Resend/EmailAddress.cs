@@ -7,7 +7,7 @@ namespace Resend;
 /// Email address.
 /// </summary>
 [JsonConverter( typeof( EmailAddressConverter ) )]
-public class EmailAddress
+public class EmailAddress : IEquatable<EmailAddress>
 {
     /// <summary>
     /// Email address.
@@ -79,6 +79,20 @@ public class EmailAddress
             Email = email,
             DisplayName = displayName,
         };
+    }
+
+
+    /// <inheritdoc />
+    public bool Equals( EmailAddress? other )
+    {
+        return this.Email.Equals( other?.Email );
+    }
+
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        return this.Email.GetHashCode();
     }
 
 
