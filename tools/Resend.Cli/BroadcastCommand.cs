@@ -10,6 +10,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( Broadcast.BroadcastRetrieveCommand ))]
 [Subcommand( typeof( Broadcast.BroadcastScheduleCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastSendCommand ) )]
+[Subcommand( typeof( Broadcast.BroadcastUpdateCommand ))]
 public class BroadcastCommand
 {
     /// <summary />

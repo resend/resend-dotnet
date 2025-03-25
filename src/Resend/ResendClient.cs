@@ -366,6 +366,17 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc/>
+    public async Task<ResendResponse> BroadcastUpdateAsync( Guid broadcastId, BroadcastUpdateData data, CancellationToken cancellationToken = default )
+    {
+        var path = $"/broadcasts/{broadcastId}";
+        var req = new HttpRequestMessage( HttpMethod.Patch, path );
+        req.Content = JsonContent.Create( data );
+
+        return await Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
     public async Task<ResendResponse> BroadcastSendAsync( Guid broadcastId, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}/send";
