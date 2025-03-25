@@ -25,6 +25,46 @@ public class Broadcast
     public Guid AudienceId { get; set; }
 
     /// <summary>
+    /// From.
+    /// </summary>
+    /// <remarks>
+    /// Set when retrieving the broadcast, null when listing broadcasts.
+    /// </remarks>
+    [JsonPropertyName( "from" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddress? From { get; set; }
+
+    /// <summary>
+    /// Reply-to email address.
+    /// </summary>
+    /// <remarks>
+    /// Set when retrieving the broadcast, null when listing broadcasts.
+    /// </remarks>
+    [JsonPropertyName( "reply_to" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? ReplyTo { get; set; }
+
+    /// <summary>
+    /// Email subject.
+    /// </summary>
+    /// <remarks>
+    /// Set when retrieving the broadcast, null when listing broadcasts.
+    /// </remarks>
+    [JsonPropertyName( "subject" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? Subject { get; set; }
+
+    /// <summary>
+    /// Preview text.
+    /// </summary>
+    /// <remarks>
+    /// Set when retrieving the broadcast, null when listing broadcasts.
+    /// </remarks>
+    [JsonPropertyName( "preview_text" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? PreviewText { get; set; }
+
+    /// <summary>
     /// Status.
     /// </summary>
     [JsonPropertyName( "status" )]

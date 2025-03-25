@@ -374,6 +374,19 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task BroadcastUpdate()
+    {
+        var resp = await _resend.BroadcastUpdateAsync( Guid.NewGuid(), new BroadcastUpdateData()
+        {
+            HtmlBody = "From unit test!",
+        } );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task BroadcastSend()
     {
         var resp = await _resend.BroadcastSendAsync( Guid.NewGuid() );

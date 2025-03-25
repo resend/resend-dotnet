@@ -5,21 +5,26 @@ using System.Text.Json;
 namespace Resend.Cli.Broadcast;
 
 /// <summary />
-[Command( "add", Description = "Create a broadcast" )]
-public class BroadcastAddCommand
+[Command( "update", Description = "Update a broadcast" )]
+public class BroadcastUpdateCommand
 {
     private readonly IResend _resend;
 
 
     /// <summary />
-    [Argument( 0, Description = "Broadcast data" )]
+    [Argument( 0, Description = "Broadcast identifier" )]
+    [Required]
+    public Guid? BroadcastId { get; set; }
+
+    /// <summary />
+    [Argument( 1, Description = "Broadcast data" )]
     [FileExists]
     [Required]
     public string? Filename { get; set; }
 
 
     /// <summary />
-    public BroadcastAddCommand( IResend resend )
+    public BroadcastUpdateCommand( IResend resend )
     {
         _resend = resend;
     }
@@ -32,20 +37,13 @@ public class BroadcastAddCommand
          * 
          */
         var json = await File.ReadAllTextAsync( this.Filename! );
-        var data = JsonSerializer.Deserialize<BroadcastData>( json );
+        var data = JsonSerializer.Deserialize<BroadcastUpdateData>( json );
 
 
         /*
          * 
          */
-        var res = await _resend.BroadcastAddAsync( data! );
-        var id = res.Content;
-
-
-        /*
-         * 
-         */
-        Console.WriteLine( id );
+        var res = await _resend.BroadcastUpdateAsync( this.BroadcastId!.Value, data! );
 
         return 0;
     }

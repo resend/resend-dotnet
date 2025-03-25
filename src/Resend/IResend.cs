@@ -447,6 +447,16 @@ public interface IResend
 
 
     /// <summary>
+    /// Updates a draft broadcast.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="data">Broadcast data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> BroadcastUpdateAsync( Guid broadcastId, BroadcastUpdateData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Sends a broadcast immediately.
     /// </summary>
     /// <param name="broadcastId">Broadcast identifier.</param>
