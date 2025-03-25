@@ -1,4 +1,6 @@
-﻿namespace Resend;
+﻿using Microsoft.Extensions.Options;
+
+namespace Resend;
 
 /// <summary />
 public class ResendClientOptions
@@ -21,4 +23,30 @@ public class ResendClientOptions
     /// fails (for whatever reason).
     /// </summary>
     public bool ThrowExceptions { get; set; } = true;
+}
+
+
+/// <summary />
+internal class OptionsSnapshot<T> : IOptionsSnapshot<T>
+    where T : class
+{
+    private readonly T _value;
+
+
+    /// <summary />
+    internal OptionsSnapshot( T value )
+    {
+        _value = value;
+    }
+
+
+    /// <inheritdoc />
+    public T Value => _value;
+
+
+    /// <inheritdoc />
+    public T Get( string? name )
+    {
+        return _value;
+    }
 }
