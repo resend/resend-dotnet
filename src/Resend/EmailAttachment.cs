@@ -73,7 +73,14 @@ public class EmailAttachment
 
         var attachment = new EmailAttachment();
         attachment.Filename = System.IO.Path.GetFileName( filename );
+
+#if NETSTANDARD2_0_OR_GREATER
+        await Task.Yield();
+
+        attachment.Content = File.ReadAllBytes( filename );
+#else
         attachment.Content = await File.ReadAllBytesAsync( filename, cancellationToken );
+#endif
 
         return attachment;
     }
