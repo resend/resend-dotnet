@@ -16,6 +16,10 @@ public class EmailSendCommand
     public string? InputFile { get; set; }
 
     /// <summary />
+    [Option( "-k|--key", CommandOptionType.SingleValue, Description = "Idempotency key" )]
+    public string? IdempotencyKey { get; set; }
+
+    /// <summary />
     [Option( "-v|--verbose", CommandOptionType.NoValue, Description = "Emit additional console output" )]
     public bool Verbose { get; set; }
 
@@ -35,7 +39,7 @@ public class EmailSendCommand
          */
         string json;
 
-        if ( Console.IsInputRedirected == true )
+        if ( Console.IsInputRedirected == true && this.InputFile == null )
         {
             json = await Console.In.ReadToEndAsync();
         }
@@ -117,7 +121,12 @@ public class EmailSendCommand
         /*
          * 
          */
-        var res = await _resend.EmailSendAsync( message );
+        ResendResponse<Guid> res;
+
+        if ( this.IdempotencyKey != null )
+            res = await _resend.EmailSendAsync( new StringIdempotencyKey( this.IdempotencyKey ), message );
+        else
+            res = await _resend.EmailSendAsync( message );
 
         Console.WriteLine( res.Content );
 

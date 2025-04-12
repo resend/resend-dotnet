@@ -66,6 +66,34 @@ public enum ErrorType
     [JsonStringValue( "application_error" )]
     ApplicationError,
 
+    /// <summary>
+    /// Invalid value provided as Idempotency Key, must be between 1-256 chars.
+    /// </summary>
+    /// <remarks>
+    /// Request must be retried using a valid idempotency key.
+    /// </remarks>
+    [JsonStringValue( "invalid_idempotency_key" )]
+    InvalidIdempotencyKey,
+
+    /// <summary>
+    /// Mismatch between idempotency key and request payload.
+    /// </summary>
+    /// <remarks>
+    /// Retry request must be identical: the idempotency key and payloads must be identical.
+    /// </remarks>
+    [JsonStringValue( "invalid_idempotent_request" )]
+    InvalidIdempotentRequest,
+
+    /// <summary>
+    /// Idempotency key matches request which is still in progress.
+    /// </summary>
+    /// <remarks>
+    /// Past request will continue executing, current request was ignored. Moreover, in case
+    /// the original request fails to execute, it is still possible to retry in the future.
+    /// </remarks>
+    [JsonStringValue( "concurrent_idempotent_requests" )]
+    ConcurrentIdempotentRequests,
+
 
 
     /// <summary>
