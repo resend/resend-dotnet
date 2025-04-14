@@ -68,13 +68,13 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<Guid>> EmailSendAsync( IIdempotencyKey idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> EmailSendAsync( IIdempotencyKey idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
         req.Content = JsonContent.Create( email );
         req.Headers.Add( "Idempotency-Key", idempotencyKey.ToKey() );
 
-        return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
