@@ -58,38 +58,38 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<Guid>> EmailSendAsync( EmailMessage email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> EmailSendAsync( EmailMessage email, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
         req.Content = JsonContent.Create( email );
 
-        return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<EmailReceipt>> EmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<EmailReceipt>> EmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<EmailReceipt, EmailReceipt>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailReceipt, EmailReceipt>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<List<Guid>>> EmailBatchAsync( IEnumerable<EmailMessage> emails, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Guid>>> EmailBatchAsync( IEnumerable<EmailMessage> emails, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( emails );
 
-        return await Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+        return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
@@ -98,22 +98,22 @@ public class ResendClient : IResend
             MomentSchedule = rescheduleFor,
         } );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> EmailCancelAsync( Guid emailId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> EmailCancelAsync( Guid emailId, CancellationToken cancellationToken = default )
     {
         var path = $"emails/{emailId}/cancel";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default )
     {
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -123,63 +123,63 @@ public class ResendClient : IResend
             Region = region,
         } );
 
-        return await Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<Domain>> DomainRetrieveAsync( Guid domainId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Domain>> DomainRetrieveAsync( Guid domainId, CancellationToken cancellationToken = default )
     {
         var path = $"/domains/{domainId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> DomainUpdateAsync( Guid domainId, DomainUpdateData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> DomainUpdateAsync( Guid domainId, DomainUpdateData data, CancellationToken cancellationToken = default )
     {
         var path = $"/domains/{domainId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> DomainVerifyAsync( Guid domainId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> DomainVerifyAsync( Guid domainId, CancellationToken cancellationToken = default )
     {
         var path = $"/domains/{domainId}/verify";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<List<Domain>>> DomainListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Domain>>> DomainListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<Domain>, List<Domain>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Domain>, List<Domain>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> DomainDeleteAsync( Guid domainId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> DomainDeleteAsync( Guid domainId, CancellationToken cancellationToken = default )
     {
         var path = $"/domains/{domainId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<ApiKeyData>> ApiKeyCreateAsync( string keyName, Permission? permission = null, Guid? domainId = null, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<ApiKeyData>> ApiKeyCreateAsync( string keyName, Permission? permission = null, Guid? domainId = null, CancellationToken cancellationToken = default )
     {
         var path = $"/api-keys";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -190,42 +190,42 @@ public class ResendClient : IResend
             DomainId = domainId,
         } );
 
-        return await Execute<ApiKeyData, ApiKeyData>( req, ( x ) => x, cancellationToken );
+        return Execute<ApiKeyData, ApiKeyData>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<List<ApiKey>>> ApiKeyListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<ApiKey>>> ApiKeyListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/api-keys";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<ApiKey>, List<ApiKey>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<ApiKey>, List<ApiKey>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse> ApiKeyDeleteAsync( Guid apiKeyId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ApiKeyDeleteAsync( Guid apiKeyId, CancellationToken cancellationToken = default )
     {
         var path = $"/api-keys/{apiKeyId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<List<Webhook>>> WebhookListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Webhook>>> WebhookListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/webhooks";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<Webhook>, List<Webhook>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Webhook>, List<Webhook>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Guid>> AudienceAddAsync( string name, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> AudienceAddAsync( string name, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -234,42 +234,42 @@ public class ResendClient : IResend
             Name = name
         } );
 
-        return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Audience>> AudienceRetrieveAsync( Guid audienceId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Audience>> AudienceRetrieveAsync( Guid audienceId, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<Audience, Audience>( req, ( x ) => x, cancellationToken );
+        return Execute<Audience, Audience>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> AudienceDeleteAsync( Guid audienceId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> AudienceDeleteAsync( Guid audienceId, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<List<Audience>>> AudienceListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Audience>>> AudienceListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/audiences";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<Audience>, List<Audience>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Audience>, List<Audience>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Guid>> ContactAddAsync( Guid audienceId, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> ContactAddAsync( Guid audienceId, ContactData data, CancellationToken cancellationToken = default )
     {
         if ( data.Email == null )
             throw new ArgumentException( "Email must be non-null when creating contact", nameof( data ) + ".Email" );
@@ -278,106 +278,106 @@ public class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Contact>> ContactRetrieveAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Contact>> ContactRetrieveAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
+        return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> ContactUpdateByEmailAsync( Guid audienceId, string email, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactUpdateByEmailAsync( Guid audienceId, string email, ContactData data, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> ContactDeleteAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactDeleteAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> ContactDeleteByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactDeleteByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<List<Contact>>> ContactListAsync( Guid audienceId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Contact>>> ContactListAsync( Guid audienceId, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<Contact>, List<Contact>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Contact>, List<Contact>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Guid>> BroadcastAddAsync( BroadcastData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> BroadcastAddAsync( BroadcastData data, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<Broadcast>> BroadcastRetrieveAsync( Guid broadcastId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Broadcast>> BroadcastRetrieveAsync( Guid broadcastId, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<Broadcast, Broadcast>( req, ( x ) => x, cancellationToken );
+        return Execute<Broadcast, Broadcast>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> BroadcastUpdateAsync( Guid broadcastId, BroadcastUpdateData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> BroadcastUpdateAsync( Guid broadcastId, BroadcastUpdateData data, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> BroadcastSendAsync( Guid broadcastId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> BroadcastSendAsync( Guid broadcastId, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}/send";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -385,12 +385,12 @@ public class ResendClient : IResend
         {
         } );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> BroadcastScheduleAsync( Guid broadcastId, DateTime scheduleFor, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> BroadcastScheduleAsync( Guid broadcastId, DateTime scheduleFor, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}/send";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
@@ -399,27 +399,27 @@ public class ResendClient : IResend
             MomentSchedule = scheduleFor,
         } );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse<List<Broadcast>>> BroadcastListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<List<Broadcast>>> BroadcastListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return await Execute<ListOf<Broadcast>, List<Broadcast>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Broadcast>, List<Broadcast>>( req, ( x ) => x.Data, cancellationToken );
     }
 
 
     /// <inheritdoc/>
-    public async Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return await Execute( req, cancellationToken );
+        return Execute( req, cancellationToken );
     }
 
 
@@ -433,7 +433,7 @@ public class ResendClient : IResend
 
         try
         {
-            resp = await _http.SendAsync( req, HttpCompletionOption.ResponseContentRead, cancellationToken );
+            resp = await _http.SendAsync( req, HttpCompletionOption.ResponseContentRead, cancellationToken ).ConfigureAwait( false );
         }
         catch ( TaskCanceledException )
         {
@@ -465,7 +465,7 @@ public class ResendClient : IResend
 
             try
             {
-                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken );
+                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken ).ConfigureAwait( false );
             }
             catch ( Exception iex )
             {
@@ -510,7 +510,7 @@ public class ResendClient : IResend
 
         try
         {
-            resp = await _http.SendAsync( req, HttpCompletionOption.ResponseContentRead, cancellationToken );
+            resp = await _http.SendAsync( req, HttpCompletionOption.ResponseContentRead, cancellationToken ).ConfigureAwait( false );
         }
         catch ( TaskCanceledException )
         {
@@ -542,7 +542,7 @@ public class ResendClient : IResend
 
             try
             {
-                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken );
+                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken ).ConfigureAwait( false );
             }
             catch ( TaskCanceledException )
             {
@@ -579,7 +579,7 @@ public class ResendClient : IResend
 
         try
         {
-            obj = await resp.Content.ReadFromJsonAsync<T1>( cancellationToken );
+            obj = await resp.Content.ReadFromJsonAsync<T1>( cancellationToken ).ConfigureAwait( false );
         }
         catch ( TaskCanceledException )
         {
