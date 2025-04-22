@@ -15,6 +15,11 @@ public class ResendClient : IResend
     private readonly bool _throw;
     private readonly HttpClient _http;
 
+    /// <summary>
+    /// HTTP header name, for idempotency key.
+    /// </summary>
+    private const string IdempotencyKey = "Idempotency-Key";
+
 
     /// <summary>
     /// Initializes a new instance of ResendClient client.
@@ -72,7 +77,7 @@ public class ResendClient : IResend
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
         req.Content = JsonContent.Create( email );
-        req.Headers.Add( "Idempotency-Key", idempotencyKey );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
