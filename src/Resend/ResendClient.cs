@@ -15,6 +15,11 @@ public class ResendClient : IResend
     private readonly bool _throw;
     private readonly HttpClient _http;
 
+    /// <summary>
+    /// HTTP header name, for idempotency key.
+    /// </summary>
+    private const string IdempotencyKey = "Idempotency-Key";
+
 
     /// <summary>
     /// Initializes a new instance of ResendClient client.
@@ -64,6 +69,17 @@ public class ResendClient : IResend
         req.Content = JsonContent.Create( email );
 
         return await Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Guid>> EmailSendAsync( string idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
+        req.Content = JsonContent.Create( email );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -682,6 +698,7 @@ public class ResendClient : IResend
     /// options.
     /// </summary>
     /// <param name="options">Resend client options.</param>
+    /// <param name="http">HTTP client instance.</param>
     /// <returns>Instance of Resend client.</returns>
     /// <remarks>
     /// Utility method for examples/one-off apps. For most use-cases it is
