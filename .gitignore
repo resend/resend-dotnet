@@ -14,8 +14,8 @@ obj/
 !/bin/
 
 # Specific
-tools/Resend.Cli/env.cmd
-tools/Resend.Cli/exec.cmd
+tools/Resend.Cli/*.cmd
+tools/Resend.Cli/*.ps1
 tools/Resend.Cli/*.json
 tools/Resend.Cli/Properties/launchSettings.json
 

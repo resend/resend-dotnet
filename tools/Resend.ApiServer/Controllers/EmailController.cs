@@ -21,9 +21,15 @@ public class EmailController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "emails" )]
-    public ObjectId EmailSend( [FromBody] EmailMessage message )
+    public ObjectId EmailSend(
+        [FromHeader( Name = "Idempotency-Key" )] string? idempotencyKey,
+        [FromBody] EmailMessage message
+    )
     {
         _logger.LogDebug( "EmailSend" );
+
+        if ( idempotencyKey != null )
+            _logger.LogDebug( "With {IdempotencyKey}", idempotencyKey );
 
         return new ObjectId()
         {

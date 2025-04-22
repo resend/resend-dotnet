@@ -1,6 +1,5 @@
 ﻿using FluentEmail.Core;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Options;
 using Resend.ApiServer;
 
 namespace Resend.FluentEmail.Tests;
@@ -19,12 +18,12 @@ public partial class FluentTests : IClassFixture<WebApplicationFactory<Program>>
 
         var http = _factory.CreateClient();
 
-        var opt = Options.Create( new ResendClientOptions()
+        var opt = new ResendClientOptions()
         {
             ApiUrl = http.BaseAddress!.ToString(),
-        } );
+        };
 
-        _resend = new ResendClient( opt, http );
+        _resend = ResendClient.Create( opt, http );
 
         Email.DefaultSender = new ResendSender( _resend );
     }

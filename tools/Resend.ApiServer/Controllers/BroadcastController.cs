@@ -51,6 +51,21 @@ public class BroadcastController : ControllerBase
 
 
     /// <summary />
+    [HttpPatch]
+    [Route( "broadcasts/{broadcastId}" )]
+    public ObjectId BroadcastUpdate( [FromRoute] Guid broadcastId, [FromBody] BroadcastUpdateData message )
+    {
+        _logger.LogDebug( "BroadcastUpdate" );
+
+        return new ObjectId()
+        {
+            Object = "broadcast",
+            Id = broadcastId,
+        };
+    }
+
+
+    /// <summary />
     [HttpPost]
     [Route( "broadcasts/{broadcastId}/send" )]
     public ActionResult BroadcastSend( [FromRoute] Guid broadcastId, [FromBody] BroadcastScheduleRequest message )

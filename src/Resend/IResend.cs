@@ -22,6 +22,26 @@ public interface IResend
 
 
     /// <summary>
+    /// Send an email using idempotency key, such that retries do not yield duplicate
+    /// submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">
+    /// Idempotency key.
+    /// </param>
+    /// <param name="email">
+    /// Email.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Email identifier.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/emails/send-email"/>
+    Task<ResendResponse<Guid>> EmailSendAsync( string idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Retrieves the email receipt for the given email.
     /// </summary>
     /// <param name="emailId">
@@ -444,6 +464,16 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Broadcast data.</returns>
     Task<ResendResponse<Broadcast>> BroadcastRetrieveAsync( Guid broadcastId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Updates a draft broadcast.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="data">Broadcast data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> BroadcastUpdateAsync( Guid broadcastId, BroadcastUpdateData data, CancellationToken cancellationToken = default );
 
 
     /// <summary>

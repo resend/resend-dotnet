@@ -10,7 +10,7 @@ public class ResendMockClient : ResendClient, IResend
 
 
     /// <summary />
-    public ResendMockClient( IOptions<ResendClientOptions> options, HttpClient httpClient )
+    public ResendMockClient( IOptionsSnapshot<ResendClientOptions> options, HttpClient httpClient )
         : base( options, httpClient )
     {
     }

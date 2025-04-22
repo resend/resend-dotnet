@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Svix" Version="1.56.0" />
+    <PackageReference Include="Svix" Version="1.61.0" />
   </ItemGroup>
 
   <ItemGroup>

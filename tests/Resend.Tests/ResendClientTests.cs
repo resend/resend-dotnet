@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Options;
 using Resend.ApiServer;
 
 namespace Resend.Tests;
@@ -18,12 +17,12 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         var http = _factory.CreateClient();
 
-        var opt = Options.Create( new ResendClientOptions()
+        var opt = new ResendClientOptions()
         {
             ApiUrl = http.BaseAddress!.ToString(),
-        } );
+        };
 
-        _resend = new ResendClient( opt, http );
+        _resend = ResendClient.Create( opt, http );
     }
 
 
@@ -368,6 +367,19 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     public async Task BroadcastRetrieve()
     {
         var resp = await _resend.BroadcastRetrieveAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastUpdate()
+    {
+        var resp = await _resend.BroadcastUpdateAsync( Guid.NewGuid(), new BroadcastUpdateData()
+        {
+            HtmlBody = "From unit test!",
+        } );
 
         Assert.NotNull( resp );
     }
