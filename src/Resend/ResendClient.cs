@@ -84,7 +84,7 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public async Task<ResendResponse<EmailReceipt>> EmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<EmailReceipt>> EmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
