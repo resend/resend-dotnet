@@ -38,7 +38,7 @@ public interface IResend
     /// Email identifier.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/emails/send-email"/>
-    Task<ResendResponse<Guid>> EmailSendAsync( IIdempotencyKey idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Guid>> EmailSendAsync( string idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default );
 
 
     /// <summary>

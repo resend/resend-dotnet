@@ -68,11 +68,11 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public Task<ResendResponse<Guid>> EmailSendAsync( IIdempotencyKey idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> EmailSendAsync( string idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
         req.Content = JsonContent.Create( email );
-        req.Headers.Add( "Idempotency-Key", idempotencyKey.ToKey() );
+        req.Headers.Add( "Idempotency-Key", idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
@@ -693,6 +693,7 @@ public class ResendClient : IResend
     /// options.
     /// </summary>
     /// <param name="options">Resend client options.</param>
+    /// <param name="http">HTTP client instance.</param>
     /// <returns>Instance of Resend client.</returns>
     /// <remarks>
     /// Utility method for examples/one-off apps. For most use-cases it is

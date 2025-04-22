@@ -12,7 +12,7 @@ public partial class ResendClientTests
         email.To = "to@example.com";
         email.HtmlBody = "From unit test!";
 
-        var key = new UuidIdempotencyKey( Guid.NewGuid() );
+        var key = IdempotencyKey.New();
 
         var resp = await _resend.EmailSendAsync( key, email );
 
@@ -32,11 +32,7 @@ public partial class ResendClientTests
         email.To = "to@example.com";
         email.HtmlBody = "From unit test!";
 
-        var key = new EntityIdempotencyKey<Guid>()
-        {
-            EntityType = "email",
-            EntityId = Guid.NewGuid(),
-        };
+        var key = IdempotencyKey.New<Guid>( "test", Guid.NewGuid() );
 
         var resp = await _resend.EmailSendAsync( key, email );
 

@@ -124,7 +124,7 @@ public class EmailSendCommand
         ResendResponse<Guid> res;
 
         if ( this.IdempotencyKey != null )
-            res = await _resend.EmailSendAsync( new StringIdempotencyKey( this.IdempotencyKey ), message );
+            res = await _resend.EmailSendAsync( this.IdempotencyKey, message );
         else
             res = await _resend.EmailSendAsync( message );
 
