@@ -309,6 +309,16 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc/>
+    public Task<ResendResponse<Contact>> ContactRetrieveByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default )
+    {
+        var path = $"/audiences/{audienceId}/contacts/{email}";
+        var req = new HttpRequestMessage( HttpMethod.Get, path );
+
+        return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
     public async Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default )
     {
         var path = $"/audiences/{audienceId}/contacts/{contactId}";

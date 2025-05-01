@@ -18,9 +18,9 @@ public class ContactRetrieveCommand
     public Guid? AudienceId { get; set; }
 
     /// <summary />
-    [Argument( 1, Description = "Contact identifier" )]
+    [Argument( 1, Description = "Contact identifier or email" )]
     [Required]
-    public Guid? ContactId { get; set; }
+    public string? Contact { get; set; }
 
     /// <summary />
     [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON array" )]
@@ -37,8 +37,27 @@ public class ContactRetrieveCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.ContactRetrieveAsync( this.AudienceId!.Value, this.ContactId!.Value );
-        var contact = res.Content;
+        /*
+         * 
+         */
+        Resend.Contact contact;
+
+        if ( this.Contact!.Contains( "@" ) == true )
+        {
+            var res = await _resend.ContactRetrieveByEmailAsync( this.AudienceId!.Value, this.Contact! );
+            contact = res.Content;
+        }
+        else
+        {
+            if ( Guid.TryParse( this.Contact!, out var contactId ) == false )
+            {
+                Console.WriteLine( "err: Contact is not a valid Guid" );
+                return 1;
+            }
+
+            var res = await _resend.ContactRetrieveAsync( this.AudienceId!.Value, contactId );
+            contact = res.Content;
+        }
 
 
         /*
