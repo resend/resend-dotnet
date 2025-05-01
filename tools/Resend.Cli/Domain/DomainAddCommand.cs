@@ -20,6 +20,10 @@ public class DomainAddCommand
     [Option( "-r|--region", CommandOptionType.SingleValue, Description = "Delivery region" )]
     public DeliveryRegion? Region { get; set; }
 
+    /// <summary />
+    [Option( "--return-path", CommandOptionType.SingleValue, Description = "Return path" )]
+    public string? ReturnPath { get; set; }
+
 
     /// <summary />
     public DomainAddCommand( IResend resend )
@@ -31,7 +35,12 @@ public class DomainAddCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.DomainAddAsync( this.DomainName, this.Region );
+        var res = await _resend.DomainAddAsync( new DomainAddData()
+        {
+            DomainName = this.DomainName,
+            Region = this.Region,
+            CustomReturnPath = this.ReturnPath,
+        } );
         var domain = res.Content;
 
 
