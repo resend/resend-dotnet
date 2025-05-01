@@ -135,7 +135,7 @@ public class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( new DomainAddData()
         {
-            Name = domainName,
+            DomainName = domainName,
             Region = region,
         } );
 

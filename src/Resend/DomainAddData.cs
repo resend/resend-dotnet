@@ -11,7 +11,7 @@ public class DomainAddData
     /// Domain name.
     /// </summary>
     [JsonPropertyName( "name" )]
-    public string Name { get; set; } = default!;
+    public string DomainName { get; set; } = default!;
 
     /// <summary>
     /// Delivery region.
