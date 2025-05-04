@@ -20,7 +20,7 @@ public class DomainController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "domains" )]
-    public Domain DomainAdd( [FromBody] DomainAddRequest request )
+    public Domain DomainAdd( [FromBody] DomainAddData request )
     {
         _logger.LogDebug( "DomainAdd" );
 

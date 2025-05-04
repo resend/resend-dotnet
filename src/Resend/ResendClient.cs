@@ -133,13 +133,24 @@ public class ResendClient : IResend
     {
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( new DomainAddRequest()
+        req.Content = JsonContent.Create( new DomainAddData()
         {
-            Name = domainName,
+            DomainName = domainName,
             Region = region,
         } );
 
         return await Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Domain>> DomainAddAsync( DomainAddData data, CancellationToken cancellationToken = default )
+    {
+        var path = $"/domains";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( data );
+
+        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
     }
 
 

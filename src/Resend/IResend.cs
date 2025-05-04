@@ -134,6 +134,22 @@ public interface IResend
 
 
     /// <summary>
+    /// Create a (sender) domain.
+    /// </summary>
+    /// <param name="data">
+    /// Domain name.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/domains/create-domain"/>
+    Task<ResendResponse<Domain>> DomainAddAsync( DomainAddData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Retrieves a domain.
     /// </summary>
     /// <param name="domainId">
