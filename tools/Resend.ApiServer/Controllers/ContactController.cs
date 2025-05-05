@@ -34,8 +34,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpGet]
-    [Route( "audiences/{audienceId}/contacts/{contactId}" )]
-    public Contact ContactRetrieve( [FromRoute] Guid audienceId, Guid contactId )
+    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
+    public Contact ContactRetrieve( [FromRoute] Guid audienceId, [FromRoute] Guid contactId )
     {
         _logger.LogDebug( "ContactRetrieve" );
 
@@ -43,6 +43,25 @@ public class ContactController : ControllerBase
         {
             Id = contactId,
             Email = "email@test.com",
+            FirstName = "Bob",
+            LastName = "Test",
+            MomentCreated = DateTime.UtcNow.AddDays( -1 ),
+            IsUnsubscribed = true,
+        };
+    }
+
+
+    /// <summary />
+    [HttpGet]
+    [Route( "audiences/{audienceId}/contacts/{email}" )]
+    public Contact ContactRetrieveByEmail( [FromRoute] Guid audienceId, [FromRoute] string email )
+    {
+        _logger.LogDebug( "ContactRetrieve" );
+
+        return new Contact()
+        {
+            Id = Guid.NewGuid(),
+            Email = email,
             FirstName = "Bob",
             LastName = "Test",
             MomentCreated = DateTime.UtcNow.AddDays( -1 ),

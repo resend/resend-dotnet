@@ -366,6 +366,25 @@ public interface IResend
 
 
     /// <summary>
+    /// Retrieve a single contact from an audience using email address.
+    /// </summary>
+    /// <param name="audienceId">
+    /// Audience identifier.
+    /// </param>
+    /// <param name="email">
+    /// Contact email.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancelation token.
+    /// </param>
+    /// <returns>
+    /// A Contact.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/contacts/get-contact" />
+    Task<ResendResponse<Contact>> ContactRetrieveByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Update an existing contact.
     /// </summary>
     /// <param name="audienceId">
