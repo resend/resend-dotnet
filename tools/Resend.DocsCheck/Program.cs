@@ -191,6 +191,7 @@ public class Program
             MetadataReference.CreateFromFile( Assembly.Load( "System.Runtime" ).Location ),
             MetadataReference.CreateFromFile( Assembly.Load( "System.Collections" ).Location ),
             MetadataReference.CreateFromFile( typeof( List<> ).Assembly.Location ),
+            MetadataReference.CreateFromFile( typeof( HttpClient ).Assembly.Location ),
             MetadataReference.CreateFromFile( typeof( IResend ).Assembly.Location ),
         };
 
