@@ -134,6 +134,22 @@ public interface IResend
 
 
     /// <summary>
+    /// Create a (sender) domain.
+    /// </summary>
+    /// <param name="data">
+    /// Domain name.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/domains/create-domain"/>
+    Task<ResendResponse<Domain>> DomainAddAsync( DomainAddData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Retrieves a domain.
     /// </summary>
     /// <param name="domainId">
@@ -347,6 +363,25 @@ public interface IResend
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/contacts/get-contact" />
     Task<ResendResponse<Contact>> ContactRetrieveAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Retrieve a single contact from an audience using email address.
+    /// </summary>
+    /// <param name="audienceId">
+    /// Audience identifier.
+    /// </param>
+    /// <param name="email">
+    /// Contact email.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancelation token.
+    /// </param>
+    /// <returns>
+    /// A Contact.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/contacts/get-contact" />
+    Task<ResendResponse<Contact>> ContactRetrieveByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default );
 
 
     /// <summary>

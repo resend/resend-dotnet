@@ -279,6 +279,16 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task ContactRetrieveByEmail()
+    {
+        var resp = await _resend.ContactRetrieveByEmailAsync( Guid.NewGuid(), "test@email.com" );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task ContactUpdate()
     {
         var req = new ContactData()
