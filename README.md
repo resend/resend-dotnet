@@ -72,7 +72,7 @@ public class FeatureImplementation
     }
 
 
-    public Task Execute()
+    public async Task Execute()
     {
         var message = new EmailMessage();
         message.From = "you@example.com";
@@ -105,7 +105,7 @@ public class FeatureImplementation
     }
 
 
-    public Task Execute()
+    public async Task Execute()
     {
         var message = new EmailMessage();
         message.From = "you@example.com";
