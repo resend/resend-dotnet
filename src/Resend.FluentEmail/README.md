@@ -76,7 +76,7 @@ public class FeatureImplementation
     }
 
 
-    public Task Execute()
+    public async Task Execute()
     {
         var email = Email
             .From( "onboarding@resend.dev" )
