@@ -58,13 +58,8 @@ public interface IResend
 
 
     /// <summary>
-    /// Send a batch of emails using idempotency key, such that retries do not yield
-    /// duplicate submissions.
+    /// Send a batch of emails.
     /// </summary>
-    /// </summary>
-    /// <param name="idempotencyKey">
-    /// Idempotency key.
-    /// </param>
     /// <param name="emails">
     /// List of emails.
     /// </param>
@@ -79,8 +74,12 @@ public interface IResend
 
 
     /// <summary>
-    /// Send a batch of emails.
+    /// Send a batch of emails  using idempotency key, such that retries do not yield
+    /// duplicate submissions.
     /// </summary>
+    /// <param name="idempotencyKey">
+    /// Idempotency key.
+    /// </param>
     /// <param name="emails">
     /// List of emails.
     /// </param>
