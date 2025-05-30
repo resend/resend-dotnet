@@ -62,9 +62,14 @@ public class EmailController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "emails/batch" )]
-    public ListOf<ObjectId> EmailBatch( [FromBody] List<EmailMessage> messages )
+    public ListOf<ObjectId> EmailBatch(
+        [FromHeader( Name = "Idempotency-Key" )] string? idempotencyKey,
+        [FromBody] List<EmailMessage> messages )
     {
         _logger.LogDebug( "EmailBatch" );
+
+        if ( idempotencyKey != null )
+            _logger.LogDebug( "With {IdempotencyKey}", idempotencyKey );
 
         var list = new ListOf<ObjectId>();
         list.Data = messages.Select( x => new ObjectId()
