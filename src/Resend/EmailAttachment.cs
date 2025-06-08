@@ -29,7 +29,7 @@ public class EmailAttachment
     /// </summary>
     [JsonPropertyName( "content" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public byte[]? Content { get; set; }
+    public ByteArrayOrString? Content { get; set; }
 
     /// <summary>
     /// Content type for the attachment, if not set will be derived from the filename property.
