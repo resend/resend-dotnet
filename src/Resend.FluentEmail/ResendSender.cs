@@ -1,6 +1,7 @@
 ﻿using FluentEmail.Core;
 using FluentEmail.Core.Interfaces;
 using FluentEmail.Core.Models;
+using System.Text;
 
 namespace Resend.FluentEmail;
 
@@ -167,16 +168,50 @@ public class ResendSender : ISender
                 var ms = new MemoryStream();
                 x.Data.CopyTo( ms );
 
-                return new EmailAttachment()
+                if ( AsText( x.ContentType ) == true )
                 {
-                    Filename = x.Filename,
-                    ContentType = x.ContentType,
-                    Content = ms.ToArray(),
-                };
+                    var text = Encoding.UTF8.GetString( ms.ToArray() );
+
+                    return new EmailAttachment()
+                    {
+                        Filename = x.Filename,
+                        ContentType = x.ContentType,
+                        Content = ms.ToArray(),
+                    };
+                }
+                else
+                {
+                    return new EmailAttachment()
+                    {
+                        Filename = x.Filename,
+                        ContentType = x.ContentType,
+                        Content = ms.ToArray(),
+                    };
+                }
+
             } ).ToList();
         }
 
         return message;
+    }
+
+
+    /// <summary />
+    private static bool AsText( string contentType )
+    {
+        if ( contentType.StartsWith( "text/" ) == true )
+            return true;
+
+        if ( contentType == "application/json" )
+            return true;
+
+        if ( contentType.EndsWith( "+json" ) == true )
+            return true;
+
+        if ( contentType.EndsWith( "+xml" ) == true )
+            return true;
+
+        return false;
     }
 
 
