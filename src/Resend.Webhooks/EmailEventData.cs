@@ -27,6 +27,10 @@ public class EmailEventData : IWebhookData
     public string Subject { get; set; } = default!;
 
     /// <summary />
+    [JsonPropertyName( "tags" )]
+    public List<EmailTag>? Tags { get; set; }
+
+    /// <summary />
     /// <remarks>
     /// Only set for <see cref="WebhookEventType.EmailClicked" />, otherwise is null.
     /// </remarks>
