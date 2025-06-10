@@ -27,6 +27,10 @@ public class EmailAttachment
     /// <summary>
     /// Content of the attached file.
     /// </summary>
+    /// <remarks>
+    /// When sending text content which must be interpreted as such by the email
+    /// client, assign a string value. Otherwise, assign a byte array.
+    /// </remarks>
     [JsonPropertyName( "content" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public ByteArrayOrString? Content { get; set; }
