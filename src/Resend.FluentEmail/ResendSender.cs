@@ -33,7 +33,7 @@ public class ResendSender : ISender
     {
         var message = ToMessage( email );
 
-        var resp = await _resend.EmailSendAsync( message, token ?? CancellationToken.None );
+        var resp = await _resend.EmailSendAsync( message, token ?? CancellationToken.None ).ConfigureAwait( false );
 
 
         /*
