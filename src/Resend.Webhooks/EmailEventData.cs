@@ -52,14 +52,30 @@ public class EmailBounceData
     public string Message { get; set; } = default!;
 
     /// <summary />
-    /// <remarks>TODO: What are the possible values?</remarks>
-    [JsonPropertyName( "subType" )]
-    public string SubType { get; set; } = default!;
+    [JsonPropertyName( "type" )]
+    public EmailBounceType Type { get; set; }
 
     /// <summary />
-    /// <remarks>TODO: What are the possible values?</remarks>
-    [JsonPropertyName( "type" )]
-    public string Type { get; set; } = default!;
+    [JsonPropertyName( "subType" )]
+    public EmailBounceSubType SubType { get; set; } = default!;
+}
+
+
+/// <summary />
+[JsonConverter( typeof( JsonStringEnumConverter<EmailBounceType> ) )]
+public enum EmailBounceType
+{
+    /// <summary />
+    Permanent,
+}
+
+
+/// <summary />
+[JsonConverter( typeof( JsonStringEnumConverter<EmailBounceSubType> ) )]
+public enum EmailBounceSubType
+{
+    /// <summary />
+    Suppressed,
 }
 
 
