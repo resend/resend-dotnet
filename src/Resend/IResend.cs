@@ -74,6 +74,26 @@ public interface IResend
 
 
     /// <summary>
+    /// Send a batch of emails  using idempotency key, such that retries do not yield
+    /// duplicate submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">
+    /// Idempotency key.
+    /// </param>
+    /// <param name="emails">
+    /// List of emails.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// List of email identifiers.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/emails/send-batch-emails"/>
+    Task<ResendResponse<List<Guid>>> EmailBatchAsync( string idempotencyKey, IEnumerable<EmailMessage> emails, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Reschedule an email.
     /// </summary>
     /// <param name="emailId">

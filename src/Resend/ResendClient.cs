@@ -105,6 +105,18 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<List<Guid>>> EmailBatchAsync( string idempotencyKey, IEnumerable<EmailMessage> emails, CancellationToken cancellationToken = default )
+    {
+        var path = $"/emails/batch";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( emails );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
+
+        return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse> EmailRescheduleAsync( Guid emailId, DateTimeOrHuman rescheduleFor, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/{emailId}";

@@ -20,7 +20,7 @@ public class EmailAttachmentTests
         Assert.Equal( "EmailAttachmentTests.cs", attach.Filename );
         Assert.Null( attach.Path );
         Assert.NotNull( attach.Content );
-        Assert.Equal( size, attach.Content.LongLength );
+        Assert.Equal( size, attach.Content?.LongLength );
     }
 
 
@@ -59,7 +59,7 @@ public class EmailAttachmentTests
         Assert.Equal( "EmailAttachmentTests.cs", attach.Filename );
         Assert.Null( attach.Path );
         Assert.NotNull( attach.Content );
-        Assert.Equal( size, attach.Content.LongLength );
+        Assert.Equal( size, attach.Content?.LongLength );
     }
 
 

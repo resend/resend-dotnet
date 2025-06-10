@@ -82,11 +82,23 @@ public class EmailSendCommand
                     return 1;
                 }
 
-                if ( this.Verbose == true )
-                    Console.WriteLine( "attachment: loading {0}...", att.Filename );
+                if ( att.ContentType?.StartsWith( "text/" ) == true
+                    || att.ContentType?.StartsWith( "application/json" ) == true )
+                {
+                    if ( this.Verbose == true )
+                        Console.WriteLine( "attachment: loading {0} as text...", att.Filename );
 
-                var content = await File.ReadAllBytesAsync( att.Filename );
-                att.Content = content;
+                    var content = await File.ReadAllTextAsync( att.Filename );
+                    att.Content = content;
+                }
+                else
+                {
+                    if ( this.Verbose == true )
+                        Console.WriteLine( "attachment: loading {0} as binary...", att.Filename );
+
+                    var content = await File.ReadAllBytesAsync( att.Filename );
+                    att.Content = content;
+                }
             }
         }
 
@@ -112,9 +124,27 @@ public class EmailSendCommand
                 Console.WriteLine( "{0}", message.TextBody );
             }
 
-            // TODO: headers
-            // TODO: tags
-            // TODO: attachments
+            // Headers
+            if ( message.Headers != null )
+            {
+                foreach ( var h in message.Headers )
+                    Console.WriteLine( "Header: {0}={1}", h.Key, h.Value );
+            }
+
+            // Tags
+            if ( message.Tags != null )
+            {
+                foreach ( var t in message.Tags )
+                    Console.WriteLine( "Tag: {0}={1}", t.Name, t.Value );
+            }
+
+
+            // Attachments
+            if ( message.Attachments != null )
+            {
+                foreach ( var att in message.Attachments )
+                    Console.WriteLine( "Attachment {0}: Content-Type={1}, FileSize={2}", att.Filename, att.ContentType, att.Content?.Length );
+            }
         }
 
 
@@ -136,11 +166,13 @@ public class EmailSendCommand
          */
         if ( this.Verbose == true && res.Limits != null )
         {
-            Console.WriteLine( "Policy={0}", res.Limits.Policy );
-            Console.WriteLine( "Limit={0}", res.Limits.Limit );
-            Console.WriteLine( "Remaining={0}", res.Limits.Remaining );
-            Console.WriteLine( "Reset={0}", res.Limits.Reset );
-            Console.WriteLine( "RetryAfter={0}", res.Limits.RetryAfter );
+            Console.WriteLine( "" );
+            Console.WriteLine( "Rate Limit:" );
+            Console.WriteLine( "  Policy={0}", res.Limits.Policy );
+            Console.WriteLine( "  Limit={0}", res.Limits.Limit );
+            Console.WriteLine( "  Remaining={0}", res.Limits.Remaining );
+            Console.WriteLine( "  Reset={0}", res.Limits.Reset );
+            Console.WriteLine( "  RetryAfter={0}", res.Limits.RetryAfter );
         }
 
         return 0;
