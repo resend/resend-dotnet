@@ -12,6 +12,7 @@
 | [WebControllerApi](https://github.com/resend/resend-dotnet/tree/master/examples/WebControllerApi) | 5000 | Send email from a controller
 | [WebMinimalApi](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi) | 5001 | Send email from a (minimal) API
 | [WebRazor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor)           | 5002 | Send email from a Razor form
+| [WebWebhook](https://github.com/resend/resend-dotnet/tree/master/examples/WebWebhook)       | 5007 | Receive webhook events from Resend
 
 
 Async
