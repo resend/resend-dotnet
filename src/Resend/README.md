@@ -77,7 +77,7 @@ public class FeatureImplementation
     {
         var message = new EmailMessage();
         message.From = "onboarding@resend.dev";
-        message.To.Add( "myapp@example.com" );
+        message.To.Add( "delivered@resend.dev" );
         message.Subject = "Hello!";
         message.HtmlBody = "<div><strong>Greetings<strong> 👋🏻 from .NET</div>";
 

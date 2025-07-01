@@ -38,8 +38,8 @@ try
 {
     var email = new EmailMessage()
     {
-        From = "you@example.com",
-        To = "user@gmail.com",
+        From = "onboarding@resend.dev",
+        To = "delivered@resend.dev",
         Subject = "Hello from Console",
         HtmlBody = "<p>Email using <strong>Resend .NET SDK</strong></p>",
         Attachments = [

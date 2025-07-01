@@ -80,7 +80,7 @@ public class FeatureImplementation
     {
         var email = Email
             .From( "onboarding@resend.dev" )
-            .To( "myapp@example.com" )
+            .To( "delivered@resend.dev" )
             .Subject( "Hello!" )
             .Body( "<div><strong>Greetings<strong> 👋🏻 from .NET</div>", true )
             .PlaintextAlternativeBody( "Greetigs from .NET" );
