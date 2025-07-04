@@ -27,6 +27,18 @@ public class EmailAddressList : List<EmailAddress>
 
 
     /// <summary>
+    /// Implicitly create an email address list from a single email address.
+    /// </summary>
+    public static implicit operator EmailAddressList( EmailAddress email )
+    {
+        var list = new EmailAddressList();
+        list.Add( email );
+
+        return list;
+    }
+
+
+    /// <summary>
     /// Implicitly create an email address list from an array of email strings.
     /// </summary>
     public static implicit operator EmailAddressList( string[] emails )
