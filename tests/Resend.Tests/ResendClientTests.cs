@@ -56,7 +56,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         Assert.True( resp.Success );
         Assert.NotNull( resp.Content );
         Assert.Equal( anyId, resp.Content.Id );
-        Assert.Equal( "from@example.com", resp.Content.From.Email );
+        Assert.Equal( "onboarding@resend.dev", resp.Content.From.Email );
         Assert.Single( resp.Content.To );
         Assert.Null( resp.Content.TextBody );
         Assert.NotNull( resp.Content.HtmlBody );
