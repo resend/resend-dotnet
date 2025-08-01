@@ -50,8 +50,8 @@ public class EmailController : ControllerBase
         {
             Id = id,
             Subject = "Demo",
-            From = "from@example.com",
-            To = "to@example.com",
+            From = "onboarding@resend.dev",
+            To = "delivered@resend.dev",
             HtmlBody = "This is HTML!",
             MomentCreated = DateTime.UtcNow,
             LastEvent = EmailStatus.Delivered,
