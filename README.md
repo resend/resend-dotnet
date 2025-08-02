@@ -75,8 +75,8 @@ public class FeatureImplementation
     public async Task Execute()
     {
         var message = new EmailMessage();
-        message.From = "you@example.com";
-        message.To.Add( "user@gmail.com" );
+        message.From = "onboarding@resend.dev";
+        message.To.Add( "delivered@resend.dev" );
         message.Subject = "hello world";
         message.TextBody = "it works!";
 
@@ -108,8 +108,8 @@ public class FeatureImplementation
     public async Task Execute()
     {
         var message = new EmailMessage();
-        message.From = "you@example.com";
-        message.To.Add( "user@gmail.com" );
+        message.From = "onboarding@resend.dev";
+        message.To.Add( "delivered@resend.dev" );
         message.Subject = "hello world";
         message.HtmlBody = "<strong>it works!</strong>";
 
