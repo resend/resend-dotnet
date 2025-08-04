@@ -42,6 +42,17 @@ public class EmailAttachment
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? ContentType { get; set; }
 
+    /// <summary>
+    /// Inline content identifier.
+    /// </summary>
+    /// <remarks>
+    /// Value can then be used as reference in HTML body using <code>cid</code>
+    /// scheme, e.g. <code>&lt;img src="cid:property-value" &gt; /></code>.
+    /// </remarks>
+    [JsonPropertyName( "inline_content_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? InlineContentId { get; set; }
+
 
 
     /// <summary>
