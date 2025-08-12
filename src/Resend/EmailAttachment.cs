@@ -49,9 +49,9 @@ public class EmailAttachment
     /// Value can then be used as reference in HTML body using <code>cid</code>
     /// scheme, e.g. <code>&lt;img src="cid:property-value" &gt; /></code>.
     /// </remarks>
-    [JsonPropertyName( "inline_content_id" )]
+    [JsonPropertyName( "content_id" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? InlineContentId { get; set; }
+    public string? ContentId { get; set; }
 
 
 
