@@ -5,6 +5,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection;
 
+#if NETSTANDARD2_0_OR_GREATER
+using HttpMethod = Resend.NetStandard2.HttpMethod;
+#endif
+
 namespace Resend;
 
 /// <summary>
@@ -636,7 +640,11 @@ public class ResendClient : IResend
         }
         catch ( Exception ex )
         {
+#if NETSTANDARD2_0_OR_GREATER
+            ResendException oex = new ResendException( (HttpStatusCode) 422, ErrorType.Deserialization, "Failed deserializing response", ex );
+#else
             ResendException oex = new ResendException( HttpStatusCode.UnprocessableContent, ErrorType.Deserialization, "Failed deserializing response", ex );
+#endif
 
             if ( _throw == true )
                 throw oex;
