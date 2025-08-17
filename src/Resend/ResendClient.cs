@@ -476,7 +476,7 @@ public class ResendClient : IResend
     private async Task<ResendResponse> Execute( HttpRequestMessage req, CancellationToken cancellationToken )
     {
         /*
-         * 
+         *
          */
         HttpResponseMessage resp;
 
@@ -500,7 +500,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         var rrl = FromHeaders( resp.Headers );
 
@@ -530,6 +530,46 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+            else if ( err.ErrorType == ErrorType.ValidationError )
+            {
+                ex = new ResendValidationErrorException( (HttpStatusCode) err.StatusCode, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.RestrictedApiKey )
+            {
+                ex = new ResendRestrictedApiKeyException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.NotFound )
+            {
+                ex = new ResendNotFoundException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.InvalidAttachment )
+            {
+                ex = new ResendInvalidAttachmentException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingRequiredField )
+            {
+                ex = new ResendMissingRequiredFieldException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            {
+                ex = new ResendDailyQuotaExceededException( err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            {
+                ex = new ResendRateLimitExceededException( err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.SecurityError )
+            {
+                ex = new ResendSecurityErrorException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.ApplicationError )
+            {
+                ex = new ResendApplicationErrorException( err.Message );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
@@ -541,7 +581,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         return new ResendResponse( rrl );
     }
@@ -553,7 +593,7 @@ public class ResendClient : IResend
         CancellationToken cancellationToken )
     {
         /*
-         * 
+         *
          */
         HttpResponseMessage resp;
 
@@ -577,13 +617,13 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         var rrl = FromHeaders( resp.Headers );
 
 
         /*
-         * 
+         *
          */
         if ( resp.IsSuccessStatusCode == false )
         {
@@ -611,6 +651,46 @@ public class ResendClient : IResend
 
             if ( err == null )
                 ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+            else if ( err.ErrorType == ErrorType.ValidationError )
+            {
+                ex = new ResendValidationErrorException( (HttpStatusCode) err.StatusCode, err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingApiKey )
+            {
+                ex = new ResendMissingApiKeyException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.RestrictedApiKey )
+            {
+                ex = new ResendRestrictedApiKeyException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.NotFound )
+            {
+                ex = new ResendNotFoundException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.InvalidAttachment )
+            {
+                ex = new ResendInvalidAttachmentException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.MissingRequiredField )
+            {
+                ex = new ResendMissingRequiredFieldException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.DailyQuotaExceeded )
+            {
+                ex = new ResendDailyQuotaExceededException( err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.RateLimitExceeded )
+            {
+                ex = new ResendRateLimitExceededException( err.Message, rrl );
+            }
+            else if ( err.ErrorType == ErrorType.SecurityError )
+            {
+                ex = new ResendSecurityErrorException( err.Message );
+            }
+            else if ( err.ErrorType == ErrorType.ApplicationError )
+            {
+                ex = new ResendApplicationErrorException( err.Message );
+            }
             else
                 ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
 
@@ -622,7 +702,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         T1? obj;
 
@@ -646,7 +726,7 @@ public class ResendClient : IResend
 
 
         /*
-         * 
+         *
          */
         if ( obj == null )
         {
@@ -685,7 +765,8 @@ public class ResendClient : IResend
         return new ResendResponse<T2>( res, rrl );
     }
 
-
+    /// <summary>
+    /// Rate limit info from the HTTP response headers.
     /// <summary />
     private ResendRateLimit FromHeaders( HttpResponseHeaders headers )
     {
