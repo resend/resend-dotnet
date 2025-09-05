@@ -41,8 +41,8 @@ public class EmailListCommand
         var q = new PaginatedQuery()
         {
             Limit = this.Limit,
-            BeforeId = this.BeforeId,
-            AfterId = this.AfterId,
+            Before = this.BeforeId,
+            After = this.AfterId,
         };
 
         var res = await _resend.EmailListAsync( q );

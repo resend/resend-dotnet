@@ -70,7 +70,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         var resp = await _resend.EmailListAsync( new PaginatedQuery()
         {
             Limit = 20,
-            AfterId = Guid.NewGuid().ToString(),
+            After = Guid.NewGuid().ToString(),
         } );
 
         Assert.NotNull( resp );

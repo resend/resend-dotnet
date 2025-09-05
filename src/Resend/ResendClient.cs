@@ -107,11 +107,11 @@ public class ResendClient : IResend
             if ( query.Limit.HasValue == true )
                 qs.Add( "limit", query.Limit.Value.ToString() );
 
-            if ( query.BeforeId != null )
-                qs.Add( "before", query.BeforeId );
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
 
-            if ( query.AfterId != null )
-                qs.Add( "after", query.AfterId );
+            if ( query.After != null )
+                qs.Add( "after", query.After );
 
             url = QueryHelpers.AddQueryString( baseUrl, qs );
         }
