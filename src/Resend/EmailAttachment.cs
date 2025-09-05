@@ -88,7 +88,7 @@ public class EmailAttachment
 
         var attachment = new EmailAttachment();
         attachment.Filename = System.IO.Path.GetFileName( filename );
-        attachment.Content = await File.ReadAllBytesAsync( filename, cancellationToken );
+        attachment.Content = await File.ReadAllBytesAsync( filename, cancellationToken ).ConfigureAwait( false );
 
         return attachment;
     }
