@@ -65,6 +65,23 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary />
     [Fact]
+    public async Task EmailList()
+    {
+        var resp = await _resend.EmailListAsync( new PaginatedQuery()
+        {
+            Limit = 20,
+            AfterId = Guid.NewGuid().ToString(),
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.True( resp.Content.HasMore );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task EmailBatch()
     {
         var email = new EmailMessage();
