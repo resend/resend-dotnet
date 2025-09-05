@@ -665,8 +665,6 @@ public class ResendClient : IResend
         }
         catch ( Exception ex )
         {
-            Console.WriteLine( ex.ToString() );
-
             ResendException oex = new ResendException( HttpStatusCode.UnprocessableContent, ErrorType.Deserialization, "Failed deserializing response", ex );
 
             if ( _throw == true )
