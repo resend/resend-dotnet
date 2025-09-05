@@ -70,4 +70,10 @@ public enum EmailStatus
     /// </summary>
     [JsonStringValue( "scheduled" )]
     Scheduled,
+
+    /// <summary>
+    /// Email delivery failed.
+    /// </summary>
+    [JsonStringValue( "failed" )]
+    Failed,
 }

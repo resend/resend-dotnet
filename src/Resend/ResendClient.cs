@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using Resend.Payloads;
 using System.Net;
 using System.Net.Http.Headers;
@@ -90,6 +91,34 @@ public class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
         return Execute<EmailReceipt, EmailReceipt>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<PaginatedResult<EmailReceipt>>> EmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = "/emails";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<EmailReceipt>, PaginatedResult<EmailReceipt>>( req, ( x ) => x, cancellationToken );
     }
 
 
