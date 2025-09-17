@@ -62,8 +62,9 @@ public class EmailController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "emails/batch" )]
-    public ListOf<ObjectId> EmailBatch(
+    public EmailBatchResponse EmailBatch(
         [FromHeader( Name = "Idempotency-Key" )] string? idempotencyKey,
+        [FromHeader( Name = "x-batch-validation" )] string? validationMode,
         [FromBody] List<EmailMessage> messages )
     {
         _logger.LogDebug( "EmailBatch" );
@@ -71,10 +72,16 @@ public class EmailController : ControllerBase
         if ( idempotencyKey != null )
             _logger.LogDebug( "With {IdempotencyKey}", idempotencyKey );
 
-        var list = new ListOf<ObjectId>();
-        list.Data = messages.Select( x => new ObjectId()
+        if ( validationMode != null )
+            _logger.LogDebug( "With {ValidationMode}", validationMode );
+
+
+        /*
+         *
+         */
+        var list = new EmailBatchResponse();
+        list.Data = messages.Select( x => new EmailBatchReceipt()
         {
-            Object = "email",
             Id = Guid.NewGuid(),
         } ).ToList();
 
