@@ -99,6 +99,7 @@ public class ResendClient : IResend
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( emails );
+        req.Headers.Add( "x-batch-validation", "strict" );
 
         return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
     }
@@ -111,8 +112,48 @@ public class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( emails );
         req.Headers.Add( IdempotencyKey, idempotencyKey );
+        req.Headers.Add( "x-batch-validation", "strict" );
 
         return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<EmailBatchResponse>> EmailBatchAsync( IEnumerable<EmailMessage> emails, EmailBatchValidationMode validationMode, CancellationToken cancellationToken = default )
+    {
+        var mode = validationMode switch
+        {
+            EmailBatchValidationMode.Strict => "strict",
+            EmailBatchValidationMode.Permissive => "permissive",
+            _ => throw new NotImplementedException( $"Validation mode {validationMode} is not implemented" )
+        };
+
+        var path = $"/emails/batch";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( emails );
+        req.Headers.Add( "x-batch-validation", mode );
+
+        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<EmailBatchResponse>> EmailBatchAsync( string idempotencyKey, IEnumerable<EmailMessage> emails, EmailBatchValidationMode validationMode, CancellationToken cancellationToken = default )
+    {
+        var mode = validationMode switch
+        {
+            EmailBatchValidationMode.Strict => "strict",
+            EmailBatchValidationMode.Permissive => "permissive",
+            _ => throw new NotImplementedException( $"Validation mode {validationMode} is not implemented" )
+        };
+
+        var path = $"/emails/batch";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( emails );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
+        req.Headers.Add( "x-batch-validation", mode );
+
+        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ( x ) => x, cancellationToken );
     }
 
 
