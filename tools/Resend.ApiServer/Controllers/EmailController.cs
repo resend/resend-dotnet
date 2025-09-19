@@ -60,6 +60,49 @@ public class EmailController : ControllerBase
 
 
     /// <summary />
+    [HttpGet]
+    [Route( "emails" )]
+    public PaginatedResult<EmailReceipt> EmailList(
+        [FromQuery( Name = "limit" )] int? limit,
+        [FromQuery( Name = "after" )] string? after,
+        [FromQuery( Name = "before" )] string? before
+        )
+    {
+        _logger.LogDebug( "EmailList" );
+
+        var pr = new PaginatedResult<EmailReceipt>()
+        {
+            HasMore = true,
+            Data = new List<EmailReceipt>(),
+        };
+
+        pr.Data.Add( new EmailReceipt()
+        {
+            Id = Guid.NewGuid(),
+            Subject = "Demo #1",
+            From = "onboarding@resend.dev",
+            To = "delivered@resend.dev",
+            HtmlBody = "This is HTML!",
+            MomentCreated = DateTime.UtcNow,
+            LastEvent = EmailStatus.Delivered,
+        } );
+
+        pr.Data.Add( new EmailReceipt()
+        {
+            Id = Guid.NewGuid(),
+            Subject = "Demo #2",
+            From = "onboarding@resend.dev",
+            To = "delivered@resend.dev",
+            HtmlBody = "This is HTML!",
+            MomentCreated = DateTime.UtcNow,
+            LastEvent = EmailStatus.Delivered,
+        } );
+
+        return pr;
+    }
+
+
+    /// <summary />
     [HttpPost]
     [Route( "emails/batch" )]
     public EmailBatchResponse EmailBatch(

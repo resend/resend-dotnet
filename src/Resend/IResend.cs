@@ -58,6 +58,21 @@ public interface IResend
 
 
     /// <summary>
+    /// Lists a page of email receipts.
+    /// </summary>
+    /// <param name="query">
+    /// Pagination query.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// List of email receipts.
+    /// </returns>
+    Task<ResendResponse<PaginatedResult<EmailReceipt>>> EmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Send a batch of emails, if and only if all messages are valid.
     /// </summary>
     /// <param name="emails">

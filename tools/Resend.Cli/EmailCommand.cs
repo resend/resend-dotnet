@@ -6,6 +6,7 @@ namespace Resend.Cli;
 [Command( "email", Description = "Send emails" )]
 [Subcommand( typeof( Email.EmailBatchCommand ) )]
 [Subcommand( typeof( Email.EmailCancelCommand ) )]
+[Subcommand( typeof( Email.EmailListCommand ) )]
 [Subcommand( typeof( Email.EmailRescheduleCommand ) )]
 [Subcommand( typeof( Email.EmailRetrieveCommand ) )]
 [Subcommand( typeof( Email.EmailSendCommand ) )]
