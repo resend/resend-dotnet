@@ -73,7 +73,7 @@ public interface IResend
 
 
     /// <summary>
-    /// Send a batch of emails.
+    /// Send a batch of emails, if and only if all messages are valid.
     /// </summary>
     /// <param name="emails">
     /// List of emails.
@@ -89,8 +89,9 @@ public interface IResend
 
 
     /// <summary>
-    /// Send a batch of emails  using idempotency key, such that retries do not yield
-    /// duplicate submissions.
+    /// Send a batch of emails using idempotency key, such that retries do not yield
+    /// duplicate submissions. Emails are only send if and only if all messages are
+    /// valid.
     /// </summary>
     /// <param name="idempotencyKey">
     /// Idempotency key.
@@ -106,6 +107,47 @@ public interface IResend
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/emails/send-batch-emails"/>
     Task<ResendResponse<List<Guid>>> EmailBatchAsync( string idempotencyKey, IEnumerable<EmailMessage> emails, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Send a batch of emails.
+    /// </summary>
+    /// <param name="emails">
+    /// List of emails.
+    /// </param>
+    /// <param name="validationMode">
+    /// Validation mode.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// List of email identifiers.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/emails/send-batch-emails"/>
+    Task<ResendResponse<EmailBatchResponse>> EmailBatchAsync( IEnumerable<EmailMessage> emails, EmailBatchValidationMode validationMode, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Send a batch of emails.
+    /// </summary>
+    /// <param name="idempotencyKey">
+    /// Idempotency key.
+    /// </param>
+    /// <param name="emails">
+    /// List of emails.
+    /// </param>
+    /// <param name="validationMode">
+    /// Validation mode.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// List of email identifiers.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/emails/send-batch-emails"/>
+    Task<ResendResponse<EmailBatchResponse>> EmailBatchAsync( string idempotencyKey, IEnumerable<EmailMessage> emails, EmailBatchValidationMode validationMode, CancellationToken cancellationToken = default );
 
 
     /// <summary>
