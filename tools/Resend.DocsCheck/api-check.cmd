@@ -1,1 +1,1 @@
-dotnet run -- --root=..\..\..\resend-docs\api-reference
+dotnet run -- --root=..\..\..\resend-docs
