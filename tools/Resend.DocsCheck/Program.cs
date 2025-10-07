@@ -153,6 +153,7 @@ public class Program
 
         var sb = new StringBuilder();
         sb.AppendLine( "using System;" );
+        sb.AppendLine( "using System.Collections.Generic;" );
         sb.AppendLine( "using System.Threading.Tasks;" );
 
         foreach ( var l in lines )
@@ -191,6 +192,7 @@ public class Program
             MetadataReference.CreateFromFile( Assembly.Load( "System.Runtime" ).Location ),
             MetadataReference.CreateFromFile( Assembly.Load( "System.Collections" ).Location ),
             MetadataReference.CreateFromFile( typeof( List<> ).Assembly.Location ),
+            MetadataReference.CreateFromFile( typeof( HttpClient ).Assembly.Location ),
             MetadataReference.CreateFromFile( typeof( IResend ).Assembly.Location ),
         };
 
