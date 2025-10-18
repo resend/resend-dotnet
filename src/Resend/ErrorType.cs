@@ -53,7 +53,7 @@ public enum ErrorType
     /// Invalid `from` field.
     /// </summary>
     /// <remarks>
-    /// Make sure the from field is a valid. The email address needs to follow the
+    /// Make sure the from field is valid. The email address needs to follow the
     /// <code>email@example.com</code> or Name <code>&lt;email@example.com&gt;</code> format.
     /// </remarks>
     [JsonStringValue( "invalid_from_address" )]
