@@ -33,7 +33,7 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
-    public Task<ResendResponse<ReceivedEmail>> ReceivedEmailRetrieve( Guid emailId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<ReceivedEmail>> ReceivedEmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default )
     {
         var path = $"/emails/receiving/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );

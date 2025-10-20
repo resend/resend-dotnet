@@ -638,7 +638,7 @@ public interface IResend
     /// <param name="emailId"></param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Received email.</returns>
-    Task<ResendResponse<ReceivedEmail>> ReceivedEmailRetrieve( Guid emailId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<ReceivedEmail>> ReceivedEmailRetrieveAsync( Guid emailId, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Lists attachments associated with a received email.
