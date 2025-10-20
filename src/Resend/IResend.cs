@@ -622,4 +622,39 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Lists received emails.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of received emails.</returns>
+    Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a received email.
+    /// </summary>
+    /// <param name="emailId"></param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Received email.</returns>
+    Task<ResendResponse<ReceivedEmail>> ReceivedEmailRetrieve( Guid emailId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists attachments associated with a received email.
+    /// </summary>
+    /// <param name="emailId">Email identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of attachments.</returns>
+    Task<ResendResponse<PaginatedResult<ReceivedEmailAttachment>>> ReceivedEmailAttachmentListAsync( Guid emailId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves an attachment from a received email.
+    /// </summary>
+    /// <param name="emailId">Email identifier.</param>
+    /// <param name="attachmentId">Attachment identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Attachment.</returns>
+    Task<ResendResponse<ReceivedEmailAttachment>> ReceivedEmailAttachmentRetrieveAsync( Guid emailId, Guid attachmentId, CancellationToken cancellationToken = default );
 }

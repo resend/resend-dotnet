@@ -11,7 +11,7 @@ namespace Resend;
 /// <summary>
 /// Resend client implementation.
 /// </summary>
-public class ResendClient : IResend
+public partial class ResendClient : IResend
 {
     private readonly bool _throw;
     private readonly HttpClient _http;
