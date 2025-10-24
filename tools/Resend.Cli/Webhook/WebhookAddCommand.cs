@@ -13,7 +13,7 @@ public class WebhookAddCommand
     /// <summary />
     [Argument( 0, Description = "Endpoint URL." )]
     [Required]
-    public string? EndpoointUrl { get; set; }
+    public string? EndpointUrl { get; set; }
 
     /// <summary />
     [Option( "-t|--type", CommandOptionType.SingleValue, Description = "Event type" )]
@@ -32,7 +32,7 @@ public class WebhookAddCommand
     {
         var data = new WebhookData()
         {
-            EndpointUrl = this.EndpoointUrl!,
+            EndpointUrl = this.EndpointUrl!,
             Events = [ this.EventType ],
             Status = WebhookStatus.Disabled,
         };
