@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Receive;
 
 /// <summary />
-[Command( "get", Description = "Retrieves a topic" )]
+[Command( "get", Description = "Retrieves an attachment from a received email" )]
 public class ReceiveAttachmentRetrieveCommand
 {
     private readonly IResend _resend;

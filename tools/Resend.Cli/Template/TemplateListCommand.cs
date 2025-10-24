@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Template;
 
 /// <summary />
-[Command( "list", Description = "List all templates." )]
+[Command( "list", Description = "List all templates" )]
 public class TemplateListCommand
 {
     private readonly IResend _resend;

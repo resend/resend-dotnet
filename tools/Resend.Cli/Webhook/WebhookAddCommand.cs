@@ -11,7 +11,7 @@ public class WebhookAddCommand
 
 
     /// <summary />
-    [Argument( 0, Description = "Endpoint URL." )]
+    [Argument( 0, Description = "Endpoint URL" )]
     [Required]
     public string? EndpointUrl { get; set; }
 

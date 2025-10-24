@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Resend.Cli.Audience;
 
 /// <summary />
-[Command( "add", Description = "Create an Audience" )]
+[Command( "add", Description = "Create an audience" )]
 public class AudienceAddCommand
 {
     private readonly IResend _resend;

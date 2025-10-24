@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Receive;
 
 /// <summary />
-[Command( "list", Description = "List all received emails." )]
+[Command( "list", Description = "List all received emails" )]
 public class ReceiveListCommand
 {
     private readonly IResend _resend;

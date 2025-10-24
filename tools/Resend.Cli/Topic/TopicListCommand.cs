@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Topic;
 
 /// <summary />
-[Command( "list", Description = "List all topics." )]
+[Command( "list", Description = "List all topics" )]
 public class TopicListCommand
 {
     private readonly IResend _resend;

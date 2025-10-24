@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Webhook;
 
 /// <summary />
-[Command( "list", Description = "List all webhooks." )]
+[Command( "list", Description = "List all webhooks" )]
 public class WebhookListCommand
 {
     private readonly IResend _resend;
