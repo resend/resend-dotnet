@@ -84,6 +84,17 @@ public class EmailMessage
     public List<EmailTag>? Tags { get; set; }
 
     /// <summary>
+    /// Email template and variables.
+    /// </summary>
+    /// <remarks>
+    /// Use of a template is mutually exclusive with setting <see cref="HtmlBody" /> or
+    /// <see cref="TextBody" />.
+    /// </remarks>
+    [JsonPropertyName( "template" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailMessageTemplate? Template { get; set; }
+
+    /// <summary>
     /// Moment for which the email is scheduled for/at.
     /// </summary>
     [JsonPropertyName( "scheduled_at" )]

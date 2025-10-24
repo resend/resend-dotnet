@@ -43,5 +43,6 @@ public class Webhook
     /// Not returned in <code>WebhookListAsync</code>.
     /// </remarks>
     [JsonPropertyName( "signing_secret" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? SigningSecret { get; set; }
 }

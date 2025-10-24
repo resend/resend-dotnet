@@ -12,6 +12,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( ContactCommand ) )]
 [Subcommand( typeof( DomainCommand ) )]
 [Subcommand( typeof( EmailCommand ) )]
+[Subcommand( typeof( TemplateCommand ) )]
 [Subcommand( typeof( TopicCommand ) )]
 [Subcommand( typeof( WebhookCommand ) )]
 [HelpOption]
