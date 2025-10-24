@@ -660,6 +660,48 @@ public interface IResend
 
 
     /// <summary>
+    /// Lists topics.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of topics.</returns>
+    Task<ResendResponse<PaginatedResult<Topic>>> TopicListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Create a topic.
+    /// </summary>
+    /// <param name="topic">Topic data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Topic identifier.</returns>
+    Task<ResendResponse<Guid>> TopicCreateAsync( TopicData topic, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieve a topic.
+    /// </summary>
+    /// <param name="topicId">Topic identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Topic.</returns>
+    Task<ResendResponse<Topic>> TopicRetrieveAsync( Guid topicId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates a topic.
+    /// </summary>
+    /// <param name="topicId">Topic identifier.</param>
+    /// <param name="topic">Topic data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> TopicUpdateAsync( Guid topicId, TopicData topic, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes a topic.
+    /// </summary>
+    /// <param name="topicId">Topic identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> TopicDeleteAsync( Guid topicId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
     /// Lists webhooks.
     /// </summary>
     /// <param name="query">Paginated query.</param>
