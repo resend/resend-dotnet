@@ -657,4 +657,46 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Attachment.</returns>
     Task<ResendResponse<ReceivedEmailAttachment>> ReceivedEmailAttachmentRetrieveAsync( Guid emailId, Guid attachmentId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Lists webhooks.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of webhooks.</returns>
+    Task<ResendResponse<PaginatedResult<Webhook>>> WebhookListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates a webhook.
+    /// </summary>
+    /// <param name="webhook">Webhook data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse<WebhookNew>> WebhookCreateAsync( WebhookData webhook, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a webhook.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse<Webhook>> WebhookRetrieveAsync( Guid webhookId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates a webhook.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="webhook">Webhook data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> WebhookUpdateAsync( Guid webhookId, WebhookData webhook, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes a webhook.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
 }

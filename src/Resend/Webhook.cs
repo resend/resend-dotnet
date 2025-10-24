@@ -24,27 +24,24 @@ public class Webhook
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
     public DateTime MomentCreated { get; set; }
 
-    /// <summary />
+    /// <summary>
+    /// Whether webhook is enabled or not.
+    /// </summary>
     [JsonPropertyName( "status" )]
     public WebhookStatus Status { get; set; }
 
-    /// <summary />
+    /// <summary>
+    /// List of events which are emitted to the webhook.
+    /// </summary>
     [JsonPropertyName( "events" )]
     public List<WebhookEventType> Events { get; set; } = default!;
 
-    /// <summary />
+    /// <summary>
+    /// Signing secret, used to validate the webhook signature.
+    /// </summary>
     /// <remarks>
-    /// Only returned in WebookRetrieve.
+    /// Not returned in <code>WebhookListAsync</code>.
     /// </remarks>
-    [JsonPropertyName( "svix_endpoint_id" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? SvixEndpointId { get; set; }
-
-    /// <summary />
-    /// <remarks>
-    /// Only returned in WebookRetrieve.
-    /// </remarks>
-    [JsonPropertyName( "webhook_secret_key" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? SecretKey { get; set; }
+    [JsonPropertyName( "signing_secret" )]
+    public string? SigningSecret { get; set; }
 }
