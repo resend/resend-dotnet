@@ -22,7 +22,7 @@ public class TemplateSummary
     /// </summary>
     [JsonPropertyName( "alias" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? Alias { get; set; }
+    public string Alias { get; set; } = default!;
 
     /// <summary>
     /// Status
