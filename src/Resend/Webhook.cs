@@ -36,15 +36,6 @@ public class Webhook
     /// <remarks>
     /// Only returned in WebookRetrieve.
     /// </remarks>
-    [JsonPropertyName( "svix_endpoint_id" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? SvixEndpointId { get; set; }
-
-    /// <summary />
-    /// <remarks>
-    /// Only returned in WebookRetrieve.
-    /// </remarks>
-    [JsonPropertyName( "webhook_secret_key" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? SecretKey { get; set; }
+    [JsonPropertyName( "signing_secret" )]
+    public string? SigningSecret { get; set; }
 }

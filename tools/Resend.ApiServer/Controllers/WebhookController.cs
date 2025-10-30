@@ -47,8 +47,7 @@ public class WebhookController : ControllerBase
                 WebhookEventType.EmailSent,
                 WebhookEventType.EmailDelivered,
             },
-            SecretKey = "whsec_test_secret_12345",
-            SvixEndpointId = "ep_test123",
+            SigningSecret = "whsec_test_secret_12345",
         };
     }
 
