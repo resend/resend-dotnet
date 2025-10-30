@@ -17,7 +17,7 @@ public class ReceiveAttachmentRetrieveCommand
     public Guid? ReceivedId { get; set; }
 
     /// <summary />
-    [Argument( 0, Description = "Attachment identifier" )]
+    [Argument( 1, Description = "Attachment identifier" )]
     [Required]
     public Guid? AttachmentId { get; set; }
 
