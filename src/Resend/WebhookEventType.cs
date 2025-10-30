@@ -51,10 +51,22 @@ public enum WebhookEventType
     EmailClicked,
 
     /// <summary>
-    /// The recipient’s opened the email.
+    /// The recipient's opened the email.
     /// </summary>
     [JsonStringValue( "email.opened" )]
     EmailOpened,
+
+    /// <summary>
+    /// An inbound email was received.
+    /// </summary>
+    [JsonStringValue( "email.received" )]
+    EmailReceived,
+
+    /// <summary>
+    /// The email failed to send.
+    /// </summary>
+    [JsonStringValue( "email.failed" )]
+    EmailFailed,
 
 
     /// <summary>

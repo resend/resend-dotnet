@@ -324,12 +324,72 @@ public class ResendClient : IResend
 
 
     /// <inheritdoc />
-    public Task<ResendResponse<List<Webhook>>> WebhookListAsync( CancellationToken cancellationToken = default )
+    public Task<ResendResponse<WebhookAddResponse>> WebhookAddAsync( WebhookAddData data, CancellationToken cancellationToken = default )
     {
         var path = $"/webhooks";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( data );
+
+        return Execute<WebhookAddResponse, WebhookAddResponse>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Webhook>> WebhookRetrieveAsync( Guid webhookId, CancellationToken cancellationToken = default )
+    {
+        var path = $"/webhooks/{webhookId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ListOf<Webhook>, List<Webhook>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<Webhook, Webhook>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<PaginatedResult<Webhook>>> WebhookListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = "/webhooks";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<Webhook>, PaginatedResult<Webhook>>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse> WebhookUpdateAsync( Guid webhookId, WebhookUpdateData data, CancellationToken cancellationToken = default )
+    {
+        var path = $"/webhooks/{webhookId}";
+        var req = new HttpRequestMessage( HttpMethod.Patch, path );
+        req.Content = JsonContent.Create( data );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default )
+    {
+        var path = $"/webhooks/{webhookId}";
+        var req = new HttpRequestMessage( HttpMethod.Delete, path );
+
+        return Execute( req, cancellationToken );
     }
 
 

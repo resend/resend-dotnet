@@ -30,7 +30,7 @@ public class Webhook
 
     /// <summary />
     [JsonPropertyName( "events" )]
-    public List<WebhookEventType> Events { get; set; } = default!;
+    public List<WebhookEventType>? Events { get; set; }
 
     /// <summary />
     /// <remarks>

@@ -1,4 +1,6 @@
-﻿namespace Resend;
+﻿using Resend.Payloads;
+
+namespace Resend;
 
 /// <summary>
 /// Resend client.
@@ -622,4 +624,87 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Create a webhook.
+    /// </summary>
+    /// <param name="data">
+    /// Webhook data.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Webhook identifier and signing secret.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/webhooks/create-webhook"/>
+    Task<ResendResponse<WebhookAddResponse>> WebhookAddAsync( WebhookAddData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Retrieves a webhook.
+    /// </summary>
+    /// <param name="webhookId">
+    /// Webhook identifier.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Webhook.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/webhooks/get-webhook"/>
+    Task<ResendResponse<Webhook>> WebhookRetrieveAsync( Guid webhookId, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Retrieve a list of webhooks.
+    /// </summary>
+    /// <param name="query">
+    /// Pagination query.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// List of webhooks.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/webhooks/list-webhooks"/>
+    Task<ResendResponse<PaginatedResult<Webhook>>> WebhookListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Update an existing webhook.
+    /// </summary>
+    /// <param name="webhookId">
+    /// Webhook identifier.
+    /// </param>
+    /// <param name="data">
+    /// Updated webhook information.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Task.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/webhooks/update-webhook"/>
+    Task<ResendResponse> WebhookUpdateAsync( Guid webhookId, WebhookUpdateData data, CancellationToken cancellationToken = default );
+
+
+    /// <summary>
+    /// Remove an existing webhook.
+    /// </summary>
+    /// <param name="webhookId">
+    /// Webhook identifier.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Task.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/webhooks/delete-webhook"/>
+    Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
 }

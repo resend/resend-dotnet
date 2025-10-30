@@ -452,4 +452,82 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         Assert.NotNull( resp );
     }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task WebhookAdd()
+    {
+        var req = new WebhookAddData()
+        {
+            EndpointUrl = "https://example.com/webhook",
+            Events = new List<WebhookEventType>()
+            {
+                WebhookEventType.EmailSent,
+                WebhookEventType.EmailDelivered,
+            },
+        };
+
+        var resp = await _resend.WebhookAddAsync( req );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content.Id );
+        Assert.NotNull( resp.Content.SigningSecret );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task WebhookRetrieve()
+    {
+        var resp = await _resend.WebhookRetrieveAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.NotEqual( Guid.Empty, resp.Content.Id );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task WebhookList()
+    {
+        var resp = await _resend.WebhookListAsync( new PaginatedQuery() { Limit = 10 } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.NotNull( resp.Content.Data );
+        Assert.Equal( 2, resp.Content.Data.Count );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task WebhookUpdate()
+    {
+        var req = new WebhookUpdateData()
+        {
+            EndpointUrl = "https://example.com/webhook-updated",
+            Status = WebhookStatus.Enabled,
+        };
+
+        var resp = await _resend.WebhookUpdateAsync( Guid.NewGuid(), req );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task WebhookDelete()
+    {
+        var resp = await _resend.WebhookDeleteAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+    }
 }
