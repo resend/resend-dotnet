@@ -8,8 +8,11 @@ public class TopicData
     /// <summary>
     /// Topic name.
     /// </summary>
+    /// <remarks>
+    /// Required when creating the topic.
+    /// </remarks>
     [JsonPropertyName( "name" )]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; }
 
     /// <summary>
     /// Topic description.
