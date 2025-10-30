@@ -21,7 +21,7 @@ public class TopicData
     /// <summary>
     /// Default subscription.
     /// </summary>
-    [JsonPropertyName( "defaultSubscription" )]
+    [JsonPropertyName( "default_subscription" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public SubscriptionType? SubscriptionDefault { get; set; }
 }
