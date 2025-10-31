@@ -646,6 +646,42 @@ public interface IResend
 
     #endregion
 
+    #region Segments
+
+    /// <summary>
+    /// Lists segments.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of segments.</returns>
+    Task<ResendResponse<PaginatedResult<Segment>>> SegmentListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Create a segment.
+    /// </summary>
+    /// <param name="segment">Segment data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Segment identifier.</returns>
+    Task<ResendResponse<Guid>> SegmentCreateAsync( SegmentData segment, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieve a segment.
+    /// </summary>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Segment.</returns>
+    Task<ResendResponse<Segment>> SegmentRetrieveAsync( Guid segmentId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes a segment.
+    /// </summary>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> SegmentDeleteAsync( Guid segmentId, CancellationToken cancellationToken = default );
+
+    #endregion
+
     #region Templates
 
     /// <summary>
@@ -720,7 +756,7 @@ public interface IResend
     /// <summary>
     /// Create a topic.
     /// </summary>
-    /// <param name="topic">Topic data.</param>
+    /// <param name="segment">Topic data.</param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Topic identifier.</returns>
     Task<ResendResponse<Guid>> TopicCreateAsync( TopicData topic, CancellationToken cancellationToken = default );
@@ -745,7 +781,7 @@ public interface IResend
     /// <summary>
     /// Deletes a topic.
     /// </summary>
-    /// <param name="topicId">Topic identifier.</param>
+    /// <param name="segmentId">Topic identifier.</param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> TopicDeleteAsync( Guid topicId, CancellationToken cancellationToken = default );
