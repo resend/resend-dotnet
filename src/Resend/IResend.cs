@@ -756,7 +756,7 @@ public interface IResend
     /// <summary>
     /// Create a topic.
     /// </summary>
-    /// <param name="segment">Topic data.</param>
+    /// <param name="topic">Topic data.</param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Topic identifier.</returns>
     Task<ResendResponse<Guid>> TopicCreateAsync( TopicData topic, CancellationToken cancellationToken = default );
@@ -781,7 +781,7 @@ public interface IResend
     /// <summary>
     /// Deletes a topic.
     /// </summary>
-    /// <param name="segmentId">Topic identifier.</param>
+    /// <param name="topicId">Topic identifier.</param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> TopicDeleteAsync( Guid topicId, CancellationToken cancellationToken = default );
