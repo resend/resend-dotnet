@@ -17,6 +17,12 @@ public enum WebhookEventType
     EmailSent = 1,
 
     /// <summary>
+    /// An email was received by Resend.
+    /// </summary>
+    [JsonStringValue( "email.received" )]
+    EmailReceived,
+
+    /// <summary>
     /// Resend successfully delivered the email to the recipient’s mail server.
     /// </summary>
     [JsonStringValue( "email.delivered" )]

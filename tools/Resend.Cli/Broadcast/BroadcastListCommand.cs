@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace Resend.Cli.Broadcast;
 
 /// <summary />
-[Command( "list", Description = "List all broadcasts." )]
+[Command( "list", Description = "List all broadcasts" )]
 public class BroadcastListCommand
 {
     private readonly IResend _resend;

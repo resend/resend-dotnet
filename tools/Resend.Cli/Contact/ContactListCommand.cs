@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace Resend.Cli.Contact;
 
 /// <summary />
-[Command( "list", Description = "Show all contacts from an audience." )]
+[Command( "list", Description = "Show all contacts from an audience" )]
 public class ContactListCommand
 {
     private readonly IResend _resend;

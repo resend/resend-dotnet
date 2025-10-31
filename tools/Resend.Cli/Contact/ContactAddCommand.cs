@@ -11,7 +11,7 @@ public class ContactAddCommand
 
 
     /// <summary />
-    [Argument( 0, Description = "The Audience Id." )]
+    [Argument( 0, Description = "Audience identifier" )]
     [Required]
     public Guid? AudienceId { get; set; }
 
