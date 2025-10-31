@@ -19,10 +19,17 @@ public enum ErrorType
     MissingApiKey,
 
     /// <summary>
-    /// Missing API key in the authorization header.
+    /// API key is restricted to only send emails, and may not be used for
+    /// other operations.
     /// </summary>
     [JsonStringValue( "restricted_api_key" )]
     RestrictedApiKey,
+
+    /// <summary>
+    /// API key is invalid.
+    /// </summary>
+    [JsonStringValue( "invalid_api_key" )]
+    InvalidApiKey,
 
     /// <summary>
     /// Requested endpoint does not exist.
@@ -31,16 +38,59 @@ public enum ErrorType
     NotFound,
 
     /// <summary>
+    /// Method is not allowed for the requested path.
+    /// </summary>
+    [JsonStringValue( "method_not_allowed" )]
+    MethodNotAllowed,
+
+    /// <summary>
     /// Attachment must have either a `content` or `path` property.
     /// </summary>
     [JsonStringValue( "invalid_attachment" )]
     InvalidAttachment,
 
     /// <summary>
+    /// Invalid `from` field.
+    /// </summary>
+    /// <remarks>
+    /// Make sure the from field is valid. The email address needs to follow the
+    /// <code>email@example.com</code> or Name <code>&lt;email@example.com&gt;</code> format.
+    /// </remarks>
+    [JsonStringValue( "invalid_from_address" )]
+    InvalidFromAddress,
+
+    /// <summary>
+    /// Invalid access for provided API key.
+    /// </summary>
+    /// <remarks>
+    /// Make sure the API key has necessary permissions.
+    /// </remarks>
+    [JsonStringValue( "invalid_access" )]
+    InvalidAccess,
+
+    /// <summary>
+    /// Parameter must be a valid Guid value.
+    /// </summary>
+    [JsonStringValue( "invalid_parameter" )]
+    InvalidParameter,
+
+    /// <summary>
+    /// Delivery region has an invalid value.
+    /// </summary>
+    [JsonStringValue( "invalid_region" )]
+    InvalidRegion,
+
+    /// <summary>
     /// Body is missing one or more required fields.
     /// </summary>
     [JsonStringValue( "missing_required_field" )]
     MissingRequiredField,
+
+    /// <summary>
+    /// You have reached your monthly email sending quota.
+    /// </summary>
+    [JsonStringValue( "monthly_quota_exceeded" )]
+    MonthlyQuotaExceeded,
 
     /// <summary>
     /// You have reached your daily email sending quota.
@@ -65,6 +115,13 @@ public enum ErrorType
     /// </summary>
     [JsonStringValue( "application_error" )]
     ApplicationError,
+
+    /// <summary>
+    /// An unexpected error occurred.
+    /// </summary>
+    [JsonStringValue( "internal_server_error" )]
+    InternalServerError,
+
 
     /// <summary>
     /// Invalid value provided as Idempotency Key, must be between 1-256 chars.
