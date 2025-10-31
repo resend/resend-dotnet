@@ -323,16 +323,6 @@ public partial class ResendClient : IResend
     }
 
 
-    /// <inheritdoc />
-    public Task<ResendResponse<List<Webhook>>> WebhookListAsync( CancellationToken cancellationToken = default )
-    {
-        var path = $"/webhooks";
-        var req = new HttpRequestMessage( HttpMethod.Get, path );
-
-        return Execute<ListOf<Webhook>, List<Webhook>>( req, ( x ) => x.Data, cancellationToken );
-    }
-
-
     /// <inheritdoc/>
     public Task<ResendResponse<Guid>> AudienceAddAsync( string name, CancellationToken cancellationToken = default )
     {
