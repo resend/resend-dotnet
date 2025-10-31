@@ -709,6 +709,14 @@ public interface IResend
     Task<ResendResponse<Template>> TemplateRetrieveAsync( Guid templateId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Retrieve a template, by alias.
+    /// </summary>
+    /// <param name="templateAlias">Template alias.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Template.</returns>
+    Task<ResendResponse<Template>> TemplateRetrieveAsync( string templateAlias, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Updates a template.
     /// </summary>
     /// <param name="templateId">Template identifier.</param>
@@ -716,6 +724,15 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> TemplateUpdateAsync( Guid templateId, TemplateData template, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates a template, by alias.
+    /// </summary>
+    /// <param name="templateAlias">Template alias.</param>
+    /// <param name="template">Template data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> TemplateUpdateAsync( string templateAlias, TemplateData template, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Deletes a template.
@@ -726,6 +743,14 @@ public interface IResend
     Task<ResendResponse> TemplateDeleteAsync( Guid templateId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Deletes a template, by alias.
+    /// </summary>
+    /// <param name="templateAlias">Template alias.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> TemplateDeleteAsync( string templateAlias, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Publishes a template.
     /// </summary>
     /// <param name="templateId">Template identifier.</param>
@@ -734,12 +759,28 @@ public interface IResend
     Task<ResendResponse> TemplatePublishAsync( Guid templateId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Publishes a template, by alias.
+    /// </summary>
+    /// <param name="templateAlias">Template alias.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> TemplatePublishAsync( string templateAlias, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Duplicates a template.
     /// </summary>
     /// <param name="templateId">Template identifier.</param>
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Identifier of newly created duplicate.</returns>
     Task<ResendResponse<Guid>> TemplateDuplicateAsync( Guid templateId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Duplicates a template, by alias.
+    /// </summary>
+    /// <param name="templateAlias">Template alias.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Identifier of newly created duplicate.</returns>
+    Task<ResendResponse<Guid>> TemplateDuplicateAsync( string templateAlias, CancellationToken cancellationToken = default );
 
     #endregion
 

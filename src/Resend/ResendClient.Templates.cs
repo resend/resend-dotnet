@@ -55,9 +55,29 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<Template>> TemplateRetrieveAsync( string templateAlias, CancellationToken cancellationToken = default )
+    {
+        var path = $"/templates/{templateAlias}";
+        var req = new HttpRequestMessage( HttpMethod.Get, path );
+
+        return Execute<Template, Template>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse> TemplateUpdateAsync( Guid templateId, TemplateData template, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/templates/{templateId}" );
+        req.Content = JsonContent.Create( template );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse> TemplateUpdateAsync( string templateAlias, TemplateData template, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Patch, $"/templates/{templateAlias}" );
         req.Content = JsonContent.Create( template );
 
         return Execute( req, cancellationToken );
@@ -74,6 +94,15 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse> TemplateDeleteAsync( string templateAlias, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Delete, $"/templates/{templateAlias}" );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse> TemplatePublishAsync( Guid templateId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateId}/publish" );
@@ -83,9 +112,27 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse> TemplatePublishAsync( string templateAlias, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateAlias}/publish" );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<Guid>> TemplateDuplicateAsync( Guid templateId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateId}/duplicate" );
+
+        return Execute<ObjectId, Guid>( req, x => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Guid>> TemplateDuplicateAsync( string templateAlias, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateAlias}/duplicate" );
 
         return Execute<ObjectId, Guid>( req, x => x.Id, cancellationToken );
     }
