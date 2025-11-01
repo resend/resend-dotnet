@@ -19,6 +19,9 @@ public enum WebhookEventType
     /// <summary>
     /// An email was received by Resend.
     /// </summary>
+    /// <remarks>
+    /// See https://resend.com/docs/dashboard/receiving/introduction
+    /// </remarks>
     [JsonStringValue( "email.received" )]
     EmailReceived,
 
@@ -61,6 +64,17 @@ public enum WebhookEventType
     /// </summary>
     [JsonStringValue( "email.opened" )]
     EmailOpened,
+
+    /// <summary>
+    /// Email failed to be sent due to an error.
+    /// </summary>
+    /// <remarks>
+    /// This event is triggered when there are issues such as invalid
+    /// recipients, API key problems, domain verification issues,
+    /// quota limits, or other sending failures.
+    /// </remarks>
+    [JsonStringValue( "email.failed" )]
+    EmailFailed,
 
 
     /// <summary>
