@@ -531,19 +531,49 @@ public interface IResend
     Task<ResendResponse> ContactDeleteByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default );
 
     /// <summary>
-    /// List all contacts from an audience.
+    /// List contacts from an audience.
     /// </summary>
     /// <param name="audienceId">
     /// Audience identifier.
+    /// </param>
+    /// <param name="query">
+    /// Paginated query.
     /// </param>
     /// <param name="cancellationToken">
     /// Cancelation token.
     /// </param>
     /// <returns>
-    /// List of contacts. 
+    /// List of contacts.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/contacts/list-contacts" />
-    Task<ResendResponse<List<Contact>>> ContactListAsync( Guid audienceId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<PaginatedResult<Contact>>> ContactListAsync( Guid audienceId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists contact segments,.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of segments.</returns>
+    Task<ResendResponse<PaginatedResult<Segment>>> ContactListSegmentsAsync( Guid contactId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Adds a contact to a segment.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> ContactAddToSegmentAsync( Guid contactId, Guid segmentId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes a contact from a segment.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> ContactRemoveFromSegmentAsync( Guid contactId, Guid segmentId, CancellationToken cancellationToken = default );
 
     #endregion
 

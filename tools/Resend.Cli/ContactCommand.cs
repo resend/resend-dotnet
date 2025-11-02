@@ -9,6 +9,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( Contact.ContactUpdateCommand ) )]
 [Subcommand( typeof( Contact.ContactDeleteCommand ) )]
 [Subcommand( typeof( Contact.ContactListCommand ) )]
+[Subcommand( typeof( Contact.ContactSegmentCommand ) )]
 public class ContactCommand
 {
     /// <summary />
