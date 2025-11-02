@@ -170,6 +170,24 @@ public interface IResend
     /// <see href="https://www.resend.com/docs/api-reference/emails/cancel-email"/>
     Task<ResendResponse> EmailCancelAsync( Guid emailId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Lists email attachments from a sent email.
+    /// </summary>
+    /// <param name="emailId">Sent email identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of attachments.</returns>
+    Task<ResendResponse<PaginatedResult<SentEmailAttachment>>> EmailAttachmentListAsync( Guid emailId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves an email attachment of a sent email.
+    /// </summary>
+    /// <param name="emailId">Sent email identifier.</param>
+    /// <param name="attachmentId">Sent email attachment identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Email attachment.</returns>
+    Task<ResendResponse<SentEmailAttachment>> EmailAttachmentRetrieveAsync( Guid emailId, Guid attachmentId, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Domains

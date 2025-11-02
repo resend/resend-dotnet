@@ -3,18 +3,18 @@ using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
-namespace Resend.Cli.Receive;
+namespace Resend.Cli.Email;
 
 /// <summary />
-[Command( "list", Description = "List all attachments in a received emails" )]
-public class ReceiveAttachmentListCommand
+[Command( "list", Description = "List all attachments in a sent email" )]
+public class EmailAttachmentListCommand
 {
     private readonly IResend _resend;
 
     /// <summary />
     [Argument( 0, Description = "Email identifier" )]
     [Required]
-    public Guid? ReceivedId { get; set; }
+    public Guid? EmailId { get; set; }
 
     /// <summary />
     [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON array" )]
@@ -22,7 +22,7 @@ public class ReceiveAttachmentListCommand
 
 
     /// <summary />
-    public ReceiveAttachmentListCommand( IResend resend )
+    public EmailAttachmentListCommand( IResend resend )
     {
         _resend = resend;
     }
@@ -31,7 +31,7 @@ public class ReceiveAttachmentListCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.ReceivedEmailAttachmentListAsync( this.ReceivedId!.Value );
+        var res = await _resend.EmailAttachmentListAsync( this.EmailId!.Value );
         var attachs = res.Content.Data;
 
         if ( this.InJson == true )
