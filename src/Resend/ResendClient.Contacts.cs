@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Resend.Payloads;
 using System.Net.Http.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Resend;
 
@@ -153,6 +154,45 @@ public partial class ResendClient
     {
         var path = $"/contacts/{contactId}/segments/{segmentId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
+    public Task<ResendResponse<PaginatedResult<TopicSubscription>>> ContactListTopicsAsync( Guid contactId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/contacts/{contactId}/topics";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<TopicSubscription>, PaginatedResult<TopicSubscription>>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
+    public Task<ResendResponse> ContactUpdateTopicsAsync( Guid contactId, List<TopicSubscription> topics, CancellationToken cancellationToken = default )
+    {
+        var url = $"/contacts/{contactId}/topics";
+        var req = new HttpRequestMessage( HttpMethod.Patch, url );
+        req.Content = JsonContent.Create( topics );
 
         return Execute( req, cancellationToken );
     }

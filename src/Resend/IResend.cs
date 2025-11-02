@@ -575,6 +575,24 @@ public interface IResend
     /// <returns>Response.</returns>
     Task<ResendResponse> ContactRemoveFromSegmentAsync( Guid contactId, Guid segmentId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Retrieve a list of topics subscriptions for a contact.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of topic subscriptions.</returns>
+    Task<ResendResponse<PaginatedResult<TopicSubscription>>> ContactListTopicsAsync( Guid contactId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Update topic subscriptions for a contact.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="topics">List of topic subscriptions.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Result.</returns>
+    Task<ResendResponse> ContactUpdateTopicsAsync( Guid contactId, List<TopicSubscription> topics, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Broadcasts
