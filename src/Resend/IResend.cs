@@ -595,6 +595,51 @@ public interface IResend
 
     #endregion
 
+    #region Contact Properties
+
+    /// <summary>
+    /// List custom contact properties.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<PaginatedResult<ContactProperty>>> ContactPropListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates a custom contact property.
+    /// </summary>
+    /// <param name="prop">Property data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<Guid>> ContactPropCreateAsync( ContactPropertyData prop, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<ContactProperty>> ContactPropRetrieveAsync( Guid propId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="prop">Property data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse> ContactPropUpdateAsync( Guid propId, ContactPropertyUpdateData prop, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse> ContactPropDeleteAsync( Guid propId, CancellationToken cancellationToken = default );
+
+    #endregion
+
     #region Broadcasts
 
     /// <summary>
