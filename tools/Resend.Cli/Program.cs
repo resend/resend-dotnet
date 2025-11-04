@@ -10,6 +10,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( AudienceCommand ) )]
 [Subcommand( typeof( BroadcastCommand ) )]
 [Subcommand( typeof( ContactCommand ) )]
+[Subcommand( typeof( ContactPropCommand ) )]
 [Subcommand( typeof( DomainCommand ) )]
 [Subcommand( typeof( EmailCommand ) )]
 [Subcommand( typeof( ReceiveCommand ) )]

@@ -3,18 +3,18 @@ using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
-namespace Resend.Cli.Contact;
+namespace Resend.Cli.Contact.Segment;
 
 /// <summary />
-[Command( "list", Description = "Show all contacts from an audience" )]
-public class ContactListCommand
+[Command( "list", Description = "Lists all segments for a contact" )]
+public class ContactSegmentListCommand
 {
     private readonly IResend _resend;
 
     /// <summary />
-    [Argument( 0, Description = "Audience identifier" )]
+    [Argument( 0, Description = "Contact identifier" )]
     [Required]
-    public Guid? AudienceId { get; set; }
+    public Guid? ContactId { get; set; }
 
     /// <summary />
     [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON array" )]
@@ -22,7 +22,7 @@ public class ContactListCommand
 
 
     /// <summary />
-    public ContactListCommand( IResend resend )
+    public ContactSegmentListCommand( IResend resend )
     {
         _resend = resend;
     }
@@ -31,7 +31,7 @@ public class ContactListCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.ContactListAsync( this.AudienceId!.Value );
+        var res = await _resend.ContactListSegmentsAsync( this.ContactId!.Value );
         var rows = res.Content.Data;
 
         if ( this.InJson == true )
@@ -45,22 +45,16 @@ public class ContactListCommand
         {
             var table = new Table();
             table.Border = TableBorder.SimpleHeavy;
-            table.AddColumn( "Contact Id" );
-            table.AddColumn( "Email" );
-            table.AddColumn( "First Name" );
-            table.AddColumn( "Last Name" );
+            table.AddColumn( "Segment Id" );
+            table.AddColumn( "Name" );
             table.AddColumn( "Created" );
-            table.AddColumn( "Is Unsubscribed" );
 
             foreach ( var c in rows )
             {
                 table.AddRow(
                    new Markup( c.Id.ToString() ),
-                   new Markup( c.Email ),
-                   new Markup( c.FirstName != null ? c.FirstName : "" ),
-                   new Markup( c.LastName != null ? c.LastName : "" ),
-                   new Markup( c.MomentCreated.ToShortDateString() ),
-                   new Markup( IsUnsubscribed( c.IsUnsubscribed ) )
+                   new Markup( c.Name ),
+                   new Markup( c.MomentCreated.ToShortDateString() )
                 );
             }
 
@@ -68,15 +62,5 @@ public class ContactListCommand
         }
 
         return 0;
-    }
-
-
-    /// <summary />
-    private static string IsUnsubscribed( bool? isUnsubscribed )
-    {
-        if ( isUnsubscribed == null )
-            return "";
-
-        return isUnsubscribed == true ? "True" : "False";
     }
 }

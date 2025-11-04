@@ -549,19 +549,112 @@ public interface IResend
     Task<ResendResponse> ContactDeleteByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default );
 
     /// <summary>
-    /// List all contacts from an audience.
+    /// List contacts from an audience.
     /// </summary>
     /// <param name="audienceId">
     /// Audience identifier.
+    /// </param>
+    /// <param name="query">
+    /// Paginated query.
     /// </param>
     /// <param name="cancellationToken">
     /// Cancelation token.
     /// </param>
     /// <returns>
-    /// List of contacts. 
+    /// List of contacts.
     /// </returns>
     /// <see href="https://resend.com/docs/api-reference/contacts/list-contacts" />
-    Task<ResendResponse<List<Contact>>> ContactListAsync( Guid audienceId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<PaginatedResult<Contact>>> ContactListAsync( Guid audienceId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists contact segments,.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of segments.</returns>
+    Task<ResendResponse<PaginatedResult<Segment>>> ContactListSegmentsAsync( Guid contactId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Adds a contact to a segment.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> ContactAddToSegmentAsync( Guid contactId, Guid segmentId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes a contact from a segment.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> ContactRemoveFromSegmentAsync( Guid contactId, Guid segmentId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieve a list of topics subscriptions for a contact.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of topic subscriptions.</returns>
+    Task<ResendResponse<PaginatedResult<TopicSubscription>>> ContactListTopicsAsync( Guid contactId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Update topic subscriptions for a contact.
+    /// </summary>
+    /// <param name="contactId">Contact identifier.</param>
+    /// <param name="topics">List of topic subscriptions.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Result.</returns>
+    Task<ResendResponse> ContactUpdateTopicsAsync( Guid contactId, List<TopicSubscription> topics, CancellationToken cancellationToken = default );
+
+    #endregion
+
+    #region Contact Properties
+
+    /// <summary>
+    /// List custom contact properties.
+    /// </summary>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<PaginatedResult<ContactProperty>>> ContactPropListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates a custom contact property.
+    /// </summary>
+    /// <param name="prop">Property data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<Guid>> ContactPropCreateAsync( ContactPropertyData prop, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse<ContactProperty>> ContactPropRetrieveAsync( Guid propId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="prop">Property data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse> ContactPropUpdateAsync( Guid propId, ContactPropertyUpdateData prop, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes a custom contact property.
+    /// </summary>
+    /// <param name="propId">Property identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns></returns>
+    Task<ResendResponse> ContactPropDeleteAsync( Guid propId, CancellationToken cancellationToken = default );
 
     #endregion
 

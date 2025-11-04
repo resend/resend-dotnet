@@ -125,7 +125,7 @@ public class ContactController : ControllerBase
     /// <summary />
     [HttpGet]
     [Route( "audiences/{audienceId}/contacts" )]
-    public ListOf<Contact> ContactList( [FromRoute] Guid audienceId )
+    public PaginatedResult<Contact> ContactList( [FromRoute] Guid audienceId )
     {
         _logger.LogDebug( "ContactList" );
 
@@ -151,8 +151,9 @@ public class ContactController : ControllerBase
             IsUnsubscribed = false,
         } );
 
-        return new ListOf<Contact>()
+        return new PaginatedResult<Contact>()
         {
+            HasMore = false,
             Data = list,
         };
     }
