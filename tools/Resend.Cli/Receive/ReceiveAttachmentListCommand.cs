@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace Resend.Cli.Receive;
 
 /// <summary />
-[Command( "list", Description = "List all attachments in a received emails" )]
+[Command( "list", Description = "List all attachments in a received email" )]
 public class ReceiveAttachmentListCommand
 {
     private readonly IResend _resend;
