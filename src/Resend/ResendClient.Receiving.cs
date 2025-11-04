@@ -7,7 +7,7 @@ public partial class ResendClient
     /// <inheritdoc />
     public Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default )
     {
-        var baseUrl = "/emails/receiving/";
+        var baseUrl = "/emails/receiving";
         var url = baseUrl;
 
         if ( query != null )
