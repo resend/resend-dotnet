@@ -16,6 +16,11 @@ public class EmailSendCommand
     public string? InputFile { get; set; }
 
     /// <summary />
+    [Option( "-f|--html", CommandOptionType.SingleValue, Description = "HTML file with body" )]
+    [FileExists]
+    public string? HtmlFile { get; set; }
+
+    /// <summary />
     [Option( "-k|--key", CommandOptionType.SingleValue, Description = "Idempotency key" )]
     public string? IdempotencyKey { get; set; }
 
@@ -61,6 +66,15 @@ public class EmailSendCommand
         }
 
         EmailMessage message = JsonSerializer.Deserialize<EmailMessage>( json )!;
+
+
+        /*
+         * 
+         */
+        if ( this.HtmlFile != null )
+        {
+            message.HtmlBody = File.ReadAllText( this.HtmlFile );
+        }
 
 
         /*
@@ -137,7 +151,6 @@ public class EmailSendCommand
                 foreach ( var t in message.Tags )
                     Console.WriteLine( "Tag: {0}={1}", t.Name, t.Value );
             }
-
 
             // Attachments
             if ( message.Attachments != null )

@@ -492,7 +492,7 @@ public partial class ResendClient : IResend
             }
             catch ( Exception iex )
             {
-                ResendException oex = new ResendException( resp.StatusCode, ErrorType.Deserialization, "Failed deserializing error response", iex );
+                ResendException oex = new ResendException( resp.StatusCode, ErrorType.Deserialization, "Failed deserializing error response", iex, rrl );
 
                 if ( _throw == true )
                     throw oex;
@@ -503,9 +503,9 @@ public partial class ResendClient : IResend
             ResendException ex;
 
             if ( err == null )
-                ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+                ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response", rrl );
             else
-                ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
+                ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message, rrl );
 
             if ( _throw == true )
                 throw ex;
@@ -573,7 +573,7 @@ public partial class ResendClient : IResend
             }
             catch ( Exception iex )
             {
-                ResendException oex = new ResendException( resp.StatusCode, ErrorType.Deserialization, "Failed deserializing error response", iex );
+                ResendException oex = new ResendException( resp.StatusCode, ErrorType.Deserialization, "Failed deserializing error response", iex, rrl );
 
                 if ( _throw == true )
                     throw oex;
@@ -584,9 +584,9 @@ public partial class ResendClient : IResend
             ResendException ex;
 
             if ( err == null )
-                ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response" );
+                ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing error response", rrl );
             else
-                ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message );
+                ex = new ResendException( (HttpStatusCode) err.StatusCode, err.ErrorType, err.Message, rrl );
 
             if ( _throw == true )
                 throw ex;
@@ -610,7 +610,7 @@ public partial class ResendClient : IResend
         }
         catch ( Exception ex )
         {
-            ResendException oex = new ResendException( HttpStatusCode.UnprocessableContent, ErrorType.Deserialization, "Failed deserializing response", ex );
+            ResendException oex = new ResendException( HttpStatusCode.UnprocessableContent, ErrorType.Deserialization, "Failed deserializing response", ex, rrl );
 
             if ( _throw == true )
                 throw oex;
@@ -624,7 +624,7 @@ public partial class ResendClient : IResend
          */
         if ( obj == null )
         {
-            var ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing response" );
+            var ex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Missing response", rrl );
 
             if ( _throw )
                 throw ex;
@@ -644,7 +644,7 @@ public partial class ResendClient : IResend
         }
         catch ( Exception ex )
         {
-            var oex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Failed to map response", ex );
+            var oex = new ResendException( resp.StatusCode, ErrorType.MissingResponse, "Failed to map response", ex, rrl );
 
             if ( _throw )
                 throw oex;

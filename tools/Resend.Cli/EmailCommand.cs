@@ -11,6 +11,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( Email.EmailRescheduleCommand ) )]
 [Subcommand( typeof( Email.EmailRetrieveCommand ) )]
 [Subcommand( typeof( Email.EmailSendCommand ) )]
+[Subcommand( typeof( Email.EmailSkeletonCommand ) )]
 public class EmailCommand
 {
     /// <summary />

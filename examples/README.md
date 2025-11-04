@@ -13,6 +13,9 @@
 | [WebMinimalApi](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi) | 5001 | Send email from a (minimal) API
 | [WebRazor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor)           | 5002 | Send email from a Razor form
 
+The present repository also contains a command-line application will
+implements all of the Resend API: [resend](https://github.com/resend/resend-dotnet/tree/main/tools/Resend.Cli).
+
 
 Async
 --------------------------------------------------------------------------
