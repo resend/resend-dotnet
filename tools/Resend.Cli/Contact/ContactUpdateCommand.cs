@@ -10,12 +10,7 @@ public class ContactUpdateCommand
     private readonly IResend _resend;
 
     /// <summary />
-    [Argument( 0, Description = "Audience identifier" )]
-    [Required]
-    public Guid? AudienceId { get; set; }
-
-    /// <summary />
-    [Argument( 1, Description = "Contact identifier" )]
+    [Argument( 0, Description = "Contact identifier" )]
     [Required]
     public Guid? ContactId { get; set; }
 
@@ -54,7 +49,7 @@ public class ContactUpdateCommand
             IsUnsubscribed = this.IsUnsubscribed,
         };
 
-        await _resend.ContactUpdateAsync( this.AudienceId!.Value, this.ContactId!.Value, data );
+        await _resend.ContactUpdateAsync( this.ContactId!.Value, data );
 
         return 0;
     }

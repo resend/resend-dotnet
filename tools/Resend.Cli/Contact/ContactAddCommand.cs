@@ -11,14 +11,9 @@ public class ContactAddCommand
 
 
     /// <summary />
-    [Argument( 0, Description = "Audience identifier" )]
+    [Argument( 0, Description = "Email" )]
     [Required]
-    public Guid? AudienceId { get; set; }
-
-    /// <summary />
-    [Option( "-e|--email", CommandOptionType.SingleValue, Description = "Email" )]
-    [Required]
-    public string Email { get; set; } = default!;
+    public string? Email { get; set; }
 
     /// <summary />
     [Option( "-f|--first", CommandOptionType.SingleValue, Description = "First name" )]
@@ -45,13 +40,13 @@ public class ContactAddCommand
     {
         var data = new ContactData()
         {
-            Email = this.Email,
+            Email = this.Email!,
             FirstName = this.FirstName,
             LastName = this.LastName,
             IsUnsubscribed = this.IsUnsubscribed,
         };
 
-        var res = await _resend.ContactAddAsync( this.AudienceId!.Value, data );
+        var res = await _resend.ContactAddAsync( data );
         var id = res.Content;
 
 

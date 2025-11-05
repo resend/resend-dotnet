@@ -12,11 +12,6 @@ public class ContactListCommand
     private readonly IResend _resend;
 
     /// <summary />
-    [Argument( 0, Description = "Audience identifier" )]
-    [Required]
-    public Guid? AudienceId { get; set; }
-
-    /// <summary />
     [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON array" )]
     public bool InJson { get; set; }
 
@@ -31,7 +26,7 @@ public class ContactListCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.ContactListAsync( this.AudienceId!.Value );
+        var res = await _resend.ContactListAsync();
         var rows = res.Content.Data;
 
         if ( this.InJson == true )

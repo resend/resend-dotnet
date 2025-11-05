@@ -13,12 +13,7 @@ public class ContactRetrieveCommand
 
 
     /// <summary />
-    [Argument( 0, Description = "Audience identifier" )]
-    [Required]
-    public Guid? AudienceId { get; set; }
-
-    /// <summary />
-    [Argument( 1, Description = "Contact identifier or email" )]
+    [Argument( 0, Description = "Contact identifier or email" )]
     [Required]
     public string? Contact { get; set; }
 
@@ -44,7 +39,7 @@ public class ContactRetrieveCommand
 
         if ( this.Contact!.Contains( "@" ) == true )
         {
-            var res = await _resend.ContactRetrieveByEmailAsync( this.AudienceId!.Value, this.Contact! );
+            var res = await _resend.ContactRetrieveByEmailAsync( this.Contact! );
             contact = res.Content;
         }
         else
@@ -55,7 +50,7 @@ public class ContactRetrieveCommand
                 return 1;
             }
 
-            var res = await _resend.ContactRetrieveAsync( this.AudienceId!.Value, contactId );
+            var res = await _resend.ContactRetrieveAsync( contactId );
             contact = res.Content;
         }
 

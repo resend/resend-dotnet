@@ -226,47 +226,6 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
-    public async Task AudienceCreate()
-    {
-        var resp = await _resend.AudienceAddAsync( "audience-test" );
-
-        Assert.NotNull( resp );
-        Assert.NotEqual( Guid.Empty, resp.Content );
-    }
-
-
-    /// <summary/>
-    [Fact]
-    public async Task AudienceRetrieve()
-    {
-        var resp = await _resend.AudienceRetrieveAsync( Guid.NewGuid() );
-
-        Assert.NotNull( resp );
-    }
-
-
-    /// <summary/>
-    [Fact]
-    public async Task AudienceList()
-    {
-        var resp = await _resend.AudienceListAsync();
-
-        Assert.NotNull( resp );
-    }
-
-
-    /// <summary/>
-    [Fact]
-    public async Task AudienceDelete()
-    {
-        var resp = await _resend.AudienceDeleteAsync( Guid.NewGuid() );
-
-        Assert.NotNull( resp );
-    }
-
-
-    /// <summary/>
-    [Fact]
     public async Task ContactCreate()
     {
         var req = new ContactData()
@@ -277,7 +236,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
             IsUnsubscribed = true,
         };
 
-        var resp = await _resend.ContactAddAsync( Guid.NewGuid(), req );
+        var resp = await _resend.ContactAddAsync( req );
 
         Assert.NotNull( resp );
         Assert.NotEqual( Guid.Empty, resp.Content );
@@ -288,7 +247,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ContactRetrieve()
     {
-        var resp = await _resend.ContactRetrieveAsync( Guid.NewGuid(), Guid.NewGuid() );
+        var resp = await _resend.ContactRetrieveAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
     }
@@ -298,7 +257,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ContactRetrieveByEmail()
     {
-        var resp = await _resend.ContactRetrieveByEmailAsync( Guid.NewGuid(), "test@email.com" );
+        var resp = await _resend.ContactRetrieveByEmailAsync( "test@email.com" );
 
         Assert.NotNull( resp );
     }
@@ -316,7 +275,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
             IsUnsubscribed = true,
         };
 
-        var resp = await _resend.ContactUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), req );
+        var resp = await _resend.ContactUpdateAsync( Guid.NewGuid(), req );
 
         Assert.NotNull( resp );
     }
@@ -333,7 +292,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
             IsUnsubscribed = true,
         };
 
-        var resp = await _resend.ContactUpdateByEmailAsync( Guid.NewGuid(), "test@email.com", req );
+        var resp = await _resend.ContactUpdateByEmailAsync( "test@email.com", req );
 
         Assert.NotNull( resp );
     }
@@ -343,7 +302,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ContactList()
     {
-        var resp = await _resend.ContactListAsync( Guid.NewGuid() );
+        var resp = await _resend.ContactListAsync();
 
         Assert.NotNull( resp );
     }
@@ -353,7 +312,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ContactDelete()
     {
-        var resp = await _resend.ContactDeleteAsync( Guid.NewGuid(), Guid.NewGuid() );
+        var resp = await _resend.ContactDeleteAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
     }
@@ -363,7 +322,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task ContactDeleteByEmail()
     {
-        var resp = await _resend.ContactDeleteByEmailAsync( Guid.NewGuid(), "test@email.com" );
+        var resp = await _resend.ContactDeleteByEmailAsync( "test@email.com" );
 
         Assert.NotNull( resp );
     }
