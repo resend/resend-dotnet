@@ -77,19 +77,39 @@ public class Program
     public async Task<int> OnExecute()
     {
         var dir = new DirectoryInfo( this.RootFolder! );
-        var failCount = 0;
+
+        var ok = 0;
+        var warn = 0;
+        var fail = 0;
 
         foreach ( var f in dir.GetFiles( "*.mdx", SearchOption.AllDirectories ) )
         {
-            failCount += await FileCheck( dir, f );
+            var fr = await FileCheck( dir, f );
+
+            ok += fr.Ok;
+            warn += fr.Warn;
+            fail += fr.Fail;
         }
 
-        return failCount;
+
+        /*
+         * 
+         */
+        Console.WriteLine( "{0} ok, {1} warn, {2} fail, {3} total", ok, warn, fail, ok + warn + fail );
+
+
+        /*
+         * 
+         */
+        if ( fail == 0 )
+            return 0;
+
+        return 1;
     }
 
 
     /// <summary />
-    private async Task<int> FileCheck( DirectoryInfo root, FileInfo f )
+    private async Task<( int Ok, int Warn, int Fail )> FileCheck( DirectoryInfo root, FileInfo f )
     {
         var rel = GetRelativePath( root, f );
         var mdx = await File.ReadAllLinesAsync( f.FullName );
@@ -134,23 +154,50 @@ public class Program
         /*
          * 
          */
-        var failCount = 0;
+        var ok = 0;
+        var wrn = 0;
+        var err = 0;
 
         foreach ( var b in blocks )
-            failCount += BlockCheck( rel, b.Key, b.Value );
+        {
+            var r = BlockCheck( rel, b.Key, b.Value );
 
-        return failCount;
+            if ( r == Result.Ok )
+                ok++;
+            else if ( r == Result.Warn )
+                wrn++;
+            else
+                err++;
+        }
+
+        return (ok, wrn, err);
     }
 
 
     /// <summary />
-    private int BlockCheck( string rel, int line, string block )
+    private Result BlockCheck( string rel, int line, string block )
     {
         /*
          * 
          */
         var lines = block.Split( "\n" );
 
+        if ( lines[ 0 ].StartsWith( "// " ) == true )
+        {
+            var fg = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write( "wrn" );
+            Console.ForegroundColor = fg;
+
+            Console.WriteLine( " {0} - missing code sample", rel );
+
+            return Result.Warn;
+        }
+
+
+        /*
+         * 
+         */
         var sb = new StringBuilder();
         sb.AppendLine( "using System;" );
         sb.AppendLine( "using System.Collections.Generic;" );
@@ -188,6 +235,7 @@ public class Program
         var references = new MetadataReference[]
         {
             MetadataReference.CreateFromFile( typeof( Object ).Assembly.Location ),
+            MetadataReference.CreateFromFile( typeof( Enumerable ).Assembly.Location ),
             MetadataReference.CreateFromFile( Assembly.Load( "System.Console" ).Location ),
             MetadataReference.CreateFromFile( Assembly.Load( "System.Runtime" ).Location ),
             MetadataReference.CreateFromFile( Assembly.Load( "System.Collections" ).Location ),
@@ -225,7 +273,7 @@ public class Program
                     Console.Error.WriteLine( "{0}: {1}", diagnostic.Id, diagnostic.GetMessage() );
                 }
 
-                return 1;
+                return Result.Fail;
             }
             else
             {
@@ -236,7 +284,7 @@ public class Program
 
                 Console.WriteLine( " {0} - ln {1}", rel, line );
 
-                return 1;
+                return Result.Ok;
             }
         }
     }
