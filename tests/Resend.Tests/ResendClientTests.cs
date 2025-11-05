@@ -334,7 +334,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     {
         var req = new BroadcastData()
         {
-            AudienceId = Guid.NewGuid(),
+            SegmentId = Guid.NewGuid(),
             DisplayName = "Display Name",
             Subject = "Unit testing",
             From = "from@example.com",

@@ -42,7 +42,7 @@ public class BroadcastController : ControllerBase
         return new Broadcast()
         {
             Id = broadcastId,
-            AudienceId = Guid.NewGuid(),
+            SegmentId = Guid.NewGuid(),
             DisplayName = "Display Name",
             Status = BroadcastStatus.Draft,
             MomentCreated = DateTime.UtcNow,
@@ -102,7 +102,7 @@ public class BroadcastController : ControllerBase
         list.Add( new Broadcast()
         {
             Id = Guid.NewGuid(),
-            AudienceId = Guid.NewGuid(),
+            SegmentId = Guid.NewGuid(),
             DisplayName = "In draft",
             Status = BroadcastStatus.Draft,
             MomentCreated = DateTime.UtcNow,
@@ -111,7 +111,7 @@ public class BroadcastController : ControllerBase
         list.Add( new Broadcast()
         {
             Id = Guid.NewGuid(),
-            AudienceId = Guid.NewGuid(),
+            SegmentId = Guid.NewGuid(),
             DisplayName = "Scheduled",
             Status = BroadcastStatus.Draft,
             MomentCreated = DateTime.UtcNow,
@@ -121,7 +121,7 @@ public class BroadcastController : ControllerBase
         list.Add( new Broadcast()
         {
             Id = Guid.NewGuid(),
-            AudienceId = Guid.NewGuid(),
+            SegmentId = Guid.NewGuid(),
             DisplayName = "Sent",
             Status = BroadcastStatus.Sent,
             MomentCreated = DateTime.UtcNow.AddDays( -10 ),

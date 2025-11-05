@@ -13,10 +13,10 @@ public class BroadcastData
     public string? DisplayName { get; set; }
 
     /// <summary>
-    /// Audience identifier.
+    /// Segment identifier.
     /// </summary>
-    [JsonPropertyName( "audience_id" )]
-    public Guid AudienceId { get; set; }
+    [JsonPropertyName( "segment_id" )]
+    public Guid SegmentId { get; set; }
 
     /// <summary>
     /// Sender email address.

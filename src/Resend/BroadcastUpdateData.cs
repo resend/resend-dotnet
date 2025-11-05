@@ -13,11 +13,11 @@ public class BroadcastUpdateData
     public string? DisplayName { get; set; }
 
     /// <summary>
-    /// Audience identifier.
+    /// Segment identifier.
     /// </summary>
-    [JsonPropertyName( "audience_id" )]
+    [JsonPropertyName( "segment_id" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public Guid? AudienceId { get; set; }
+    public Guid? SegmentId { get; set; }
 
     /// <summary>
     /// Sender email address.
