@@ -10,8 +10,9 @@ public class ContactEventData : IWebhookData
     public Guid ContactId { get; set; }
 
     /// <summary />
-    [JsonPropertyName( "audience_id" )]
-    public Guid AudienceId { get; set; }
+    [JsonPropertyName( "segment_ids" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<Guid>? SegmentIds { get; set; }
 
     /// <summary />
     [JsonPropertyName( "created_at" )]

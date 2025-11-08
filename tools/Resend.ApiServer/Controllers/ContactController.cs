@@ -19,8 +19,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpPost]
-    [Route( "audiences/{audienceId}/contacts" )]
-    public ObjectId ContactAdd( [FromRoute] Guid audienceId, [FromBody] ContactData message )
+    [Route( "contacts" )]
+    public ObjectId ContactAdd( [FromBody] ContactData message )
     {
         _logger.LogDebug( "ContactAdd" );
 
@@ -34,8 +34,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpGet]
-    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
-    public Contact ContactRetrieve( [FromRoute] Guid audienceId, [FromRoute] Guid contactId )
+    [Route( "contacts/{contactId:guid}" )]
+    public Contact ContactRetrieve( [FromRoute] Guid contactId )
     {
         _logger.LogDebug( "ContactRetrieve" );
 
@@ -53,8 +53,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpGet]
-    [Route( "audiences/{audienceId}/contacts/{email}" )]
-    public Contact ContactRetrieveByEmail( [FromRoute] Guid audienceId, [FromRoute] string email )
+    [Route( "contacts/{email}" )]
+    public Contact ContactRetrieveByEmail( [FromRoute] string email )
     {
         _logger.LogDebug( "ContactRetrieve" );
 
@@ -72,8 +72,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpPatch]
-    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
-    public ObjectId ContactUpdate( [FromRoute] Guid audienceId, [FromRoute] Guid contactId, [FromBody] ContactData message )
+    [Route( "contacts/{contactId:guid}" )]
+    public ObjectId ContactUpdate( [FromRoute] Guid contactId, [FromBody] ContactData message )
     {
         _logger.LogDebug( "ContactUpdate" );
 
@@ -87,8 +87,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpPatch]
-    [Route( "audiences/{audienceId}/contacts/{email}" )]
-    public ObjectId ContactUpdateByEmail( [FromRoute] Guid audienceId, [FromRoute] string email, [FromBody] ContactData message )
+    [Route( "contacts/{email}" )]
+    public ObjectId ContactUpdateByEmail( [FromRoute] string email, [FromBody] ContactData message )
     {
         _logger.LogDebug( "ContactUpdate" );
 
@@ -102,8 +102,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpDelete]
-    [Route( "audiences/{audienceId}/contacts/{contactId:guid}" )]
-    public ActionResult ContactDelete( [FromRoute] Guid audienceId, Guid contactId )
+    [Route( "contacts/{contactId:guid}" )]
+    public ActionResult ContactDelete( Guid contactId )
     {
         _logger.LogDebug( "ContactDelete" );
 
@@ -113,8 +113,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpDelete]
-    [Route( "audiences/{audienceId}/contacts/{email}" )]
-    public ActionResult ContactDeleteByEmail( [FromRoute] Guid audienceId, string email )
+    [Route( "contacts/{email}" )]
+    public ActionResult ContactDeleteByEmail( string email )
     {
         _logger.LogDebug( "ContactDeleteByEmail" );
 
@@ -124,8 +124,8 @@ public class ContactController : ControllerBase
 
     /// <summary />
     [HttpGet]
-    [Route( "audiences/{audienceId}/contacts" )]
-    public PaginatedResult<Contact> ContactList( [FromRoute] Guid audienceId )
+    [Route( "contacts" )]
+    public PaginatedResult<Contact> ContactList()
     {
         _logger.LogDebug( "ContactList" );
 

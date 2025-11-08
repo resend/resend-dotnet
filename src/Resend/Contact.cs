@@ -46,4 +46,11 @@ public class Contact
     [JsonPropertyName( "unsubscribed" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public bool? IsUnsubscribed { get; set; }
+
+    /// <summary>
+    /// Key/value custom properties for the contact.
+    /// </summary>
+    [JsonPropertyName( "properties" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public Dictionary<string,string>? Properties { get; set; }
 }

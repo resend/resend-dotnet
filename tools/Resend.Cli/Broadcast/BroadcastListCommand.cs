@@ -41,8 +41,8 @@ public class BroadcastListCommand
         }
         else
         {
-            var res2 = await _resend.AudienceListAsync();
-            var audiences = res2.Content;
+            var res2 = await _resend.SegmentListAsync();
+            var segments = res2.Content.Data;
 
 
             var table = new Table();
@@ -57,11 +57,11 @@ public class BroadcastListCommand
 
             foreach ( var c in contacts )
             {
-                var aud = audiences.SingleOrDefault( x => x.Id == c.AudienceId );
+                var seg = segments.SingleOrDefault( x => x.Id == c.SegmentId );
 
                 table.AddRow(
                    new Markup( c.Id.ToString() ),
-                   new Markup( aud?.Name ?? c.AudienceId.ToString() ),
+                   new Markup( seg?.Name ?? c.SegmentId.ToString() ),
                    new Markup( c.DisplayName ?? "" ),
                    new Markup( c.Status.ToString() ),
                    new Markup( c.MomentCreated.ToShortDateString() ),

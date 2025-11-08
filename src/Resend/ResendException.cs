@@ -51,8 +51,7 @@ public class ResendException : ApplicationException
         {
             return this.ErrorType switch
             {
-                ErrorType.MissingApiKey => true,
-
+                ErrorType.MonthlyQuotaExceeded => true,
                 ErrorType.DailyQuotaExceeded => true,
                 ErrorType.RateLimitExceeded => true,
                 ErrorType.HttpSendFailed => true,

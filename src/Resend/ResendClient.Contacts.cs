@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Resend.Payloads;
 using System.Net.Http.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Resend;
 
 public partial class ResendClient
 {
     /// <inheritdoc/>
-    public Task<ResendResponse<Guid>> ContactAddAsync( Guid audienceId, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> ContactAddAsync( ContactData data, CancellationToken cancellationToken = default )
     {
         if ( data.Email == null )
             throw new ArgumentException( "Email must be non-null when creating contact", nameof( data ) + ".Email" );
 
-        var path = $"/audiences/{audienceId}/contacts";
+        var path = $"/contacts";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( data );
 
@@ -22,9 +21,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse<Contact>> ContactRetrieveAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Contact>> ContactRetrieveAsync( Guid contactId, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{contactId}";
+        var path = $"/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
         return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
@@ -32,9 +31,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse<Contact>> ContactRetrieveByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Contact>> ContactRetrieveByEmailAsync( string email, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{email}";
+        var path = $"/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
         return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
@@ -42,9 +41,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse> ContactUpdateAsync( Guid audienceId, Guid contactId, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactUpdateAsync( Guid contactId, ContactData data, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{contactId}";
+        var path = $"/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
@@ -53,9 +52,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse> ContactUpdateByEmailAsync( Guid audienceId, string email, ContactData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactUpdateByEmailAsync( string email, ContactData data, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{email}";
+        var path = $"/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
         req.Content = JsonContent.Create( data );
 
@@ -64,9 +63,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse> ContactDeleteAsync( Guid audienceId, Guid contactId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactDeleteAsync( Guid contactId, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{contactId}";
+        var path = $"/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
         return Execute( req, cancellationToken );
@@ -74,9 +73,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse> ContactDeleteByEmailAsync( Guid audienceId, string email, CancellationToken cancellationToken = default )
+    public Task<ResendResponse> ContactDeleteByEmailAsync( string email, CancellationToken cancellationToken = default )
     {
-        var path = $"/audiences/{audienceId}/contacts/{email}";
+        var path = $"/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
         return Execute( req, cancellationToken );
@@ -84,9 +83,9 @@ public partial class ResendClient
 
 
     /// <inheritdoc/>
-    public Task<ResendResponse<PaginatedResult<Contact>>> ContactListAsync( Guid audienceId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<PaginatedResult<Contact>>> ContactListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default )
     {
-        var baseUrl = $"/audiences/{audienceId}/contacts";
+        var baseUrl = $"/contacts";
         var url = baseUrl;
 
         if ( query != null )
