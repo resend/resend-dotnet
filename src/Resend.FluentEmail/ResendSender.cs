@@ -233,7 +233,7 @@ public class ResendSender : ISender
         EmailAddress addr = new EmailAddress();
         addr.Email = fluentAddress.EmailAddress;
 
-        if ( string.IsNullOrEmpty( fluentAddress.Name ) == true )
+        if ( string.IsNullOrEmpty( fluentAddress.Name ) == false )
             addr.DisplayName = fluentAddress.Name;
 
         return addr;
