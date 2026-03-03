@@ -64,13 +64,13 @@ public class BroadcastData
     /// </summary>
     [JsonPropertyName( "send" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public bool? SendAfterCreate { get; set; }
+    public bool? SendAfterAdd { get; set; }
 
     /// <summary>
     /// Schedule the broadcast to be sent later.
     /// </summary>
     /// <remarks>
-    /// Requires <see cref="SendAfterCreate" /> to be True.
+    /// Requires <see cref="SendAfterAdd" /> to be True.
     /// </remarks>
     [JsonPropertyName( "scheduled_at" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
