@@ -51,4 +51,28 @@ public class BroadcastData
     [JsonPropertyName( "html" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? HtmlBody { get; set; }
+
+    /// <summary>
+    /// Topic identifier.
+    /// </summary>
+    [JsonPropertyName( "topic_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public Guid? TopicId { get; set; }
+
+    /// <summary>
+    /// Send the broadcast immediately after creation.
+    /// </summary>
+    [JsonPropertyName( "send" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? SendAfterCreate { get; set; }
+
+    /// <summary>
+    /// Schedule the broadcast to be sent later.
+    /// </summary>
+    /// <remarks>
+    /// Requires <see cref="SendAfterCreate" /> to be True.
+    /// </remarks>
+    [JsonPropertyName( "scheduled_at" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DateTimeOrHuman? MomentSchedule { get; set; }
 }
