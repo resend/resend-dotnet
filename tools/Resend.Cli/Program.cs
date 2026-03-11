@@ -7,7 +7,6 @@ namespace Resend.Cli;
 /// <summary />
 [Command( "resend", Description = "Command-line tool for Resend API" )]
 [Subcommand( typeof( ApiKeyCommand ) )]
-[Subcommand( typeof( AudienceCommand ) )]
 [Subcommand( typeof( BroadcastCommand ) )]
 [Subcommand( typeof( ContactCommand ) )]
 [Subcommand( typeof( ContactPropCommand ) )]

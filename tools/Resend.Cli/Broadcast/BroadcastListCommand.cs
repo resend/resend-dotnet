@@ -48,7 +48,7 @@ public class BroadcastListCommand
             var table = new Table();
             table.Border = TableBorder.SimpleHeavy;
             table.AddColumn( "Broadcast Id" );
-            table.AddColumn( "Audience" );
+            table.AddColumn( "Segment" );
             table.AddColumn( "Name" );
             table.AddColumn( "Status" );
             table.AddColumn( "Created" );

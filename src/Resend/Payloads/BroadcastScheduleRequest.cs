@@ -7,6 +7,6 @@ public class BroadcastScheduleRequest
 {
     /// <summary />
     [JsonPropertyName( "scheduled_at" )]
-    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
-    public DateTime? MomentSchedule { get; set; }
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DateTimeOrHuman? MomentSchedule { get; set; }
 }

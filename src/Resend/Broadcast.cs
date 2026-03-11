@@ -65,6 +65,20 @@ public class Broadcast
     public string? PreviewText { get; set; }
 
     /// <summary>
+    /// The plain text version of the message.
+    /// </summary>
+    [JsonPropertyName( "text" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? TextBody { get; set; }
+
+    /// <summary>
+    /// The HTML version of the message.
+    /// </summary>
+    [JsonPropertyName( "html" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? HtmlBody { get; set; }
+
+    /// <summary>
     /// Status.
     /// </summary>
     [JsonPropertyName( "status" )]
@@ -90,4 +104,11 @@ public class Broadcast
     [JsonPropertyName( "sent_at" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
     public DateTime? MomentSent { get; set; }
+
+    /// <summary>
+    /// Topic identifier.
+    /// </summary>
+    [JsonPropertyName( "topic_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public Guid? TopicId { get; set; }
 }
