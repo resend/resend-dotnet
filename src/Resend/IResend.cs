@@ -1,4 +1,4 @@
-﻿namespace Resend;
+namespace Resend;
 
 /// <summary>
 /// Resend client.
@@ -962,6 +962,28 @@ public interface IResend
     /// <param name="cancellationToken">Cancelation token.</param>
     /// <returns>Response.</returns>
     Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
+
+    #endregion
+
+    #region Logs
+
+    /// <summary>
+    /// Lists API request logs.
+    /// </summary>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of logs.</returns>
+    /// <see href="https://resend.com/docs/api-reference/logs/list-logs"/>
+    Task<ResendResponse<PaginatedResult<Log>>> LogListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single API request log, including request and response bodies when available.
+    /// </summary>
+    /// <param name="logId">Log identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Log entry.</returns>
+    /// <see href="https://resend.com/docs/api-reference/logs/retrieve-log"/>
+    Task<ResendResponse<Log>> LogRetrieveAsync( Guid logId, CancellationToken cancellationToken = default );
 
     #endregion
 }
