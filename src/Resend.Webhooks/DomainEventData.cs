@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Resend.Webhooks;
 
@@ -33,6 +33,26 @@ public class DomainEventData : IWebhookData
     /// </summary>
     [JsonPropertyName( "region" )]
     public DeliveryRegion Region { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "open_tracking" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? OpenTracking { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "click_tracking" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? ClickTracking { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "tracking_subdomain" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? TrackingSubdomain { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "capabilities" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DomainCapabilities? Capabilities { get; set; }
 
     /// <summary>
     /// DNS records used for domain validation.

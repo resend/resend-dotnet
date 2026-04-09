@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Resend;
 
@@ -35,6 +35,34 @@ public class Domain
     /// </summary>
     [JsonPropertyName( "region" )]
     public DeliveryRegion Region { get; set; }
+
+    /// <summary>
+    /// Whether open tracking is enabled for this domain.
+    /// </summary>
+    [JsonPropertyName( "open_tracking" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? OpenTracking { get; set; }
+
+    /// <summary>
+    /// Whether click tracking is enabled for this domain.
+    /// </summary>
+    [JsonPropertyName( "click_tracking" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? ClickTracking { get; set; }
+
+    /// <summary>
+    /// Subdomain used for click and open tracking URLs (for example, <c>links</c> for <c>links.example.com</c>).
+    /// </summary>
+    [JsonPropertyName( "tracking_subdomain" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? TrackingSubdomain { get; set; }
+
+    /// <summary>
+    /// Whether this domain can send and receive email.
+    /// </summary>
+    [JsonPropertyName( "capabilities" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DomainCapabilities? Capabilities { get; set; }
 
     /// <summary>
     /// DNS records used for domain validation.

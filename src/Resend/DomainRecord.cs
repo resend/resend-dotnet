@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Resend;
 
@@ -7,7 +7,7 @@ public class DomainRecord
 {
     /// <summary />
     /// <remarks>
-    /// Example values: SPF, DKIM.
+    /// Example values: SPF, DKIM, Receiving, Tracking.
     /// </remarks>
     [JsonPropertyName( "record" )]
     public string Record { get; set; } = default!;

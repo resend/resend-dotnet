@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Resend;
 
@@ -23,6 +23,24 @@ public class DomainUpdateData
     [JsonPropertyName( "tls" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public TlsMode? TlsMode { get; set; }
+
+    /// <summary>
+    /// Configure sending and receiving for this domain. At least one capability must remain enabled.
+    /// </summary>
+    [JsonPropertyName( "capabilities" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public DomainCapabilities? Capabilities { get; set; }
+
+    /// <summary>
+    /// Subdomain for click and open tracking (for example, <c>links</c> for <c>links.example.com</c>).
+    /// </summary>
+    /// <remarks>
+    /// This value can only be set after it has been specified, never cleared. After changing the tracking
+    /// subdomain, verify DNS again; until then, the previous value may still be used for tracked links.
+    /// </remarks>
+    [JsonPropertyName( "tracking_subdomain" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? TrackingSubdomain { get; set; }
 }
 
 
