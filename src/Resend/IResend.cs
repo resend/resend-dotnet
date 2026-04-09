@@ -986,4 +986,166 @@ public interface IResend
     Task<ResendResponse<Log>> LogRetrieveAsync( Guid logId, CancellationToken cancellationToken = default );
 
     #endregion
+
+    #region Automations and events
+
+    /// <summary>
+    /// Creates an automation.
+    /// </summary>
+    /// <param name="data">Automation definition.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New automation identifier.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/create-automation"/>
+    Task<ResendResponse<Guid>> AutomationCreateAsync( AutomationCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates an automation.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="data">Fields to update.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Automation identifier.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/update-automation"/>
+    Task<ResendResponse<Guid>> AutomationUpdateAsync( Guid automationId, AutomationUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves an automation by identifier.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Automation.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/retrieve-automation"/>
+    Task<ResendResponse<Automation>> AutomationRetrieveAsync( Guid automationId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists automations.
+    /// </summary>
+    /// <param name="query">Filters and pagination.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of automations.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/list-automations"/>
+    Task<ResendResponse<PaginatedResult<AutomationSummary>>> AutomationListAsync( AutomationListQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Stops a running automation (sets status to <c>disabled</c>).
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Result including updated status.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/stop-automation"/>
+    Task<ResendResponse<AutomationStopResult>> AutomationStopAsync( Guid automationId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes an automation.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Deletion confirmation.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/delete-automation"/>
+    Task<ResendResponse<AutomationDeleteResult>> AutomationDeleteAsync( Guid automationId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists runs for an automation.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="query">Filters and pagination.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of runs.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/list-automation-runs"/>
+    Task<ResendResponse<PaginatedResult<AutomationRunSummary>>> AutomationRunListAsync( Guid automationId, AutomationRunListQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single automation run.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="runId">Run identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Run detail.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/retrieve-automation-run"/>
+    Task<ResendResponse<AutomationRun>> AutomationRunRetrieveAsync( Guid automationId, Guid runId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates an event definition (name and optional payload schema).
+    /// </summary>
+    /// <param name="data">Event name and optional schema.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New event identifier (HTTP 201).</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/create-event"/>
+    Task<ResendResponse<Guid>> EventCreateAsync( EventCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves an event by identifier.
+    /// </summary>
+    /// <param name="eventId">Event identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Event definition.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/retrieve-event"/>
+    Task<ResendResponse<EventResource>> EventRetrieveAsync( Guid eventId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves an event by identifier or name.
+    /// </summary>
+    /// <param name="eventIdOrName">Event id (UUID) or name (for example <c>user.created</c>).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Event definition.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/retrieve-event"/>
+    Task<ResendResponse<EventResource>> EventRetrieveAsync( string eventIdOrName, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists event definitions.
+    /// </summary>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of events.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/list-events"/>
+    Task<ResendResponse<PaginatedResult<EventResource>>> EventListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates an event definition (for example its payload schema).
+    /// </summary>
+    /// <param name="eventId">Event identifier.</param>
+    /// <param name="data">Fields to update.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/update-event"/>
+    Task<ResendResponse> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates an event definition by identifier or name.
+    /// </summary>
+    /// <param name="eventIdOrName">Event id (UUID) or name.</param>
+    /// <param name="data">Fields to update.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/update-event"/>
+    Task<ResendResponse> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes an event definition.
+    /// </summary>
+    /// <param name="eventId">Event identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/delete-event"/>
+    Task<ResendResponse> EventDeleteAsync( Guid eventId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes an event definition by identifier or name.
+    /// </summary>
+    /// <param name="eventIdOrName">Event id (UUID) or name.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/delete-event"/>
+    Task<ResendResponse> EventDeleteAsync( string eventIdOrName, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a named event (for example to trigger automations).
+    /// </summary>
+    /// <param name="data">Event name, contact or email, and optional payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Accepted event metadata (HTTP 202).</returns>
+    /// <see href="https://resend.com/docs/api-reference/events/send-event"/>
+    Task<ResendResponse<EventSendResult>> EventSendAsync( EventSendData data, CancellationToken cancellationToken = default );
+
+    #endregion
 }
