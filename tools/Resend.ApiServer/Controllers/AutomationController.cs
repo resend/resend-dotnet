@@ -71,16 +71,18 @@ public class AutomationController : ControllerBase
             [
                 new AutomationStep()
                 {
+                    Key = stepA.ToString(),
                     Type = "trigger",
                     Config = JsonDocument.Parse( "{\"event_name\":\"user.created\"}" ).RootElement,
                 },
                 new AutomationStep()
                 {
+                    Key = stepB.ToString(),
                     Type = "send_email",
                     Config = JsonDocument.Parse( "{\"template_id\":\"tpl_xxxxxxxxx\",\"subject\":\"Welcome!\",\"from\":\"Acme <hello@example.com>\"}" ).RootElement,
                 },
             ],
-            Edges =
+            Connections =
             [
                 new AutomationEdge()
                 {
@@ -227,6 +229,7 @@ public class AutomationController : ControllerBase
             [
                 new AutomationRunStep()
                 {
+                    Key = "trigger-step",
                     Type = "trigger",
                     Status = "completed",
                     MomentStarted = DateTime.Parse( "2025-10-01 12:00:00.000000+00", null, System.Globalization.DateTimeStyles.RoundtripKind ),
@@ -237,6 +240,7 @@ public class AutomationController : ControllerBase
                 },
                 new AutomationRunStep()
                 {
+                    Key = "send-email-step",
                     Type = "send_email",
                     Status = "completed",
                     MomentStarted = DateTime.Parse( "2025-10-01 12:00:01.000000+00", null, System.Globalization.DateTimeStyles.RoundtripKind ),

@@ -24,9 +24,9 @@ public class AutomationEdge
     public string To { get; set; } = default!;
 
     /// <summary>
-    /// Edge kind: <c>default</c>, <c>condition_met</c>, <c>condition_not_met</c>, <c>timeout</c>, <c>event_received</c>.
+    /// Connection type: <c>default</c>, <c>condition_met</c>, <c>condition_not_met</c>, <c>timeout</c>, <c>event_received</c>.
     /// </summary>
-    [JsonPropertyName( "edge_type" )]
+    [JsonPropertyName( "type" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? EdgeType { get; set; }
 }

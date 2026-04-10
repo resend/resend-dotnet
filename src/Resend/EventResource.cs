@@ -45,5 +45,5 @@ public class EventResource
     /// </summary>
     [JsonPropertyName( "updated_at" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
-    public DateTime MomentUpdated { get; set; }
+    public DateTime? MomentUpdated { get; set; }
 }

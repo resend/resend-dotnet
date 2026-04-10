@@ -88,6 +88,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -104,6 +105,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -115,6 +117,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+        Assert.True( resp.Content.Deleted );
     }
 
 
@@ -122,10 +125,14 @@ public partial class ResendClientTests
     [Fact]
     public async Task EventDelete_ByGuid()
     {
-        var resp = await _resend.EventDeleteAsync( Guid.NewGuid() );
+        var id = Guid.NewGuid();
+
+        var resp = await _resend.EventDeleteAsync( id );
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+        Assert.Equal( id, resp.Content.Id );
+        Assert.True( resp.Content.Deleted );
     }
 
 

@@ -63,40 +63,40 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
-    public Task<ResendResponse> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/events/{eventId}" );
         req.Content = JsonContent.Create( data );
 
-        return Execute( req, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public Task<ResendResponse> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/events/{Uri.EscapeDataString( eventIdOrName )}" );
         req.Content = JsonContent.Create( data );
 
-        return Execute( req, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public Task<ResendResponse> EventDeleteAsync( Guid eventId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<EventDeleteResult>> EventDeleteAsync( Guid eventId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/events/{eventId}" );
 
-        return Execute( req, cancellationToken );
+        return Execute<EventDeleteResult, EventDeleteResult>( req, ( x ) => x, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public Task<ResendResponse> EventDeleteAsync( string eventIdOrName, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<EventDeleteResult>> EventDeleteAsync( string eventIdOrName, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/events/{Uri.EscapeDataString( eventIdOrName )}" );
 
-        return Execute( req, cancellationToken );
+        return Execute<EventDeleteResult, EventDeleteResult>( req, ( x ) => x, cancellationToken );
     }
 
 

@@ -27,8 +27,8 @@ public class AutomationCreateData
     public List<AutomationStepData> Steps { get; set; } = default!;
 
     /// <summary>
-    /// Edges between steps (may be empty for single-step automations).
+    /// Connections between steps (may be empty for single-step automations).
     /// </summary>
-    [JsonPropertyName( "edges" )]
-    public List<AutomationEdge> Edges { get; set; } = default!;
+    [JsonPropertyName( "connections" )]
+    public List<AutomationEdge> Connections { get; set; } = default!;
 }
