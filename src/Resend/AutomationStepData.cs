@@ -11,7 +11,7 @@ public class AutomationStepData
     /// <summary>
     /// Unique reference for this step, used by <see cref="AutomationEdge.From"/> and <see cref="AutomationEdge.To"/>.
     /// </summary>
-    [JsonPropertyName( "ref" )]
+    [JsonPropertyName( "key" )]
     public string Ref { get; set; } = default!;
 
     /// <summary>
