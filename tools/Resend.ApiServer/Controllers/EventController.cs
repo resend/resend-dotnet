@@ -42,13 +42,13 @@ public class EventController : ControllerBase
     {
         _logger.LogDebug( "EventRetrieve" );
 
-        var eid = Guid.Parse( "a1b2c3d4-e5f6-7890-abcd-ef1234567890" );
+        var isGuid = Guid.TryParse( id, out var eid );
 
         return new EventResource()
         {
             Object = "event",
-            Id = eid,
-            Name = "user.created",
+            Id = isGuid ? eid : Guid.Parse( "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ),
+            Name = isGuid ? "user.created" : id,
             Schema = JsonDocument.Parse( "{\"plan\":\"string\"}" ).RootElement,
             MomentCreated = DateTime.Parse( "2025-10-01 12:00:00.000000+00", null, System.Globalization.DateTimeStyles.RoundtripKind ),
             MomentUpdated = DateTime.Parse( "2025-10-01 12:00:00.000000+00", null, System.Globalization.DateTimeStyles.RoundtripKind ),
