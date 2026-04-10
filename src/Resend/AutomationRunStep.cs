@@ -9,6 +9,12 @@ namespace Resend;
 public class AutomationRunStep
 {
     /// <summary>
+    /// Unique key identifying this step within the automation graph.
+    /// </summary>
+    [JsonPropertyName( "key" )]
+    public string? Key { get; set; }
+
+    /// <summary>
     /// Step type.
     /// </summary>
     [JsonPropertyName( "type" )]
@@ -25,7 +31,7 @@ public class AutomationRunStep
     /// </summary>
     [JsonPropertyName( "started_at" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
-    public DateTime MomentStarted { get; set; }
+    public DateTime? MomentStarted { get; set; }
 
     /// <summary>
     /// When the step finished, if applicable.

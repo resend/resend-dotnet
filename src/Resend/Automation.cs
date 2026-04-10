@@ -52,8 +52,8 @@ public class Automation
     public List<AutomationStep> Steps { get; set; } = default!;
 
     /// <summary>
-    /// Edges connecting steps.
+    /// Connections between steps.
     /// </summary>
-    [JsonPropertyName( "edges" )]
-    public List<AutomationEdge> Edges { get; set; } = default!;
+    [JsonPropertyName( "connections" )]
+    public List<AutomationEdge> Connections { get; set; } = default!;
 }

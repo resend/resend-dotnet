@@ -21,7 +21,7 @@ public partial class ResendClientTests
                     Config = JsonDocument.Parse( "{\"event_name\":\"user.created\"}" ).RootElement,
                 },
             ],
-            Edges = [],
+            Connections = [],
         } );
 
         Assert.NotNull( resp );

@@ -1106,9 +1106,9 @@ public interface IResend
     /// <param name="eventId">Event identifier.</param>
     /// <param name="data">Fields to update.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Response.</returns>
+    /// <returns>ID of the updated event.</returns>
     /// <see href="https://resend.com/docs/api-reference/events/update-event"/>
-    Task<ResendResponse> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Guid>> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Updates an event definition by identifier or name.
@@ -1116,27 +1116,27 @@ public interface IResend
     /// <param name="eventIdOrName">Event id (UUID) or name.</param>
     /// <param name="data">Fields to update.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Response.</returns>
+    /// <returns>ID of the updated event.</returns>
     /// <see href="https://resend.com/docs/api-reference/events/update-event"/>
-    Task<ResendResponse> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Guid>> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Deletes an event definition.
     /// </summary>
     /// <param name="eventId">Event identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Response.</returns>
+    /// <returns>Delete result including the event id and confirmation flag.</returns>
     /// <see href="https://resend.com/docs/api-reference/events/delete-event"/>
-    Task<ResendResponse> EventDeleteAsync( Guid eventId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<EventDeleteResult>> EventDeleteAsync( Guid eventId, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Deletes an event definition by identifier or name.
     /// </summary>
     /// <param name="eventIdOrName">Event id (UUID) or name.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Response.</returns>
+    /// <returns>Delete result including the event id and confirmation flag.</returns>
     /// <see href="https://resend.com/docs/api-reference/events/delete-event"/>
-    Task<ResendResponse> EventDeleteAsync( string eventIdOrName, CancellationToken cancellationToken = default );
+    Task<ResendResponse<EventDeleteResult>> EventDeleteAsync( string eventIdOrName, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Sends a named event (for example to trigger automations).

@@ -30,9 +30,9 @@ public class AutomationUpdateData
     public List<AutomationStepData>? Steps { get; set; }
 
     /// <summary>
-    /// Replacement edge list when updating the graph.
+    /// Replacement connection list when updating the graph.
     /// </summary>
-    [JsonPropertyName( "edges" )]
+    [JsonPropertyName( "connections" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public List<AutomationEdge>? Edges { get; set; }
+    public List<AutomationEdge>? Connections { get; set; }
 }

@@ -24,7 +24,7 @@ public class AutomationRunSummary
     /// </summary>
     [JsonPropertyName( "started_at" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
-    public DateTime MomentStarted { get; set; }
+    public DateTime? MomentStarted { get; set; }
 
     /// <summary>
     /// When the run finished, if applicable.

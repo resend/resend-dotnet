@@ -105,7 +105,13 @@ public class EventController : ControllerBase
     {
         _logger.LogDebug( "EventUpdate" );
 
-        return Ok();
+        var isGuid = Guid.TryParse( id, out var eid );
+
+        return Ok( new ObjectId()
+        {
+            Object = "event",
+            Id = isGuid ? eid : Guid.Parse( "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ),
+        } );
     }
 
 
@@ -116,7 +122,14 @@ public class EventController : ControllerBase
     {
         _logger.LogDebug( "EventDelete" );
 
-        return Ok();
+        var isGuid = Guid.TryParse( id, out var eid );
+
+        return Ok( new EventDeleteResult()
+        {
+            Object = "event",
+            Id = isGuid ? eid : Guid.Parse( "a1b2c3d4-e5f6-7890-abcd-ef1234567890" ),
+            Deleted = true,
+        } );
     }
 
 
