@@ -7,7 +7,7 @@ public class DomainRecord
 {
     /// <summary />
     /// <remarks>
-    /// Example values: SPF, DKIM, Receiving, Tracking.
+    /// Example values: SPF, DKIM, Receiving, Tracking, TrackingCAA.
     /// </remarks>
     [JsonPropertyName( "record" )]
     public string Record { get; set; } = default!;
