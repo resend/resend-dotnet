@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -76,6 +77,55 @@ public class DomainTests
         Assert.NotNull( domain.Capabilities );
         Assert.Equal( "enabled", domain.Capabilities!.Sending );
         Assert.Equal( "disabled", domain.Capabilities.Receiving );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void Domain_deserializes_tracking_caa_record()
+    {
+        const string json = """
+            {
+              "id": "d91cd9bd-1176-453e-8fc1-35364d380206",
+              "name": "example.com",
+              "status": "not_started",
+              "created_at": "2023-04-26T20:21:26.347412+00:00",
+              "region": "us-east-1",
+              "open_tracking": true,
+              "click_tracking": true,
+              "tracking_subdomain": "links",
+              "records": [
+                {
+                  "record": "Tracking",
+                  "name": "links.example.com",
+                  "value": "links1.resend-dns.com",
+                  "type": "CNAME",
+                  "ttl": "Auto",
+                  "status": "not_started"
+                },
+                {
+                  "record": "TrackingCAA",
+                  "name": "",
+                  "value": "0 issue \"amazon.com\"",
+                  "type": "CAA",
+                  "ttl": "Auto",
+                  "status": "verified"
+                }
+              ]
+            }
+            """;
+
+        var domain = JsonSerializer.Deserialize<Domain>( json );
+        Assert.NotNull( domain );
+        Assert.NotNull( domain!.Records );
+        Assert.Equal( 2, domain.Records!.Count );
+
+        var trackingCaa = domain.Records.Single( r => r.Record == "TrackingCAA" );
+        Assert.Equal( "", trackingCaa.Name );
+        Assert.Equal( "0 issue \"amazon.com\"", trackingCaa.Value );
+        Assert.Equal( "CAA", trackingCaa.RecordType );
+        Assert.Equal( "Auto", trackingCaa.TimeToLive );
+        Assert.Equal( ValidationStatus.Verified, trackingCaa.Status );
     }
 
 
