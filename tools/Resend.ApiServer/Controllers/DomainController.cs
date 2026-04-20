@@ -29,7 +29,7 @@ public class DomainController : ControllerBase
             Id = Guid.NewGuid(),
             Name = "example.com",
             Region = DeliveryRegion.UsEast1,
-            Status = ValidationStatus.NotStarted,
+            Status = DomainStatus.NotStarted,
             MomentCreated = DateTime.UtcNow,
             Records = new List<DomainRecord>()
             {
@@ -39,7 +39,7 @@ public class DomainController : ControllerBase
                     RecordType = "TXT",
                     Name = "bounces",
                     TimeToLive = "Auto",
-                    Status = ValidationStatus.NotStarted,
+                    Status = DomainRecordStatus.NotStarted,
                     Value = "feedback-smtp.us-east-1.amazonses.com",
                 },
             },
@@ -59,7 +59,7 @@ public class DomainController : ControllerBase
             Id = id,
             Name = "example.com",
             Region = DeliveryRegion.UsEast1,
-            Status = ValidationStatus.NotStarted,
+            Status = DomainStatus.NotStarted,
             MomentCreated = DateTime.UtcNow,
             Records = new List<DomainRecord>()
             {
@@ -69,7 +69,7 @@ public class DomainController : ControllerBase
                     RecordType = "TXT",
                     Name = "bounces",
                     TimeToLive = "Auto",
-                    Status = ValidationStatus.NotStarted,
+                    Status = DomainRecordStatus.NotStarted,
                     Value = "feedback-smtp.us-east-1.amazonses.com",
                 },
             },
@@ -123,7 +123,7 @@ public class DomainController : ControllerBase
                     Id = Guid.NewGuid(),
                     Name = "example.com",
                     Region = DeliveryRegion.UsEast1,
-                    Status = ValidationStatus.NotStarted,
+                    Status = DomainStatus.NotStarted,
                     MomentCreated = DateTime.UtcNow,
                 },
                 new Domain()
@@ -131,7 +131,7 @@ public class DomainController : ControllerBase
                     Id = Guid.NewGuid(),
                     Name = "amazing.com",
                     Region = DeliveryRegion.EuWest1,
-                    Status = ValidationStatus.Pending,
+                    Status = DomainStatus.Pending,
                     MomentCreated = DateTime.UtcNow,
                 }
             },

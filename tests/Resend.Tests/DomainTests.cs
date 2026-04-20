@@ -125,7 +125,59 @@ public class DomainTests
         Assert.Equal( "0 issue \"amazon.com\"", trackingCaa.Value );
         Assert.Equal( "CAA", trackingCaa.RecordType );
         Assert.Equal( "Auto", trackingCaa.TimeToLive );
-        Assert.Equal( ValidationStatus.Verified, trackingCaa.Status );
+        Assert.Equal( DomainRecordStatus.Verified, trackingCaa.Status );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void Domain_deserializes_partially_verified_status()
+    {
+        const string json = """
+            {
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "name": "resend.com",
+              "status": "partially_verified",
+              "created_at": "2023-06-21T06:10:36.144Z",
+              "region": "us-east-1",
+              "click_tracking": true,
+              "tracking_subdomain": "track",
+              "capabilities": {
+                "sending": "enabled",
+                "receiving": "disabled"
+              },
+              "records": []
+            }
+            """;
+
+        var domain = JsonSerializer.Deserialize<Domain>( json );
+        Assert.NotNull( domain );
+        Assert.Equal( DomainStatus.PartiallyVerified, domain!.Status );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void Domain_deserializes_partially_failed_status()
+    {
+        const string json = """
+            {
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "name": "resend.com",
+              "status": "partially_failed",
+              "created_at": "2023-06-21T06:10:36.144Z",
+              "region": "us-east-1",
+              "capabilities": {
+                "sending": "enabled",
+                "receiving": "enabled"
+              },
+              "records": []
+            }
+            """;
+
+        var domain = JsonSerializer.Deserialize<Domain>( json );
+        Assert.NotNull( domain );
+        Assert.Equal( DomainStatus.PartiallyFailed, domain!.Status );
     }
 
 

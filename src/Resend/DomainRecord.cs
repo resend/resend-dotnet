@@ -49,5 +49,5 @@ public class DomainRecord
     /// Validation status of individual DNS record.
     /// </summary>
     [JsonPropertyName( "status" )]
-    public ValidationStatus Status { get; set; }
+    public DomainRecordStatus Status { get; set; }
 }
