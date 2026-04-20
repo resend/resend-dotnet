@@ -21,7 +21,7 @@ public class Domain
     /// Validation status.
     /// </summary>
     [JsonPropertyName( "status" )]
-    public ValidationStatus Status { get; set; }
+    public DomainStatus Status { get; set; }
 
     /// <summary>
     /// Moment when the domain was created.
