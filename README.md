@@ -41,13 +41,10 @@ In the startup of your application, configure the DI container as follows:
 ```csharp
 using Resend;
 
-builder.Services.AddOptions();
-builder.Services.AddHttpClient<ResendClient>();
-builder.Services.Configure<ResendClientOptions>( o =>
+builder.Services.AddResend( o => 
 {
     o.ApiToken = Environment.GetEnvironmentVariable( "RESEND_APITOKEN" )!;
 } );
-builder.Services.AddTransient<IResend, ResendClient>()
 ```
 
 You can then use the injected `IResend` instance to send emails.

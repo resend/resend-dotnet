@@ -30,8 +30,8 @@ public class Program
         var app = new CommandLineApplication<Program>();
 
         var svc = new ServiceCollection();
-        svc.AddOptions();
-        svc.Configure<ResendClientOptions>( o =>
+
+        svc.AddResend( o =>
         {
             var apiUrl = Environment.GetEnvironmentVariable( "RESEND_APIURL" );
 
@@ -40,8 +40,6 @@ public class Program
 
             o.ApiToken = Environment.GetEnvironmentVariable( "RESEND_APITOKEN" )!;
         } );
-        svc.AddHttpClient<ResendClient>();
-        svc.AddTransient<IResend, ResendClient>();
 
         var sp = svc.BuildServiceProvider();
 

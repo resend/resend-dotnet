@@ -52,13 +52,10 @@ In the startup of your application, configure the DI container as follows:
 ```
 using Resend;
 
-builder.Services.AddOptions();
-builder.Services.AddHttpClient<ResendClient>();
-builder.Services.Configure<ResendClientOptions>( o =>
+builder.Services.AddResend( o => 
 {
     o.ApiToken = Environment.GetEnvironmentVariable( "RESEND_APITOKEN" )!;
 } );
-builder.Services.AddTransient<IResend, ResendClient>();
 ```
 
 
