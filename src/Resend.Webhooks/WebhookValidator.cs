@@ -48,7 +48,7 @@ public class WebhookValidator
             {
                 s.Payload = await reader.ReadToEndAsync( cancellationToken );
             }
-            catch
+            catch ( Exception e ) when ( e is not OperationCanceledException )
             {
                 s.Exception = new WebhookException( "RWH002", "Unable to read raw body" );
 
