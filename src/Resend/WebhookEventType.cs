@@ -76,6 +76,23 @@ public enum WebhookEventType
     [JsonStringValue( "email.failed" )]
     EmailFailed,
 
+    /// <summary>
+    /// Email was scheduled to be sent at some point in the future.
+    /// </summary>
+    [JsonStringValue( "email.scheduled" )]
+    EmailScheduled,
+
+    /// <summary>
+    /// The sending of this email was suppressed.
+    /// </summary>
+    /// <remarks>
+    /// This event is triggered when an email is sent to an address
+    /// on the suppression list.
+    /// See https://www.resend.com/docs/knowledge-base/why-are-my-emails-landing-on-the-suppression-list
+    /// </remarks>
+    [JsonStringValue( "email.suppressed")]
+    EmailSuppressed,
+
 
     /// <summary>
     /// A contact was successfully created.
