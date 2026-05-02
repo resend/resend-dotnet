@@ -21,7 +21,7 @@ public class WebhookValidator
 
 
     /// <summary />
-    public WebhookContext Validate( HttpRequest request )
+    public async Task<WebhookContext> ValidateAsync( HttpRequest request, CancellationToken cancellationToken = default )
     {
         /*
          * 
@@ -46,7 +46,7 @@ public class WebhookValidator
 
             try
             {
-                s.Payload = reader.ReadToEnd();
+                s.Payload = await reader.ReadToEndAsync( cancellationToken );
             }
             catch
             {
