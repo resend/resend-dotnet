@@ -38,8 +38,13 @@ public partial class ResendClient : IResend
          */
         var opt = options.Value;
 
+        var apiToken = opt.ApiToken;
+
+        if ( string.IsNullOrWhiteSpace( apiToken ) )
+            apiToken = Environment.GetEnvironmentVariable( "RESEND_API_KEY" );
+
         httpClient.BaseAddress = new Uri( opt.ApiUrl );
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer", opt.ApiToken );
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer", apiToken );
 
 
         /*
@@ -736,5 +741,28 @@ public partial class ResendClient : IResend
         opt.ApiToken = apiToken;
 
         return Create( opt );
+    }
+
+
+    /// <summary>
+    /// Creates an instance of Resend using the RESEND_API_KEY environment variable.
+    /// </summary>
+    /// <returns>Instance of Resend client.</returns>
+    /// <remarks>
+    /// Utility method for examples/one-off apps. Requires the RESEND_API_KEY
+    /// environment variable to be set. For most use-cases it is preferable to use
+    /// dependency injection to configure/inject `IResend` instances.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when RESEND_API_KEY environment variable is not set.
+    /// </exception>
+    public static IResend Create()
+    {
+        var apiToken = Environment.GetEnvironmentVariable( "RESEND_API_KEY" );
+
+        if ( string.IsNullOrWhiteSpace( apiToken ) )
+            throw new InvalidOperationException( "Missing API key. Pass it to the constructor `ResendClient.Create(\"re_123\")` or set the RESEND_API_KEY environment variable." );
+
+        return Create( apiToken );
     }
 }
