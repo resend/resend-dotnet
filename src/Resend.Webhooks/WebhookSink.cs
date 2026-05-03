@@ -17,12 +17,13 @@ public class WebhookSink<T>
         HttpRequest request,
         [FromServices] ILogger<WebhookSink<T>> logger,
         [FromServices] T handler,
-        [FromServices] WebhookValidator validator )
+        [FromServices] WebhookValidator validator,
+        CancellationToken cancellationToken = default )
     {
         /*
          * 
          */
-        var ctx = validator.Validate( request );
+        var ctx = await validator.ValidateAsync( request, cancellationToken );
 
 
         /*
