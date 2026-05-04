@@ -90,7 +90,7 @@ public enum WebhookEventType
     /// on the suppression list.
     /// See https://www.resend.com/docs/knowledge-base/why-are-my-emails-landing-on-the-suppression-list
     /// </remarks>
-    [JsonStringValue( "email.suppressed")]
+    [JsonStringValue( "email.suppressed" )]
     EmailSuppressed,
 
 
