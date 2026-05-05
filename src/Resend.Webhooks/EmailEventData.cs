@@ -28,14 +28,17 @@ public class EmailEventData : IWebhookData
 
     /// <summary />
     [JsonPropertyName( "broadcast_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? BroadcastId { get; set; }
 
     /// <summary />
     [JsonPropertyName( "template_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? TemplateId { get; set; }
 
     /// <summary />
     [JsonPropertyName( "tags" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public Dictionary<string, string>? Tags { get; set; }
 
     /// <summary />
@@ -68,7 +71,7 @@ public class EmailEventData : IWebhookData
     /// </remarks>
     [JsonPropertyName( "suppressed" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public EmailFailedData? Suppressed { get; set; }
+    public EmailSuppressedData? Suppressed { get; set; }
 }
 
 
