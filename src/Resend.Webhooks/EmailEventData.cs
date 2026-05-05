@@ -27,6 +27,18 @@ public class EmailEventData : IWebhookData
     public string Subject { get; set; } = default!;
 
     /// <summary />
+    [JsonPropertyName( "broadcast_id" )]
+    public string? BroadcastId { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "template_id" )]
+    public string? TemplateId { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "tags" )]
+    public Dictionary<string, string>? Tags { get; set; }
+
+    /// <summary />
     /// <remarks>
     /// Only set for <see cref="WebhookEventType.EmailClicked" />, otherwise is null.
     /// </remarks>
@@ -41,6 +53,14 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "bounce" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public EmailBounceData? Bounce { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailFailed"/>
+    /// </remarks>
+    [JsonPropertyName( "failed" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull  )]
+    public EmailFailedData? Failed { get; set; }
 }
 
 
@@ -82,4 +102,12 @@ public class EmailClickData
     /// <summary />
     [JsonPropertyName( "userAgent" )]
     public string UserAgent { get; set; } = default!;
+}
+
+/// <summary />
+public class EmailFailedData
+{
+    /// <summary />
+    [JsonPropertyName( "reason" )]
+    public string Reason { get; set; } = default!;
 }
