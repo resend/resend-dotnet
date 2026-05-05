@@ -72,6 +72,12 @@ public enum EmailStatus
     Scheduled,
 
     /// <summary>
+    /// Email is suppressed.
+    /// </summary>
+    [JsonStringValue( "suppressed" )]
+    Suppressed,
+
+    /// <summary>
     /// Email delivery failed.
     /// </summary>
     [JsonStringValue( "failed" )]
