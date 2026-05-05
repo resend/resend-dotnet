@@ -61,6 +61,14 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "failed" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull  )]
     public EmailFailedData? Failed { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailSuppressed"/>
+    /// </remarks>
+    [JsonPropertyName( "suppressed" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailFailedData? Suppressed { get; set; }
 }
 
 
@@ -104,10 +112,25 @@ public class EmailClickData
     public string UserAgent { get; set; } = default!;
 }
 
+
 /// <summary />
 public class EmailFailedData
 {
     /// <summary />
     [JsonPropertyName( "reason" )]
     public string Reason { get; set; } = default!;
+}
+
+
+/// <summary />
+public class EmailSuppressedData
+{
+    /// <summary />
+    [JsonPropertyName( "message" )]
+    public string Message { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>TODO: What are the possible values?</remarks>
+    [JsonPropertyName( "type" )]
+    public string Type { get; set; } = default!; 
 }
