@@ -15,6 +15,10 @@ Install
 > dotnet add package Resend
 ```
 
+```
+PM> Install-Package Resend
+```
+
 
 Examples
 --------------------------------------------------------------------------
