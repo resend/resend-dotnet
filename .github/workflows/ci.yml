@@ -1,29 +1,33 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
       - '**'
-    pull_request:
-      branches:
-        - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
       - name: Setup .NET SDK 8.0
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
           dotnet-version: '8.0.x'
 
       - name: Cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: 
-            .nuget
-          key: nuget
+          path: .nuget
+          key: nuget-${{ hashFiles('**/*.csproj','**/packages.lock.json') }}
 
       - name: Run ci.sh
         run: ./cicd/ci.sh
