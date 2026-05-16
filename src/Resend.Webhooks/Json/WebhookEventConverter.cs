@@ -33,6 +33,10 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         /*
          * 
          */
+        bool hasType = false;
+        bool hasCreatedAt = false;
+        bool hasData = false;
+
         JsonElement rawData = default;
 
         // Read the 3 webhook payload properties
@@ -47,16 +51,31 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
             if ( propertyName == "type" )
             {
+                if ( hasType )
+                    throw new JsonException( "Duplicate 'type' property" );
+
+                hasType = true;
+
                 reader.Read();
                 value.EventType = _wet.Read( ref reader, typeof( WebhookEventType ), options );
             }
             else if ( propertyName == "created_at" )
             {
+                if ( hasCreatedAt )
+                    throw new JsonException( "Duplicate 'created_at' property" );
+
+                hasCreatedAt = true;
+
                 reader.Read();
                 value.MomentCreated = _utc.Read( ref reader, typeof( DateTime ), options );
             }
             else if ( propertyName == "data" )
             {
+                if ( hasData )
+                    throw new JsonException( "Duplicate 'data' property" );
+
+                hasData = true;
+
                 reader.Read();
                 rawData = JsonElement.ParseValue( ref reader );
             }
@@ -66,7 +85,10 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
             }
         }
 
-        
+        if ( !hasType || !hasCreatedAt || !hasData )
+            throw new JsonException( "Missing required webhook properties" );
+
+
         /*
          * 
          */
