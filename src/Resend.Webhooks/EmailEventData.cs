@@ -23,6 +23,30 @@ public class EmailEventData : IWebhookData
     public EmailAddressList To { get; set; } = default!;
 
     /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "bcc" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? Bcc { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "cc" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? Cc { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "message_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? MessageId { get; set; }
+
+    /// <summary />
     [JsonPropertyName( "subject" )]
     public string Subject { get; set; } = default!;
 
@@ -40,6 +64,14 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "tags" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public Dictionary<string, string>? Tags { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "attachments" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<EmailEventAttachment>? Attachments { get; set; }
 
     /// <summary />
     /// <remarks>
