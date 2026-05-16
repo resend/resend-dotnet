@@ -33,13 +33,14 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         /*
          * 
          */
-        reader.Read();
 
         JsonElement rawData = default;
 
         // Read the 3 properties
         for ( int i = 0; i < 3; i++ )
         {
+            reader.Read();
+
             if ( reader.TokenType != JsonTokenType.PropertyName )
                 throw new JsonException( "Expected PropertyName" );
 
@@ -147,16 +148,6 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         //{
         //    throw new NotSupportedException( $"Unexpected '{value.EventType}' event type" );
         //}
-
-        reader.Read();
-
-        if ( reader.TokenType != JsonTokenType.PropertyName )
-            throw new JsonException( "Expected PropertyName" );
-
-        if ( reader.GetString() != "data" )
-            throw new JsonException( "Expected 'data' property" );
-
-        reader.Read();
 
         if ( category == WebhookEventTypeCategory.Email )
         {
