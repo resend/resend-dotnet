@@ -33,10 +33,9 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         /*
          * 
          */
-
         JsonElement rawData = default;
 
-        // Read the 3 properties
+        // Read the 3 webhook payload properties
         for ( int i = 0; i < 3; i++ )
         {
             reader.Read();
@@ -67,88 +66,16 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
             }
         }
 
-
-
         
-
-        //if ( reader.GetString() != "type" )
-        //    throw new JsonException( "Expected 'type' property" );
-
-        //reader.Read();
-        //value.EventType = _wet.Read( ref reader, typeof( WebhookEventType ), options );
-
+        /*
+         * 
+         */
         var category = value.EventType.Category();
 
 
         /*
          * 
          */
-        //reader.Read();
-
-        //if ( reader.TokenType != JsonTokenType.PropertyName )
-        //    throw new JsonException( "Expected PropertyName" );
-
-        //if ( reader.GetString() != "created_at" )
-        //    throw new JsonException( "Expected 'created_at' property" );
-
-        //reader.Read();
-        //value.MomentCreated = _utc.Read( ref reader, typeof( DateTime ), options );
-
-
-        /*
-         * 
-         */
-        //reader.Read();
-
-        //if ( reader.TokenType != JsonTokenType.PropertyName )
-        //    throw new JsonException( "Expected PropertyName" );
-
-        //if ( reader.GetString() != "data" )
-        //    throw new JsonException( "Expected 'data' property" );
-
-        //reader.Read();
-
-        //if ( category == WebhookEventTypeCategory.Email )
-        //{
-        //    var t1 = typeof( EmailEventData );
-        //    var o1 = (JsonConverter<EmailEventData>) options.GetConverter( t1 );
-
-        //    var data = o1.Read( ref reader, t1, options );
-
-        //    if ( data == null )
-        //        throw new JsonException( "Expected non-null data" );
-
-        //    value.Data = data;
-        //}
-        //else if ( category == WebhookEventTypeCategory.Contact )
-        //{
-        //    var t2 = typeof( ContactEventData );
-        //    var o2 = (JsonConverter<ContactEventData>) options.GetConverter( t2 );
-
-        //    var data = o2.Read( ref reader, t2, options );
-
-        //    if ( data == null )
-        //        throw new JsonException( "Expected non-null data" );
-
-        //    value.Data = data;
-        //}
-        //else if ( category == WebhookEventTypeCategory.Domain )
-        //{
-        //    var t3 = typeof( DomainEventData );
-        //    var o2 = (JsonConverter<DomainEventData>) options.GetConverter( t3 );
-
-        //    var data = o2.Read( ref reader, t3, options );
-
-        //    if ( data == null )
-        //        throw new JsonException( "Expected non-null data" );
-
-        //    value.Data = data;
-        //}
-        //else
-        //{
-        //    throw new NotSupportedException( $"Unexpected '{value.EventType}' event type" );
-        //}
-
         if ( category == WebhookEventTypeCategory.Email )
         {
             var data = rawData.Deserialize<EmailEventData>( options );

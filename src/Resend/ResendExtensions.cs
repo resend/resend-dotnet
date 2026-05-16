@@ -25,8 +25,12 @@ public static class ResendExtensions
             case WebhookEventType.EmailComplained:
             case WebhookEventType.EmailDelivered:
             case WebhookEventType.EmailDeliveryDelay:
+            case WebhookEventType.EmailFailed:
             case WebhookEventType.EmailOpened:
+            case WebhookEventType.EmailReceived:
+            case WebhookEventType.EmailScheduled:
             case WebhookEventType.EmailSent:
+            case WebhookEventType.EmailSuppressed:
                 return WebhookEventTypeCategory.Email;
 
             default:
