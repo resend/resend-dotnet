@@ -123,7 +123,12 @@ public class EmailBounceData
     /// <remarks>TODO: What are the possible values?</remarks>
     [JsonPropertyName( "type" )]
     public string Type { get; set; } = default!;
-}
+
+    /// <summary />
+    [JsonPropertyName( "diagnosticCode" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<string>? DiagnosticCode { get; set; }
+} 
 
 
 /// <summary />
