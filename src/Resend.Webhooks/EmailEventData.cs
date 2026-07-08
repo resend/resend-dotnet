@@ -14,6 +14,13 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "email_id" )]
     public Guid EmailId { get; set; }
 
+    /// <summary>
+    /// RFC Message-ID header value for the email.
+    /// </summary>
+    [JsonPropertyName( "message_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? MessageId { get; set; }
+
     /// <summary />
     [JsonPropertyName( "from" )]
     public EmailAddress From { get; set; } = default!;
