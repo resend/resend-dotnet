@@ -52,6 +52,13 @@ public class EmailReceipt
     [JsonPropertyName( "subject" )]
     public string Subject { get; set; } = default!;
 
+    /// <summary>
+    /// RFC Message-ID header value for the email.
+    /// </summary>
+    [JsonPropertyName( "message_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? MessageId { get; set; }
+
 
     /// <summary>
     /// The plain text version of the message.
