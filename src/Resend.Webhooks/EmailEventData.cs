@@ -46,14 +46,6 @@ public class EmailEventData : IWebhookData
     public EmailAddressList? Cc { get; set; } = default!;
 
     /// <summary />
-    /// <remarks>
-    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
-    /// </remarks>
-    [JsonPropertyName( "message_id" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? MessageId { get; set; }
-
-    /// <summary />
     [JsonPropertyName( "subject" )]
     public string Subject { get; set; } = default!;
 
