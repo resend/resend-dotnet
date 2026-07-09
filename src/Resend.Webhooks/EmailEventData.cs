@@ -30,8 +30,55 @@ public class EmailEventData : IWebhookData
     public EmailAddressList To { get; set; } = default!;
 
     /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "bcc" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? Bcc { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "cc" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? Cc { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "message_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? MessageId { get; set; }
+
+    /// <summary />
     [JsonPropertyName( "subject" )]
     public string Subject { get; set; } = default!;
+
+    /// <summary />
+    [JsonPropertyName( "broadcast_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? BroadcastId { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "template_id" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? TemplateId { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "tags" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public Dictionary<string, string>? Tags { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "attachments" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<EmailEventAttachment>? Attachments { get; set; }
 
     /// <summary />
     /// <remarks>
@@ -48,6 +95,22 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "bounce" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public EmailBounceData? Bounce { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailFailed"/>
+    /// </remarks>
+    [JsonPropertyName( "failed" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull  )]
+    public EmailFailedData? Failed { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailSuppressed"/>
+    /// </remarks>
+    [JsonPropertyName( "suppressed" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailSuppressedData? Suppressed { get; set; }
 }
 
 
@@ -67,7 +130,12 @@ public class EmailBounceData
     /// <remarks>TODO: What are the possible values?</remarks>
     [JsonPropertyName( "type" )]
     public string Type { get; set; } = default!;
-}
+
+    /// <summary />
+    [JsonPropertyName( "diagnosticCode" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<string>? DiagnosticCode { get; set; }
+} 
 
 
 /// <summary />
@@ -89,4 +157,27 @@ public class EmailClickData
     /// <summary />
     [JsonPropertyName( "userAgent" )]
     public string UserAgent { get; set; } = default!;
+}
+
+
+/// <summary />
+public class EmailFailedData
+{
+    /// <summary />
+    [JsonPropertyName( "reason" )]
+    public string Reason { get; set; } = default!;
+}
+
+
+/// <summary />
+public class EmailSuppressedData
+{
+    /// <summary />
+    [JsonPropertyName( "message" )]
+    public string Message { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>TODO: What are the possible values?</remarks>
+    [JsonPropertyName( "type" )]
+    public string Type { get; set; } = default!; 
 }
