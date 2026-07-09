@@ -11,9 +11,9 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.NotNull( resp.Content );
-        Assert.NotEmpty( resp.Content );
+        Assert.NotEmpty( resp.Content.Data );
 
-        var grant = resp.Content[ 0 ];
+        var grant = resp.Content.Data[ 0 ];
 
         Assert.NotEqual( Guid.Empty, grant.Id );
         Assert.Equal( "Resend CLI", grant.Client.Name );
@@ -31,6 +31,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.NotNull( resp.Content );
+        Assert.Equal( "oauth_grant", resp.Content.Object );
         Assert.Equal( id, resp.Content.Id );
         Assert.Equal( "revoked_from_api", resp.Content.RevokedReason );
     }

@@ -27,7 +27,7 @@ public class OAuthGrantListCommand
     public async Task<int> OnExecuteAsync()
     {
         var res = await _resend.OAuthGrantListAsync();
-        var grants = res.Content;
+        var grants = res.Content.Data;
 
 
         if ( this.InJson == true )
@@ -50,8 +50,8 @@ public class OAuthGrantListCommand
             {
                 table.AddRow(
                     new Markup( g.Id.ToString() ),
-                    new Markup( g.Client.Name ),
-                    new Markup( string.Join( ", ", g.Scopes ) ),
+                    new Markup( Markup.Escape( g.Client.Name ) ),
+                    new Markup( Markup.Escape( string.Join( ", ", g.Scopes ) ) ),
                     new Markup( g.MomentCreated.ToString() )
                     );
             }

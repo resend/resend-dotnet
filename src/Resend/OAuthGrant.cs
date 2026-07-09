@@ -88,6 +88,12 @@ public class OAuthGrantClient
 public class OAuthGrantRevoked
 {
     /// <summary>
+    /// Object type discriminator.
+    /// </summary>
+    [JsonPropertyName( "object" )]
+    public string Object { get; set; } = default!;
+
+    /// <summary>
     /// OAuth grant identifier.
     /// </summary>
     [JsonPropertyName( "id" )]

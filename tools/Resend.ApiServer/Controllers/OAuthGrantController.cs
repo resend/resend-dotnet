@@ -20,7 +20,7 @@ public class OAuthGrantController : ControllerBase
     /// <summary />
     [HttpGet]
     [Route( "oauth/grants" )]
-    public ListOf<OAuthGrant> OAuthGrantList()
+    public PaginatedResult<OAuthGrant> OAuthGrantList()
     {
         _logger.LogDebug( "OAuthGrantList" );
 
@@ -34,7 +34,7 @@ public class OAuthGrantController : ControllerBase
             Client = new OAuthGrantClient() { Name = "Resend CLI" },
         } );
 
-        return new ListOf<OAuthGrant>() { Data = list };
+        return new PaginatedResult<OAuthGrant>() { HasMore = false, Data = list };
     }
 
 
@@ -47,6 +47,7 @@ public class OAuthGrantController : ControllerBase
 
         return new OAuthGrantRevoked()
         {
+            Object = "oauth_grant",
             Id = id,
             MomentRevoked = DateTime.UtcNow,
             RevokedReason = "revoked_from_api",
