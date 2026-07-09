@@ -122,7 +122,9 @@ public class EmailSendCommand
          */
         if ( this.Verbose == true )
         {
-            Console.WriteLine( "From: {0}", message.From.Email );
+            if ( message.From != null )
+                Console.WriteLine( "From: {0}", message.From.Email );
+
             Console.WriteLine( "  To: {0}", string.Join( ", ", message.To ) );
             Console.WriteLine( "Subj: {0}", message.Subject );
 
