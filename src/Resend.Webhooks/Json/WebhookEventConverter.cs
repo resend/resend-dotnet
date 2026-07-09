@@ -33,54 +33,74 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         /*
          * 
          */
-        reader.Read();
+        bool hasType = false;
+        bool hasCreatedAt = false;
+        bool hasData = false;
 
-        if ( reader.TokenType != JsonTokenType.PropertyName )
-            throw new JsonException( "Expected PropertyName" );
+        JsonElement rawData = default;
 
-        if ( reader.GetString() != "type" )
-            throw new JsonException( "Expected 'type' property" );
+        // Read the 3 webhook payload properties
+        for ( int i = 0; i < 3; i++ )
+        {
+            reader.Read();
 
-        reader.Read();
-        value.EventType = _wet.Read( ref reader, typeof( WebhookEventType ), options );
+            if ( reader.TokenType != JsonTokenType.PropertyName )
+                throw new JsonException( "Expected PropertyName" );
 
+            string? propertyName = reader.GetString();
+
+            if ( propertyName == "type" )
+            {
+                if ( hasType )
+                    throw new JsonException( "Duplicate 'type' property" );
+
+                hasType = true;
+
+                reader.Read();
+                value.EventType = _wet.Read( ref reader, typeof( WebhookEventType ), options );
+            }
+            else if ( propertyName == "created_at" )
+            {
+                if ( hasCreatedAt )
+                    throw new JsonException( "Duplicate 'created_at' property" );
+
+                hasCreatedAt = true;
+
+                reader.Read();
+                value.MomentCreated = _utc.Read( ref reader, typeof( DateTime ), options );
+            }
+            else if ( propertyName == "data" )
+            {
+                if ( hasData )
+                    throw new JsonException( "Duplicate 'data' property" );
+
+                hasData = true;
+
+                reader.Read();
+                rawData = JsonElement.ParseValue( ref reader );
+            }
+            else
+            {
+                throw new JsonException( "Invalid property name" );
+            }
+        }
+
+        if ( !hasType || !hasCreatedAt || !hasData )
+            throw new JsonException( "Missing required webhook properties" );
+
+
+        /*
+         * 
+         */
         var category = value.EventType.Category();
 
 
         /*
          * 
          */
-        reader.Read();
-
-        if ( reader.TokenType != JsonTokenType.PropertyName )
-            throw new JsonException( "Expected PropertyName" );
-
-        if ( reader.GetString() != "created_at" )
-            throw new JsonException( "Expected 'created_at' property" );
-
-        reader.Read();
-        value.MomentCreated = _utc.Read( ref reader, typeof( DateTime ), options );
-
-
-        /*
-         * 
-         */
-        reader.Read();
-
-        if ( reader.TokenType != JsonTokenType.PropertyName )
-            throw new JsonException( "Expected PropertyName" );
-
-        if ( reader.GetString() != "data" )
-            throw new JsonException( "Expected 'data' property" );
-
-        reader.Read();
-
         if ( category == WebhookEventTypeCategory.Email )
         {
-            var t1 = typeof( EmailEventData );
-            var o1 = (JsonConverter<EmailEventData>) options.GetConverter( t1 );
-
-            var data = o1.Read( ref reader, t1, options );
+            var data = rawData.Deserialize<EmailEventData>( options );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -89,10 +109,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Contact )
         {
-            var t2 = typeof( ContactEventData );
-            var o2 = (JsonConverter<ContactEventData>) options.GetConverter( t2 );
-
-            var data = o2.Read( ref reader, t2, options );
+            var data = rawData.Deserialize<ContactEventData>( options );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -101,10 +118,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Domain )
         {
-            var t3 = typeof( DomainEventData );
-            var o2 = (JsonConverter<DomainEventData>) options.GetConverter( t3 );
-
-            var data = o2.Read( ref reader, t3, options );
+            var data = rawData.Deserialize<DomainEventData>( options );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
