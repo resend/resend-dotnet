@@ -6,10 +6,10 @@ namespace Resend;
 public class EmailMessageTemplate
 {
     /// <summary>
-    /// Identifier of published template.
+    /// Identifier or alias of the published template.
     /// </summary>
     [JsonPropertyName( "id" )]
-    public Guid TemplateId { get; set; }
+    public string TemplateId { get; set; } = default!;
 
     /// <summary>
     /// Template variables.
