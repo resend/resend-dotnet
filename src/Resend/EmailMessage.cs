@@ -10,8 +10,13 @@ public class EmailMessage
     /// <summary>
     /// Sender email address.
     /// </summary>
+    /// <remarks>
+    /// Can be omitted when sending a hosted <see cref="Template" /> that
+    /// defines a default sender.
+    /// </remarks>
     [JsonPropertyName( "from" )]
-    public EmailAddress From { get; set; } = default!;
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddress? From { get; set; }
 
     /// <summary>
     /// Recipient email address (list).
@@ -22,8 +27,13 @@ public class EmailMessage
     /// <summary>
     /// Email subject.
     /// </summary>
+    /// <remarks>
+    /// Can be omitted when sending a hosted <see cref="Template" /> that
+    /// defines a default subject.
+    /// </remarks>
     [JsonPropertyName( "subject" )]
-    public string Subject { get; set; } = default!;
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? Subject { get; set; }
 
     /// <summary>
     /// Cc/carbon-copy recipient email address.
