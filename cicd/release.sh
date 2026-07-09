@@ -79,7 +79,7 @@ dotnet nuget push "nupkg/*.nupkg" --api-key ${NUGET_APIKEY} --source=https://api
 # Release, including artifacts
 # ------------------------------------------------------------------------
 
-gh release create v${VERSION} --notes="Release v${VERSION}" \
+gh release create v${VERSION} --generate-notes --title "v${VERSION}" \
    artifacts/resend-cli-win-x64-${VERSION}.zip \
    artifacts/resend-cli-linux-x64-${VERSION}.zip \
    artifacts/resend-cli-osx-x64-${VERSION}.zip
