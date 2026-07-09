@@ -353,6 +353,39 @@ public interface IResend
 
     #endregion
 
+    #region OAuth Grants
+
+    /// <summary>
+    /// Lists all OAuth grants.
+    /// </summary>
+    /// <param name="query">
+    /// Pagination query.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>Paginated list of OAuth grants.</returns>
+    /// <see href="https://resend.com/docs/api-reference/oauth/list-grants"/>
+    Task<ResendResponse<PaginatedResult<OAuthGrant>>> OAuthGrantListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Revoke an existing OAuth grant. Revoking a grant invalidates every access
+    /// and refresh token issued under it.
+    /// </summary>
+    /// <param name="oauthGrantId">
+    /// OAuth grant identifier.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Outcome of the revocation.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/oauth/revoke-grant"/>
+    Task<ResendResponse<OAuthGrantRevoked>> OAuthGrantRevokeAsync( Guid oauthGrantId, CancellationToken cancellationToken = default );
+
+    #endregion
+
     #region Audiences
 
     /// <summary>
