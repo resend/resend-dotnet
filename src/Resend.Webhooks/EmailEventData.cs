@@ -46,8 +46,23 @@ public class EmailEventData : IWebhookData
     public EmailAddressList? Cc { get; set; } = default!;
 
     /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailReceived" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "received_for" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? ReceivedFor { get; set; }
+
+    /// <summary />
     [JsonPropertyName( "subject" )]
     public string Subject { get; set; } = default!;
+
+    /// <summary>
+    /// Custom headers included on the email.
+    /// </summary>
+    [JsonPropertyName( "headers" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<EmailEventHeader>? Headers { get; set; }
 
     /// <summary />
     [JsonPropertyName( "broadcast_id" )]
@@ -79,6 +94,14 @@ public class EmailEventData : IWebhookData
     [JsonPropertyName( "click" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public EmailClickData? Click { get; set; }
+
+    /// <summary />
+    /// <remarks>
+    /// Only set for <see cref="WebhookEventType.EmailOpened" />, otherwise is null.
+    /// </remarks>
+    [JsonPropertyName( "open" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailOpenData? Open { get; set; }
 
     /// <summary />
     /// <remarks>
@@ -153,6 +176,24 @@ public class EmailClickData
 
 
 /// <summary />
+public class EmailOpenData
+{
+    /// <summary />
+    [JsonPropertyName( "ipAddress" )]
+    public string IpAddress { get; set; } = default!;
+
+    /// <summary />
+    [JsonPropertyName( "timestamp" )]
+    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
+    public DateTime MomentOpened { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "userAgent" )]
+    public string UserAgent { get; set; } = default!;
+}
+
+
+/// <summary />
 public class EmailFailedData
 {
     /// <summary />
@@ -169,7 +210,18 @@ public class EmailSuppressedData
     public string Message { get; set; } = default!;
 
     /// <summary />
-    /// <remarks>TODO: What are the possible values?</remarks>
+    /// <remarks>One of "Suppressed" or "OnAccountSuppressionList".</remarks>
     [JsonPropertyName( "type" )]
-    public string Type { get; set; } = default!; 
+    public string Type { get; set; } = default!;
+
+    /// <summary />
+    /// <remarks>One of "previous_bounce" or "previous_complaint".</remarks>
+    [JsonPropertyName( "reason" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? Reason { get; set; }
+
+    /// <summary />
+    [JsonPropertyName( "diagnosticCode" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<string>? DiagnosticCode { get; set; }
 }
