@@ -84,11 +84,22 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
     [Fact]
     public async Task EmailBatch()
     {
-        var email = new EmailMessage();
-        email.Subject = "Unit testing";
-        email.From = "from@example.com";
-        email.To = "to@example.com";
-        email.HtmlBody = "From unit test!";
+        var email = new EmailMessage()
+        {
+            Subject = "Unit testing",
+            From = "from@example.com",
+            To = "to@example.com",
+            HtmlBody = "From unit test!",
+            Tags = [ new EmailTag { Name = "category", Value = "confirm_email" } ],
+            MomentSchedule = DateTime.UtcNow.AddHours( 1 ),
+            Attachments = [
+                new EmailAttachment()
+                {
+                    Filename = "note.txt",
+                    Content = "batch attachment"u8.ToArray(),
+                },
+            ],
+        };
 
         var list = new List<EmailMessage>() { email, email };
 

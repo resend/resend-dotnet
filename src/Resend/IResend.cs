@@ -73,6 +73,10 @@ public interface IResend
     /// <summary>
     /// Send a batch of emails, if and only if all messages are valid.
     /// </summary>
+    /// <remarks>
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
+    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// </remarks>
     /// <param name="emails">
     /// List of emails.
     /// </param>
@@ -90,6 +94,10 @@ public interface IResend
     /// duplicate submissions. Emails are only send if and only if all messages are
     /// valid.
     /// </summary>
+    /// <remarks>
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
+    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// </remarks>
     /// <param name="idempotencyKey">
     /// Idempotency key.
     /// </param>
@@ -108,6 +116,10 @@ public interface IResend
     /// <summary>
     /// Send a batch of emails.
     /// </summary>
+    /// <remarks>
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
+    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// </remarks>
     /// <param name="emails">
     /// List of emails.
     /// </param>
@@ -126,6 +138,10 @@ public interface IResend
     /// <summary>
     /// Send a batch of emails.
     /// </summary>
+    /// <remarks>
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
+    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// </remarks>
     /// <param name="idempotencyKey">
     /// Idempotency key.
     /// </param>
