@@ -82,6 +82,9 @@ public class EmailMessage
     /// <summary>
     /// Filename and content of attachments (max 40mb per email).
     /// </summary>
+    /// <remarks>
+    /// Not supported when sending batch emails via <see cref="IResend.EmailBatchAsync" />.
+    /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public List<EmailAttachment>? Attachments { get; set; }
@@ -89,6 +92,9 @@ public class EmailMessage
     /// <summary>
     /// Email tags.
     /// </summary>
+    /// <remarks>
+    /// Supported for both single and batch email sends.
+    /// </remarks>
     [JsonPropertyName( "tags" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public List<EmailTag>? Tags { get; set; }
@@ -107,6 +113,9 @@ public class EmailMessage
     /// <summary>
     /// Moment for which the email is scheduled for/at.
     /// </summary>
+    /// <remarks>
+    /// Not supported when sending batch emails via <see cref="IResend.EmailBatchAsync" />.
+    /// </remarks>
     [JsonPropertyName( "scheduled_at" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public DateTimeOrHuman? MomentSchedule { get; set; }

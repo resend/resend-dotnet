@@ -74,8 +74,9 @@ public interface IResend
     /// Send a batch of emails, if and only if all messages are valid.
     /// </summary>
     /// <remarks>
-    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
-    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />.
+    /// <see cref="EmailMessage.Attachments" /> and <see cref="EmailMessage.MomentSchedule" />
+    /// are not supported on batch sends.
     /// </remarks>
     /// <param name="emails">
     /// List of emails.
@@ -95,8 +96,9 @@ public interface IResend
     /// valid.
     /// </summary>
     /// <remarks>
-    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
-    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />.
+    /// <see cref="EmailMessage.Attachments" /> and <see cref="EmailMessage.MomentSchedule" />
+    /// are not supported on batch sends.
     /// </remarks>
     /// <param name="idempotencyKey">
     /// Idempotency key.
@@ -117,8 +119,9 @@ public interface IResend
     /// Send a batch of emails.
     /// </summary>
     /// <remarks>
-    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
-    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />.
+    /// <see cref="EmailMessage.Attachments" /> and <see cref="EmailMessage.MomentSchedule" />
+    /// are not supported on batch sends.
     /// </remarks>
     /// <param name="emails">
     /// List of emails.
@@ -139,8 +142,9 @@ public interface IResend
     /// Send a batch of emails.
     /// </summary>
     /// <remarks>
-    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />,
-    /// <see cref="EmailMessage.Attachments" />, and <see cref="EmailMessage.MomentSchedule" />.
+    /// Each <see cref="EmailMessage" /> supports <see cref="EmailMessage.Tags" />.
+    /// <see cref="EmailMessage.Attachments" /> and <see cref="EmailMessage.MomentSchedule" />
+    /// are not supported on batch sends.
     /// </remarks>
     /// <param name="idempotencyKey">
     /// Idempotency key.

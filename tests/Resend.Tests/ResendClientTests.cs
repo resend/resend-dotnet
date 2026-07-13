@@ -91,14 +91,6 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
             To = "to@example.com",
             HtmlBody = "From unit test!",
             Tags = [ new EmailTag { Name = "category", Value = "confirm_email" } ],
-            MomentSchedule = DateTime.UtcNow.AddHours( 1 ),
-            Attachments = [
-                new EmailAttachment()
-                {
-                    Filename = "note.txt",
-                    Content = "batch attachment"u8.ToArray(),
-                },
-            ],
         };
 
         var list = new List<EmailMessage>() { email, email };
