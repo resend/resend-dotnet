@@ -82,9 +82,6 @@ public class EmailMessage
     /// <summary>
     /// Filename and content of attachments (max 40mb per email).
     /// </summary>
-    /// <remarks>
-    /// Not supported when sending batch emails via <see cref="IResend.EmailBatchAsync" />.
-    /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public List<EmailAttachment>? Attachments { get; set; }
