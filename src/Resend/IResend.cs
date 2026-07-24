@@ -1093,6 +1093,106 @@ public interface IResend
 
     #endregion
 
+    #region Suppressions
+
+    /// <summary>
+    /// Adds an email address to the suppression list.
+    /// </summary>
+    /// <param name="email">Email address to suppress.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New suppression identifier.</returns>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/add-suppression"/>
+    Task<ResendResponse<Guid>> SuppressionAddAsync( string email, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists suppressions.
+    /// </summary>
+    /// <param name="query">Pagination query, optionally filtered by origin.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of suppressions.</returns>
+    /// <remarks>
+    /// List entries do not carry the <c>object</c> discriminator; use
+    /// <see cref="SuppressionRetrieveAsync"/> for the full <see cref="Suppression"/>.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/list-suppressions"/>
+    Task<ResendResponse<PaginatedResult<SuppressionSummary>>> SuppressionListAsync( SuppressionListQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single suppression.
+    /// </summary>
+    /// <param name="suppressionIdOrEmail">Suppression identifier or the suppressed email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Suppression.</returns>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/get-suppression"/>
+    Task<ResendResponse<Suppression>> SuppressionRetrieveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes a single suppression, allowing Resend to deliver to the address again.
+    /// </summary>
+    /// <param name="suppressionIdOrEmail">Suppression identifier or the suppressed email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Outcome of the removal.</returns>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/remove-suppression"/>
+    Task<ResendResponse<SuppressionRemoveResult>> SuppressionRemoveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Adds up to 100 email addresses to the suppression list at once.
+    /// </summary>
+    /// <param name="emails">Email addresses to suppress.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New suppression identifiers.</returns>
+    /// <remarks>
+    /// Fewer identifiers may be returned than addresses sent: the API lowercases, trims and
+    /// dedupes the addresses, so case variants of one address collapse into a single entry.
+    /// Do not pair the result with the input by index. Re-adding an already-suppressed
+    /// address is not an error -- it returns the existing identifier.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/add-suppressions"/>
+    Task<ResendResponse<List<Guid>>> SuppressionBatchAddAsync( IEnumerable<string> emails, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes up to 100 suppressions at once, by email address.
+    /// </summary>
+    /// <param name="emails">Suppressed email addresses to remove.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Outcome of each removal.</returns>
+    /// <remarks>
+    /// The API accepts either email addresses or identifiers in a single call, never both;
+    /// use <see cref="SuppressionBatchRemoveAsync(IEnumerable{Guid}, CancellationToken)"/> to
+    /// remove by identifier.
+    /// <para>
+    /// Only addresses that were actually suppressed appear in the result, and the addresses
+    /// are lowercased, trimmed and deduped first -- so the result may be shorter than the
+    /// input and must not be paired with it by index. Unlike
+    /// <see cref="SuppressionRemoveAsync"/>, an address that was not suppressed is silently
+    /// absent rather than a not-found error.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/remove-suppressions"/>
+    Task<ResendResponse<List<SuppressionRemoveResult>>> SuppressionBatchRemoveAsync( IEnumerable<string> emails, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes up to 100 suppressions at once, by identifier.
+    /// </summary>
+    /// <param name="suppressionIds">Suppression identifiers to remove.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Outcome of each removal.</returns>
+    /// <remarks>
+    /// The API accepts either email addresses or identifiers in a single call, never both;
+    /// use <see cref="SuppressionBatchRemoveAsync(IEnumerable{string}, CancellationToken)"/> to
+    /// remove by email address.
+    /// <para>
+    /// Only identifiers that were actually suppressed appear in the result, so it may be
+    /// shorter than the input and must not be paired with it by index. Unlike
+    /// <see cref="SuppressionRemoveAsync"/>, an identifier that was not suppressed is
+    /// silently absent rather than a not-found error.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/suppressions/remove-suppressions"/>
+    Task<ResendResponse<List<SuppressionRemoveResult>>> SuppressionBatchRemoveAsync( IEnumerable<Guid> suppressionIds, CancellationToken cancellationToken = default );
+
+    #endregion
+
     #region Automations and events
 
     /// <summary>
