@@ -38,20 +38,23 @@ public static class DomainClaimRender
         AnsiConsole.Write( head );
 
 
-        var table = new Table();
-        table.Border = TableBorder.SimpleHeavy;
-        table.AddColumn( "Type" );
-        table.AddColumn( "Name" );
-        table.AddColumn( "TTL" );
-        table.AddColumn( "Value" );
+        if ( claim.Record != null )
+        {
+            var table = new Table();
+            table.Border = TableBorder.SimpleHeavy;
+            table.AddColumn( "Type" );
+            table.AddColumn( "Name" );
+            table.AddColumn( "TTL" );
+            table.AddColumn( "Value" );
 
-        table.AddRow(
-            new Markup( claim.Record.RecordType ),
-            new Markup( claim.Record.Name ),
-            new Markup( claim.Record.TimeToLive ),
-            new Markup( claim.Record.Value )
-            );
+            table.AddRow(
+                new Markup( claim.Record.RecordType ),
+                new Markup( claim.Record.Name ),
+                new Markup( claim.Record.TimeToLive ),
+                new Markup( claim.Record.Value )
+                );
 
-        AnsiConsole.Write( table );
+            AnsiConsole.Write( table );
+        }
     }
 }

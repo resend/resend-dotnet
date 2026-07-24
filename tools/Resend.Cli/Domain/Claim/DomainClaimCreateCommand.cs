@@ -1,6 +1,5 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 
 namespace Resend.Cli.Domain.Claim;
 
@@ -24,6 +23,10 @@ public class DomainClaimCreateCommand
     [Option( "--return-path", CommandOptionType.SingleValue, Description = "Return path" )]
     public string? ReturnPath { get; set; }
 
+    /// <summary />
+    [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON" )]
+    public bool InJson { get; set; }
+
 
     /// <summary />
     public DomainClaimCreateCommand( IResend resend )
@@ -41,19 +44,7 @@ public class DomainClaimCreateCommand
             Region = this.Region,
             CustomReturnPath = this.ReturnPath,
         } );
-        var claim = res.Content;
-
-
-        /*
-         *
-         */
-        var jso = new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-        };
-
-        var json = JsonSerializer.Serialize( claim, jso );
-        Console.WriteLine( json );
+        DomainClaimRender.Write( res.Content, this.InJson );
 
         return 0;
     }
