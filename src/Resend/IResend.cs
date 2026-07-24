@@ -300,6 +300,79 @@ public interface IResend
     /// <see href="https://resend.com/docs/api-reference/domains/delete-domain"/>
     Task<ResendResponse> DomainDeleteAsync( Guid domainId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Claim a domain that is already verified by another team.
+    /// </summary>
+    /// <param name="domainName">
+    /// Name of the domain to claim.
+    /// </param>
+    /// <param name="region">
+    /// Delivery region.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain claim.
+    /// </returns>
+    /// <remarks>
+    /// Use this when creating a domain fails because the domain is already verified by
+    /// another team. Resend creates a placeholder domain on your team and returns a claim
+    /// with a TXT record to add to your DNS.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/domains/claim-domain"/>
+    Task<ResendResponse<DomainClaim>> DomainClaimAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Claim a domain that is already verified by another team.
+    /// </summary>
+    /// <param name="data">
+    /// Claim information.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain claim.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/domains/claim-domain"/>
+    Task<ResendResponse<DomainClaim>> DomainClaimAsync( DomainClaimData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieve the latest claim for a domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Placeholder domain identifier returned when the claim was created.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain claim.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/domains/get-domain-claim"/>
+    Task<ResendResponse<DomainClaim>> DomainClaimRetrieveAsync( Guid domainId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Trigger DNS verification for a domain claim.
+    /// </summary>
+    /// <param name="domainId">
+    /// Placeholder domain identifier returned when the claim was created.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain claim.
+    /// </returns>
+    /// <remarks>
+    /// Starts an asynchronous verification process. Add the TXT record returned by
+    /// <see cref="DomainClaimAsync(DomainClaimData, CancellationToken)"/> before calling this,
+    /// then poll <see cref="DomainClaimRetrieveAsync(Guid, CancellationToken)"/> to follow the status.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/domains/verify-domain-claim"/>
+    Task<ResendResponse<DomainClaim>> DomainClaimVerifyAsync( Guid domainId, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Api Keys

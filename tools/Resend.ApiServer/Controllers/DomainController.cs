@@ -148,4 +148,88 @@ public class DomainController : ControllerBase
 
         return Ok();
     }
+
+
+    /// <summary />
+    [HttpPost]
+    [Route( "domains/claim" )]
+    public DomainClaim DomainClaim( [FromBody] DomainClaimData request )
+    {
+        _logger.LogDebug( "DomainClaim" );
+
+        return new DomainClaim()
+        {
+            Object = "domain_claim",
+            Id = Guid.NewGuid(),
+            Name = request.DomainName,
+            Status = DomainClaimStatus.Pending,
+            DomainId = Guid.NewGuid(),
+            Region = request.Region ?? DeliveryRegion.UsEast1,
+            Record = new DomainClaimRecord()
+            {
+                RecordType = "TXT",
+                Name = request.DomainName,
+                Value = "resend-domain-verification=3f8a1c2d4e5b6a7f8091a2b3c4d5e6f7",
+                TimeToLive = "Auto",
+            },
+            MomentCreated = DateTime.UtcNow,
+            MomentExpires = DateTime.UtcNow.AddDays( 7 ),
+        };
+    }
+
+
+    /// <summary />
+    [HttpGet]
+    [Route( "domains/{id}/claim" )]
+    public DomainClaim DomainClaimRetrieve( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "DomainClaimRetrieve" );
+
+        return new DomainClaim()
+        {
+            Object = "domain_claim",
+            Id = Guid.NewGuid(),
+            Name = "example.com",
+            Status = DomainClaimStatus.Pending,
+            DomainId = id,
+            Region = DeliveryRegion.UsEast1,
+            Record = new DomainClaimRecord()
+            {
+                RecordType = "TXT",
+                Name = "example.com",
+                Value = "resend-domain-verification=3f8a1c2d4e5b6a7f8091a2b3c4d5e6f7",
+                TimeToLive = "Auto",
+            },
+            MomentCreated = DateTime.UtcNow,
+            MomentExpires = DateTime.UtcNow.AddDays( 7 ),
+        };
+    }
+
+
+    /// <summary />
+    [HttpPost]
+    [Route( "domains/{id}/claim/verify" )]
+    public DomainClaim DomainClaimVerify( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "DomainClaimVerify" );
+
+        return new DomainClaim()
+        {
+            Object = "domain_claim",
+            Id = Guid.NewGuid(),
+            Name = "example.com",
+            Status = DomainClaimStatus.Pending,
+            DomainId = id,
+            Region = DeliveryRegion.UsEast1,
+            Record = new DomainClaimRecord()
+            {
+                RecordType = "TXT",
+                Name = "example.com",
+                Value = "resend-domain-verification=3f8a1c2d4e5b6a7f8091a2b3c4d5e6f7",
+                TimeToLive = "Auto",
+            },
+            MomentCreated = DateTime.UtcNow,
+            MomentExpires = DateTime.UtcNow.AddDays( 7 ),
+        };
+    }
 }
