@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
+using System.Net;
 
 namespace Resend.ApiServer.Controllers;
 
@@ -97,9 +98,14 @@ public class SuppressionController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "suppressions/batch/add" )]
-    public ListOf<ObjectId> SuppressionBatchAdd( [FromBody] SuppressionBatchAddRequest request )
+    public ActionResult<ListOf<ObjectId>> SuppressionBatchAdd( [FromBody] SuppressionBatchAddRequest request )
     {
         _logger.LogDebug( "SuppressionBatchAdd" );
+
+        var invalid = ValidateEmails( request.Emails );
+
+        if ( invalid != null )
+            return invalid;
 
         var list = Normalize( request.Emails )
             .Select( _ => new ObjectId() { Object = "suppression", Id = Guid.NewGuid() } )
@@ -119,6 +125,14 @@ public class SuppressionController : ControllerBase
         if ( ( request.Emails == null ) == ( request.Ids == null ) )
             return BadRequest();
 
+        if ( request.Emails != null )
+        {
+            var invalid = ValidateEmails( request.Emails );
+
+            if ( invalid != null )
+                return invalid;
+        }
+
         var ids = request.Ids ?? Normalize( request.Emails! ).Select( _ => Guid.NewGuid() ).ToList();
 
         var list = ids
@@ -126,6 +140,24 @@ public class SuppressionController : ControllerBase
             .ToList();
 
         return new ListOf<SuppressionRemoveResult>() { Data = list };
+    }
+
+
+    /// <summary>
+    /// Mirrors the API, which validates every entry as an email address -- a missing or blank
+    /// one is rejected outright rather than dropped from the batch.
+    /// </summary>
+    private ActionResult? ValidateEmails( IEnumerable<string>? emails )
+    {
+        if ( emails != null && emails.Any( x => string.IsNullOrWhiteSpace( x ) ) == false )
+            return null;
+
+        return UnprocessableEntity( new ErrorResponse()
+        {
+            StatusCode = (int) HttpStatusCode.UnprocessableEntity,
+            ErrorType = ErrorType.ValidationError,
+            Message = "Each item in `emails` must be a valid email address.",
+        } );
     }
 
 

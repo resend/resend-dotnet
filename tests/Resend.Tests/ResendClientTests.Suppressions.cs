@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Resend.Tests;
 
 /// <summary />
@@ -155,6 +157,25 @@ public partial class ResendClientTests
     }
 
 
+    /// <summary>
+    /// The API validates each entry, so a blank one fails the whole batch.
+    /// </summary>
+    [Theory]
+    [InlineData( null )]
+    [InlineData( "   " )]
+    public async Task SuppressionBatchAddRejectsBlankEntry( string? email )
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.SuppressionBatchAddAsync( new[]
+        {
+            "steve.wozniak@gmail.com",
+            email!,
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
     /// <summary />
     [Fact]
     public async Task SuppressionBatchRemoveByEmail()
@@ -186,5 +207,22 @@ public partial class ResendClientTests
         Assert.Single( resp.Content );
         Assert.Equal( suppressionId, resp.Content[ 0 ].Id );
         Assert.True( resp.Content[ 0 ].Deleted );
+    }
+
+
+    /// <summary />
+    [Theory]
+    [InlineData( null )]
+    [InlineData( "   " )]
+    public async Task SuppressionBatchRemoveRejectsBlankEntry( string? email )
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.SuppressionBatchRemoveAsync( new[]
+        {
+            "steve.wozniak@gmail.com",
+            email!,
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
     }
 }
