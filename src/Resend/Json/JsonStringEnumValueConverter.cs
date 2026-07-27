@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Resend;
@@ -8,38 +7,6 @@ namespace Resend;
 public class JsonStringEnumValueConverter<T> : JsonConverter<T>
     where T : struct, Enum
 {
-    private readonly Dictionary<T, string> _fwd;
-    private readonly Dictionary<string, T> _rev;
-
-
-    /// <summary />
-    public JsonStringEnumValueConverter()
-    {
-        var tt = typeof( T );
-
-        var names = tt.GetEnumNames();
-        var values = tt.GetEnumValues();
-
-        var fwd = new Dictionary<T, string>( names.Length );
-        var rev = new Dictionary<string, T>( names.Length );
-
-        for ( var i = 0; i < names.Length; i++ )
-        {
-            var name = names[ i ];
-            var field = tt.GetField( name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static )!;
-
-            var str = field.GetCustomAttribute<JsonStringValueAttribute>()?.Value ?? name;
-            var val = (T) values.GetValue( i )!;
-
-            fwd.Add( val, str );
-            rev.Add( str, val );
-        }
-
-        _fwd = fwd;
-        _rev = rev;
-    }
-
-
     /// <inheritdoc />
     public override T Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
@@ -52,7 +19,7 @@ public class JsonStringEnumValueConverter<T> : JsonConverter<T>
         /*
          * 
          */
-        if ( _rev.TryGetValue( json, out var rev ) == false )
+        if ( JsonStringEnumValue<T>.Reverse.TryGetValue( json, out var rev ) == false )
             throw new JsonException( $"SE002: Invalid value: '{json}'" );
 
         return rev;
@@ -62,10 +29,8 @@ public class JsonStringEnumValueConverter<T> : JsonConverter<T>
     /// <inheritdoc />
     public override void Write( Utf8JsonWriter writer, T value, JsonSerializerOptions options )
     {
-        if ( _fwd.ContainsKey( value ) == false )
+        if ( JsonStringEnumValue<T>.Forward.TryGetValue( value, out var str ) == false )
             throw new JsonException( $"SE003: Invalid '{typeof( T ).Name}' value: '{value}'" );
-
-        var str = _fwd[ value ];
 
         writer.WriteStringValue( str );
     }
