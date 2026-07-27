@@ -27,8 +27,16 @@ internal static class JsonStringEnumValue<T>
             var str = field.GetCustomAttribute<JsonStringValueAttribute>()?.Value ?? name;
             var val = (T) values.GetValue( i )!;
 
-            fwd.Add( val, str );
-            rev.Add( str, val );
+            // Aliases -- several names sharing one underlying value -- are a legal enum
+            // declaration, so the first name encountered supplies the wire value rather
+            // than the alias making the type unusable.
+            if ( fwd.ContainsKey( val ) == false )
+                fwd.Add( val, str );
+
+            if ( rev.TryGetValue( str, out var prev ) == false )
+                rev.Add( str, val );
+            else if ( EqualityComparer<T>.Default.Equals( prev, val ) == false )
+                throw new InvalidOperationException( $"SE004: '{tt.Name}' maps wire value '{str}' to both '{prev}' and '{val}'" );
         }
 
         Forward = fwd;

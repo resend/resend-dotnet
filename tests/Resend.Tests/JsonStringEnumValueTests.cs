@@ -38,6 +38,63 @@ public class JsonStringEnumValueTests
 
 
     /// <summary />
+    [JsonConverter( typeof( JsonStringEnumValueConverter<AliasedEnum> ) )]
+    public enum AliasedEnum
+    {
+        /// <summary />
+        [JsonStringValue( "current" )]
+        Current = 1,
+
+        /// <summary />
+        [JsonStringValue( "legacy" )]
+        Legacy = 1,
+
+        /// <summary />
+        [JsonStringValue( "other" )]
+        Other = 2,
+    }
+
+
+    /// <summary />
+    [JsonConverter( typeof( JsonStringEnumValueConverter<ConflictingEnum> ) )]
+    public enum ConflictingEnum
+    {
+        /// <summary />
+        [JsonStringValue( "same" )]
+        First = 1,
+
+        /// <summary />
+        [JsonStringValue( "same" )]
+        Second = 2,
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void AliasIsUsable()
+    {
+        var json = JsonSerializer.Serialize( AliasedEnum.Current );
+        Assert.Contains( json, new[] { "\"current\"", "\"legacy\"" } );
+
+        Assert.Equal( AliasedEnum.Current, JsonSerializer.Deserialize<AliasedEnum>( "\"current\"" ) );
+        Assert.Equal( AliasedEnum.Current, JsonSerializer.Deserialize<AliasedEnum>( "\"legacy\"" ) );
+        Assert.Equal( AliasedEnum.Other, JsonSerializer.Deserialize<AliasedEnum>( "\"other\"" ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void ConflictingWireValueThrows()
+    {
+        Action act = () => JsonSerializer.Serialize( ConflictingEnum.First );
+
+        var ex = Assert.Throws<TypeInitializationException>( act );
+        Assert.NotNull( ex.InnerException );
+        Assert.StartsWith( "SE004:", ex.InnerException.Message );
+    }
+
+
+    /// <summary />
     [Fact]
     public void WithAttribute()
     {
