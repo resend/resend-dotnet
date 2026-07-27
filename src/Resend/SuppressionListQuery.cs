@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Resend;
 
 /// <summary>
@@ -10,6 +8,5 @@ public class SuppressionListQuery : PaginatedQuery
     /// <summary>
     /// Filter by the origin of the suppression.
     /// </summary>
-    [JsonIgnore]
     public SuppressionOrigin? Origin { get; set; }
 }

@@ -1123,6 +1123,9 @@ public interface IResend
     /// <param name="suppressionIdOrEmail">Suppression identifier or the suppressed email address.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Suppression.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="suppressionIdOrEmail"/> is null, empty or whitespace.
+    /// </exception>
     /// <see href="https://resend.com/docs/api-reference/suppressions/get-suppression"/>
     Task<ResendResponse<Suppression>> SuppressionRetrieveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default );
 
@@ -1132,6 +1135,9 @@ public interface IResend
     /// <param name="suppressionIdOrEmail">Suppression identifier or the suppressed email address.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Outcome of the removal.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="suppressionIdOrEmail"/> is null, empty or whitespace.
+    /// </exception>
     /// <see href="https://resend.com/docs/api-reference/suppressions/remove-suppression"/>
     Task<ResendResponse<SuppressionRemoveResult>> SuppressionRemoveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default );
 

@@ -39,7 +39,7 @@ public partial class ResendClient
                 qs.Add( "after", query.After );
 
             if ( query.Origin.HasValue == true )
-                qs.Add( "origin", OriginToQueryValue( query.Origin.Value ) );
+                qs.Add( "origin", JsonStringEnumValue<SuppressionOrigin>.Of( query.Origin.Value ) );
 
             url = QueryHelpers.AddQueryString( baseUrl, qs );
         }
@@ -53,6 +53,12 @@ public partial class ResendClient
     /// <inheritdoc />
     public Task<ResendResponse<Suppression>> SuppressionRetrieveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default )
     {
+        /*
+         * An empty identifier would target the collection endpoint, which answers with a
+         * list that deserializes into an all-default Suppression instead of failing.
+         */
+        ArgumentException.ThrowIfNullOrWhiteSpace( suppressionIdOrEmail );
+
         var req = new HttpRequestMessage( HttpMethod.Get, $"/suppressions/{Uri.EscapeDataString( suppressionIdOrEmail )}" );
 
         return Execute<Suppression, Suppression>( req, ( x ) => x, cancellationToken );
@@ -62,6 +68,8 @@ public partial class ResendClient
     /// <inheritdoc />
     public Task<ResendResponse<SuppressionRemoveResult>> SuppressionRemoveAsync( string suppressionIdOrEmail, CancellationToken cancellationToken = default )
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace( suppressionIdOrEmail );
+
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/suppressions/{Uri.EscapeDataString( suppressionIdOrEmail )}" );
 
         return Execute<SuppressionRemoveResult, SuppressionRemoveResult>( req, ( x ) => x, cancellationToken );
@@ -108,18 +116,5 @@ public partial class ResendClient
         req.Content = JsonContent.Create( data );
 
         return Execute<ListOf<SuppressionRemoveResult>, List<SuppressionRemoveResult>>( req, ( x ) => x.Data, cancellationToken );
-    }
-
-
-    /// <summary />
-    private static string OriginToQueryValue( SuppressionOrigin origin )
-    {
-        return origin switch
-        {
-            SuppressionOrigin.Bounce => "bounce",
-            SuppressionOrigin.Complaint => "complaint",
-            SuppressionOrigin.Manual => "manual",
-            _ => throw new NotImplementedException( $"Suppression origin {origin} is not implemented" )
-        };
     }
 }
