@@ -18,7 +18,7 @@ public class SuppressionTests
               "email": "steve.wozniak@gmail.com",
               "origin": "bounce",
               "source_id": "479e3145-dd38-476b-932c-529ceb705947",
-              "created_at": "2023-10-06T23:47:56.678Z"
+              "created_at": "2023-10-06 23:47:56.678+00"
             }
             """;
 
@@ -46,7 +46,7 @@ public class SuppressionTests
               "email": "steve.wozniak@gmail.com",
               "origin": "bounce",
               "source_id": "backfill-2026-07",
-              "created_at": "2023-10-06T23:47:56.678Z"
+              "created_at": "2023-10-06 23:47:56.678+00"
             }
             """;
 
@@ -73,14 +73,14 @@ public class SuppressionTests
                   "email": "steve.wozniak@gmail.com",
                   "origin": "bounce",
                   "source_id": "backfill-2026-07",
-                  "created_at": "2023-10-06T23:47:56.678Z"
+                  "created_at": "2023-10-06 23:47:56.678+00"
                 },
                 {
                   "id": "8d1f0f4a-2b6e-4c3d-9f1a-0e5b7c9d2a11",
                   "email": "carolina@resend.com",
                   "origin": "manual",
                   "source_id": null,
-                  "created_at": "2023-10-06T23:47:56.678Z"
+                  "created_at": "2023-10-06 23:47:56.678+00"
                 }
               ]
             }
@@ -108,7 +108,7 @@ public class SuppressionTests
               "email": "steve.wozniak@gmail.com",
               "origin": "manual",
               "source_id": null,
-              "created_at": "2023-10-06T23:47:56.678Z"
+              "created_at": "2023-10-06 23:47:56.678+00"
             }
             """;
 
@@ -132,7 +132,7 @@ public class SuppressionTests
               "id": "e169aa45-1ecf-4183-9955-b1499d5701d3",
               "email": "steve.wozniak@gmail.com",
               "origin": "complaint",
-              "created_at": "2023-10-06T23:47:56.678Z"
+              "created_at": "2023-10-06 23:47:56.678+00"
             }
             """;
 
@@ -205,7 +205,7 @@ public class SuppressionTests
     {
         const string json = """
             {
-              "created_at": "2023-10-06T23:47:56.678Z",
+              "created_at": "2023-10-06 23:47:56.678+00",
               "source_id": null,
               "origin": "manual",
               "email": "steve.wozniak@gmail.com",
@@ -240,7 +240,7 @@ public class SuppressionTests
                   "email": "steve.wozniak@gmail.com",
                   "origin": "manual",
                   "source_id": null,
-                  "created_at": "2023-10-06T23:47:56.678Z"
+                  "created_at": "2023-10-06 23:47:56.678+00"
                 }
               ]
             }

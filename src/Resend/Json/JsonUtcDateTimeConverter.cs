@@ -12,9 +12,9 @@ public class JsonUtcDateTimeConverter : JsonConverter<DateTime>
     public override DateTime Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
         /*
-         * The API examples have the following values:
-         * 2023-04-08T00:11:13.110779+00:00
-         * 2023-04-26T20:21:26.347412+00:00
+         * The API returns Postgres text format, for example:
+         * 2023-04-08 00:11:13.110779+00
+         * 2023-04-26 20:21:26.347412+00
          */
 
         if ( reader.TokenType != JsonTokenType.String )

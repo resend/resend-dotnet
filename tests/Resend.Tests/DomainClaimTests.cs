@@ -105,8 +105,8 @@ public class DomainClaimTests
               },
               "blocked_reason": "recent_owner_activity",
               "failure_reason": null,
-              "created_at": "2026-06-16T17:12:02.059593+00:00",
-              "expires_at": "2026-06-23T17:12:02.059593+00:00"
+              "created_at": "2026-06-16 17:12:02.059593+00",
+              "expires_at": "2026-06-23 17:12:02.059593+00"
             }
             """;
 
@@ -160,8 +160,8 @@ public class DomainClaimTests
     {
         const string json = """
             {
-              "expires_at": "2026-06-23T17:12:02.059593+00:00",
-              "created_at": "2026-06-16T17:12:02.059593+00:00",
+              "expires_at": "2026-06-23 17:12:02.059593+00",
+              "created_at": "2026-06-16 17:12:02.059593+00",
               "record": {
                 "ttl": "Auto",
                 "value": "resend-domain-verification=abc",
