@@ -789,6 +789,14 @@ public interface IResend
     Task<ResendResponse> BroadcastScheduleAsync( Guid broadcastId, DateTime scheduleFor, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Cancels a queued or scheduled broadcast.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> BroadcastCancelAsync( Guid broadcastId, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists all broadcasts.
     /// </summary>
     /// <param name="cancellationToken">Cancelation token.</param>

@@ -432,6 +432,16 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc/>
+    public Task<ResendResponse> BroadcastCancelAsync( Guid broadcastId, CancellationToken cancellationToken = default )
+    {
+        var path = $"/broadcasts/{broadcastId}/cancel";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
     public Task<ResendResponse<List<Broadcast>>> BroadcastListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts";
