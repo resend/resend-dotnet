@@ -393,6 +393,16 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task BroadcastCancel()
+    {
+        var resp = await _resend.BroadcastCancelAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task BroadcastList()
     {
         var resp = await _resend.BroadcastListAsync();

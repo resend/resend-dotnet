@@ -80,6 +80,17 @@ public class BroadcastController : ControllerBase
 
 
     /// <summary />
+    [HttpPost]
+    [Route( "broadcasts/{broadcastId}/cancel" )]
+    public ActionResult BroadcastCancel( [FromRoute] Guid broadcastId )
+    {
+        _logger.LogDebug( "BroadcastCancel" );
+
+        return Ok();
+    }
+
+
+    /// <summary />
     [HttpDelete]
     [Route( "broadcasts/{broadcastId}" )]
     public ActionResult BroadcastDelete( [FromRoute] Guid broadcastId )

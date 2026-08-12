@@ -5,6 +5,7 @@ namespace Resend.Cli;
 /// <summary />
 [Command( "broadcast", Description = "Broadcast management" )]
 [Subcommand( typeof( Broadcast.BroadcastAddCommand ))]
+[Subcommand( typeof( Broadcast.BroadcastCancelCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastDeleteCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastListCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastRetrieveCommand ))]
