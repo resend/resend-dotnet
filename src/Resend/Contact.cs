@@ -52,5 +52,5 @@ public class Contact
     /// </summary>
     [JsonPropertyName( "properties" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public Dictionary<string,string>? Properties { get; set; }
+    public Dictionary<string, ContactPropertyValue>? Properties { get; set; }
 }
