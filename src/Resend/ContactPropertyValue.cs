@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Resend;
@@ -8,13 +9,10 @@ namespace Resend;
 public class ContactPropertyValue
 {
     /// <summary>
-    /// Property value.
+    /// Property value; a string, number, or boolean, depending on <see cref="PropertyType"/>.
     /// </summary>
-    /// <remarks>
-    /// A string, number, or boolean, depending on the type field.
-    /// </remarks>
     [JsonPropertyName( "value" )]
-    public object? Value { get; set; }
+    public JsonElement Value { get; set; }
 
     /// <summary>
     /// Property data-type.

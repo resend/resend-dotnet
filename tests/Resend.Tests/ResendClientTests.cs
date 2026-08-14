@@ -333,7 +333,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         var tier = resp.Content.Properties[ "tier" ];
         Assert.Equal( ContactPropertyType.String, tier.PropertyType );
-        Assert.Equal( "premium", ( (JsonElement) tier.Value! ).GetString() );
+        Assert.Equal( "premium", tier.Value.GetString() );
     }
 
 
