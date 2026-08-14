@@ -47,6 +47,10 @@ public class ContactController : ControllerBase
             LastName = "Test",
             MomentCreated = DateTime.UtcNow.AddDays( -1 ),
             IsUnsubscribed = true,
+            Properties = new Dictionary<string, ContactPropertyValue>()
+            {
+                { "tier", new ContactPropertyValue() { Value = "premium", PropertyType = ContactPropertyType.String } },
+            },
         };
     }
 
