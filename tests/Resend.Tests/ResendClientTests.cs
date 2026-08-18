@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Resend.ApiServer;
+using System.Text.Json;
 
 namespace Resend.Tests;
 
@@ -250,6 +251,11 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         var resp = await _resend.ContactRetrieveAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
+        Assert.NotNull( resp.Content.Properties );
+
+        var tier = resp.Content.Properties[ "tier" ];
+        Assert.Equal( ContactPropertyType.String, tier.PropertyType );
+        Assert.Equal( "premium", tier.Value.GetString() );
     }
 
 

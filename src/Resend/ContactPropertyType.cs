@@ -19,4 +19,10 @@ public enum ContactPropertyType
     /// </summary>
     [JsonStringValue( "number" )]
     Number,
+
+    /// <summary>
+    /// Boolean.
+    /// </summary>
+    [JsonStringValue( "boolean" )]
+    Boolean,
 }

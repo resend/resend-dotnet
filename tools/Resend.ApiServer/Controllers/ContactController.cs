@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
+using System.Text.Json;
 
 namespace Resend.ApiServer.Controllers;
 
@@ -47,6 +48,10 @@ public class ContactController : ControllerBase
             LastName = "Test",
             MomentCreated = DateTime.UtcNow.AddDays( -1 ),
             IsUnsubscribed = true,
+            Properties = new Dictionary<string, ContactPropertyValue>()
+            {
+                { "tier", new ContactPropertyValue() { Value = JsonDocument.Parse( "\"premium\"" ).RootElement, PropertyType = ContactPropertyType.String } },
+            },
         };
     }
 
