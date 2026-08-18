@@ -138,6 +138,21 @@ public class AutomationController : ControllerBase
 
     /// <summary />
     [HttpPost]
+    [Route( "automations/{id}/duplicate" )]
+    public ObjectId AutomationDuplicate( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "AutomationDuplicate" );
+
+        return new ObjectId()
+        {
+            Object = "automation",
+            Id = Guid.NewGuid(),
+        };
+    }
+
+
+    /// <summary />
+    [HttpPost]
     [Route( "automations/{id}/stop" )]
     public AutomationStopResult AutomationStop( [FromRoute] Guid id )
     {

@@ -67,6 +67,15 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<Guid>> AutomationDuplicateAsync( Guid automationId, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/automations/{automationId}/duplicate" );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<AutomationStopResult>> AutomationStopAsync( Guid automationId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/automations/{automationId}/stop" );

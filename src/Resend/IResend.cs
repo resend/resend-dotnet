@@ -1247,6 +1247,15 @@ public interface IResend
     Task<ResendResponse<PaginatedResult<AutomationSummary>>> AutomationListAsync( AutomationListQuery? query = null, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Duplicates an automation.
+    /// </summary>
+    /// <param name="automationId">Automation identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New automation identifier.</returns>
+    /// <see href="https://resend.com/docs/api-reference/automations/duplicate-automation"/>
+    Task<ResendResponse<Guid>> AutomationDuplicateAsync( Guid automationId, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Stops a running automation (sets status to <c>disabled</c>).
     /// </summary>
     /// <param name="automationId">Automation identifier.</param>

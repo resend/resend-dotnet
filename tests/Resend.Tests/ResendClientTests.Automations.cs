@@ -97,6 +97,20 @@ public partial class ResendClientTests
 
     /// <summary/>
     [Fact]
+    public async Task AutomationDuplicate()
+    {
+        var id = Guid.NewGuid();
+
+        var resp = await _resend.AutomationDuplicateAsync( id );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task AutomationStop()
     {
         var id = Guid.NewGuid();
