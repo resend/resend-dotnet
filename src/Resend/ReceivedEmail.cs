@@ -51,6 +51,14 @@ public class ReceivedEmail
     public EmailAddressList? ReplyTo { get; set; }
 
     /// <summary>
+    /// The recipient addresses the email was forwarded for, taken from the
+    /// <c>for</c> clause of the message's <c>Received</c> headers.
+    /// </summary>
+    [JsonPropertyName( "received_for" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public EmailAddressList? ReceivedFor { get; set; }
+
+    /// <summary>
     /// Message identifier.
     /// </summary>
     [JsonPropertyName( "message_id" )]
