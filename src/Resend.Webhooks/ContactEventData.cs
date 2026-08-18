@@ -35,11 +35,11 @@ public class ContactEventData : IWebhookData
 
     /// <summary />
     [JsonPropertyName( "first_name" )]
-    public string FirstName { get; set; } = default!;
+    public string? FirstName { get; set; }
 
     /// <summary />
     [JsonPropertyName( "last_name" )]
-    public string LastName { get; set; } = default!;
+    public string? LastName { get; set; }
 
     /// <summary />
     [JsonPropertyName( "unsubscribed" )]
