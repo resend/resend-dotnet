@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Resend.ApiServer;
+using System.Net;
 
 namespace Resend.Tests;
 
@@ -124,6 +125,71 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task EmailShareDefaultExpiresIn()
+    {
+        var emailId = Guid.NewGuid();
+
+        var resp = await _resend.EmailShareAsync( emailId );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.Equal( emailId, resp.Content.Id );
+        Assert.False( string.IsNullOrWhiteSpace( resp.Content.Url ) );
+    }
+
+
+    /// <summary />
+    [Theory]
+    [InlineData( "10m" )]
+    [InlineData( "2 hours" )]
+    [InlineData( "1 day" )]
+    [InlineData( "1h 30m" )]
+    [InlineData( "48h" )]
+    public async Task EmailShareCustomExpiresIn( string expiresIn )
+    {
+        var emailId = Guid.NewGuid();
+
+        var resp = await _resend.EmailShareAsync( emailId, expiresIn );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.Equal( emailId, resp.Content.Id );
+        Assert.False( string.IsNullOrWhiteSpace( resp.Content.Url ) );
+    }
+
+
+    /// <summary />
+    [Theory]
+    [InlineData( "banana" )]
+    [InlineData( "72h" )]
+    [InlineData( "3 days" )]
+    [InlineData( "99999999999999999999h" )]
+    public async Task EmailShareRejectsInvalidExpiresIn( string expiresIn )
+    {
+        var emailId = Guid.NewGuid();
+
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.EmailShareAsync( emailId, expiresIn ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task EmailShareNotFound()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.EmailShareAsync( Guid.Empty ) );
+
+        Assert.Equal( HttpStatusCode.NotFound, ex.StatusCode );
+        Assert.Equal( ErrorType.NotFound, ex.ErrorType );
     }
 
 
