@@ -410,6 +410,28 @@ public interface IResend
     Task<ResendResponse<ApiKeyData>> ApiKeyCreateAsync( string keyName, Permission? permission = null, Guid? domainId = null, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Renames an existing API key.
+    /// </summary>
+    /// <param name="apiKeyId">
+    /// API key identifier.
+    /// </param>
+    /// <param name="name">
+    /// New display name for the API key.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// API key identifier.
+    /// </returns>
+    /// <remarks>
+    /// Permission and domain restriction cannot be changed through this method; delete
+    /// and re-create the key if those need to change.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/api-keys/update-api-key" />
+    Task<ResendResponse<Guid>> ApiKeyUpdateAsync( Guid apiKeyId, string name, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Remove an existing API key.
     /// </summary>
     /// <param name="apiKeyId">
