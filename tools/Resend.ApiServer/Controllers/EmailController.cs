@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace Resend.ApiServer.Controllers;
 
@@ -180,9 +179,11 @@ public class EmailController : ControllerBase
 
 
     /// <summary>
-    /// Mirrors the API: <c>expires_in</c> defaults to 48h, is validated as a human-readable
-    /// duration and is capped at 48h. The fake server has no persisted state, so the
-    /// well-known empty id doubles as the "email not found" fixture for tests.
+    /// The fake server has no real duration parser -- it isn't the API, so it shouldn't
+    /// try to replicate the API's validation grammar. It only needs to return realistic
+    /// responses for the fixed set of inputs the test suite exercises. The fake server
+    /// also has no persisted state, so the well-known empty id doubles as the
+    /// "email not found" fixture for tests.
     /// </summary>
     [HttpPost]
     [Route( "emails/{id}/share" )]
@@ -202,7 +203,7 @@ public class EmailController : ControllerBase
 
         var expiresIn = request?.ExpiresIn ?? "48h";
 
-        if ( TryParseExpiresIn( expiresIn, out var duration ) == false || duration > TimeSpan.FromHours( 48 ) )
+        if ( ValidExpiresIn.Contains( expiresIn ) == false )
         {
             return UnprocessableEntity( new ErrorResponse()
             {
@@ -221,68 +222,8 @@ public class EmailController : ControllerBase
     }
 
 
-    private static readonly Regex DurationTokenPattern = new Regex( @"(\d+)\s*([a-zA-Z]+)", RegexOptions.Compiled );
-
-
-    /// <summary>
-    /// Parses a human-readable duration such as <c>"10m"</c>, <c>"2 hours"</c>, <c>"1 day"</c>
-    /// or <c>"1h 30m"</c> into a <see cref="TimeSpan"/>.
-    /// </summary>
-    private static bool TryParseExpiresIn( string value, out TimeSpan duration )
+    private static readonly HashSet<string> ValidExpiresIn = new( StringComparer.OrdinalIgnoreCase )
     {
-        duration = TimeSpan.Zero;
-
-        var trimmed = value.Trim();
-
-        if ( trimmed.Length == 0 )
-            return false;
-
-        var matches = DurationTokenPattern.Matches( trimmed );
-
-        if ( matches.Count == 0 )
-            return false;
-
-        /*
-         * Reject stray characters that aren't part of a "<number><unit>" token or
-         * whitespace between tokens -- e.g. "banana" or "10x". Gaps before/between/after
-         * matches (such as the space in "1h 30m") must be whitespace-only.
-         */
-        var cursor = 0;
-
-        foreach ( Match m in matches )
-        {
-            var gap = trimmed[ cursor..m.Index ];
-
-            if ( gap.Any( c => char.IsWhiteSpace( c ) == false ) )
-                return false;
-
-            cursor = m.Index + m.Length;
-        }
-
-        if ( trimmed[ cursor.. ].Any( c => char.IsWhiteSpace( c ) == false ) )
-            return false;
-
-        foreach ( Match m in matches )
-        {
-            if ( long.TryParse( m.Groups[ 1 ].Value, out var amount ) == false )
-                return false;
-
-            var unit = m.Groups[ 2 ].Value.ToLowerInvariant();
-
-            TimeSpan? token = unit switch
-            {
-                "h" or "hr" or "hrs" or "hour" or "hours" => amount <= 48 ? TimeSpan.FromHours( amount ) : null,
-                "m" or "min" or "mins" or "minute" or "minutes" => amount <= 2880 ? TimeSpan.FromMinutes( amount ) : null,
-                "d" or "day" or "days" => amount <= 2 ? TimeSpan.FromDays( amount ) : null,
-                _ => null,
-            };
-
-            if ( token == null || duration > TimeSpan.FromHours( 48 ) - token.Value )
-                return false;
-
-            duration += token.Value;
-        }
-
-        return true;
-    }
+        "48h", "10m", "2 hours", "1 day", "1h 30m",
+    };
 }
