@@ -171,6 +171,26 @@ public interface IResend
     Task<ResendResponse> EmailCancelAsync( Guid emailId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Creates a shareable link for a sent or received email.
+    /// </summary>
+    /// <param name="emailId">
+    /// Email identifier.
+    /// </param>
+    /// <param name="expiresIn">
+    /// How long the shareable link remains valid, as a human-readable duration (for example
+    /// <c>"10m"</c>, <c>"2 hours"</c>, <c>"1 day"</c> or <c>"1h 30m"</c>). Defaults to
+    /// <c>"48h"</c> and is capped at 48 hours.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Shareable link result.
+    /// </returns>
+    /// <see href="https://www.resend.com/docs/api-reference/emails/share-email"/>
+    Task<ResendResponse<EmailShareResult>> EmailShareAsync( Guid emailId, string? expiresIn = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists email attachments from a sent email.
     /// </summary>
     /// <param name="emailId">Sent email identifier.</param>

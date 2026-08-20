@@ -216,6 +216,20 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<EmailShareResult>> EmailShareAsync( Guid emailId, string? expiresIn = null, CancellationToken cancellationToken = default )
+    {
+        var path = $"emails/{emailId}/share";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( new EmailShareRequest()
+        {
+            ExpiresIn = expiresIn,
+        } );
+
+        return Execute<EmailShareResult, EmailShareResult>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default )
     {
         var path = $"/domains";

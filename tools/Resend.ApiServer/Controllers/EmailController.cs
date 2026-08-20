@@ -176,4 +176,54 @@ public class EmailController : ControllerBase
             Id = id,
         };
     }
+
+
+    /// <summary>
+    /// The fake server has no real duration parser -- it isn't the API, so it shouldn't
+    /// try to replicate the API's validation grammar. It only needs to return realistic
+    /// responses for the fixed set of inputs the test suite exercises. The fake server
+    /// also has no persisted state, so the well-known empty id doubles as the
+    /// "email not found" fixture for tests.
+    /// </summary>
+    [HttpPost]
+    [Route( "emails/{id}/share" )]
+    public ActionResult<EmailShareResult> EmailShare( [FromRoute] Guid id, [FromBody] EmailShareRequest? request )
+    {
+        _logger.LogDebug( "EmailShare" );
+
+        if ( id == Guid.Empty )
+        {
+            return NotFound( new ErrorResponse()
+            {
+                StatusCode = (int) HttpStatusCode.NotFound,
+                ErrorType = ErrorType.NotFound,
+                Message = "Email not found",
+            } );
+        }
+
+        var expiresIn = request?.ExpiresIn ?? "48h";
+
+        if ( ValidExpiresIn.Contains( expiresIn ) == false )
+        {
+            return UnprocessableEntity( new ErrorResponse()
+            {
+                StatusCode = (int) HttpStatusCode.UnprocessableEntity,
+                ErrorType = ErrorType.ValidationError,
+                Message = "`expires_in` must be a valid duration, capped at 48 hours.",
+            } );
+        }
+
+        return new EmailShareResult()
+        {
+            Object = "email",
+            Id = id,
+            Url = $"https://resend.com/share/{id}",
+        };
+    }
+
+
+    private static readonly HashSet<string> ValidExpiresIn = new( StringComparer.OrdinalIgnoreCase )
+    {
+        "48h", "10m", "2 hours", "1 day", "1h 30m",
+    };
 }
