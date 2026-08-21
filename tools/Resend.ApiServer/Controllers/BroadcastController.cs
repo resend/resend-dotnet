@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
+using System.Net;
 
 namespace Resend.ApiServer.Controllers;
 
@@ -87,6 +88,72 @@ public class BroadcastController : ControllerBase
         _logger.LogDebug( "BroadcastCancel" );
 
         return Ok();
+    }
+
+
+    /// <summary>
+    /// The fake server has no persisted state, so the well-known empty id doubles as the
+    /// "broadcast not found" fixture for tests, mirroring <see cref="EmailController.EmailShare"/>.
+    /// </summary>
+    [HttpGet]
+    [Route( "broadcasts/{broadcastId}/recipients" )]
+    public ActionResult<PaginatedResult<BroadcastRecipient>> BroadcastListRecipients(
+        [FromRoute] Guid broadcastId,
+        [FromQuery( Name = "type" )] string type,
+        [FromQuery( Name = "email" )] string? email,
+        [FromQuery( Name = "bounce_type" )] string? bounceType,
+        [FromQuery( Name = "limit" )] int? limit,
+        [FromQuery( Name = "after" )] string? after,
+        [FromQuery( Name = "before" )] string? before )
+    {
+        _logger.LogDebug( "BroadcastListRecipients" );
+
+        if ( broadcastId == Guid.Empty )
+        {
+            return NotFound( new ErrorResponse()
+            {
+                StatusCode = (int) HttpStatusCode.NotFound,
+                ErrorType = ErrorType.NotFound,
+                Message = "Broadcast not found",
+            } );
+        }
+
+        var recipient = new BroadcastRecipient()
+        {
+            Id = "b2Zmc2V0OjA",
+            ContactId = Guid.NewGuid(),
+            Email = email ?? "steve.wozniak@gmail.com",
+        };
+
+        switch ( type )
+        {
+            case "opened":
+                recipient.Count = 3;
+                break;
+
+            case "clicked":
+                recipient.Count = 3;
+                recipient.ClickedLinks = new List<BroadcastRecipientClickedLink>()
+                {
+                    new BroadcastRecipientClickedLink() { Url = "https://resend.com/pricing", Clicks = 2 },
+                };
+                break;
+
+            case "bounced":
+                recipient.BounceType = bounceType switch
+                {
+                    "transient" => BroadcastRecipientBounceType.Transient,
+                    "undetermined" => BroadcastRecipientBounceType.Undetermined,
+                    _ => BroadcastRecipientBounceType.Permanent,
+                };
+                break;
+        }
+
+        return new PaginatedResult<BroadcastRecipient>()
+        {
+            HasMore = true,
+            Data = new List<BroadcastRecipient>() { recipient },
+        };
     }
 
 
