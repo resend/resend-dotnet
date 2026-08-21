@@ -282,6 +282,18 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary />
     [Fact]
+    public async Task ApiKeyUpdate()
+    {
+        var resp = await _resend.ApiKeyUpdateAsync( Guid.NewGuid(), "renamed-key" );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task ApiKeyDelete()
     {
         var resp = await _resend.ApiKeyDeleteAsync( Guid.NewGuid() );

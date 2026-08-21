@@ -33,6 +33,21 @@ public class ApiKeyController : ControllerBase
 
 
     /// <summary />
+    [HttpPatch]
+    [Route( "api-keys/{id}" )]
+    public ObjectId ApiKeyUpdate( [FromRoute] Guid id, [FromBody] ApiKeyUpdateRequest request )
+    {
+        _logger.LogDebug( "ApiKeyUpdate" );
+
+        return new ObjectId()
+        {
+            Object = "api_key",
+            Id = id,
+        };
+    }
+
+
+    /// <summary />
     [HttpGet]
     [Route( "api-keys" )]
     public ListOf<ApiKey> ApiKeyList()

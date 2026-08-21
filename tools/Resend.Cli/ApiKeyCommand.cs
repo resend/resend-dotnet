@@ -6,6 +6,7 @@ namespace Resend.Cli;
 [Command( "apikey", Description = "API key management" )]
 [Subcommand( typeof( ApiKey.ApiKeyCreateCommand ))]
 [Subcommand( typeof( ApiKey.ApiKeyListCommand ))]
+[Subcommand( typeof( ApiKey.ApiKeyUpdateCommand ) )]
 [Subcommand( typeof( ApiKey.ApiKeyDeleteCommand ) )]
 public class ApiKeyCommand
 {

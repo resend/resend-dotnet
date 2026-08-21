@@ -323,6 +323,20 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<Guid>> ApiKeyUpdateAsync( Guid apiKeyId, string name, CancellationToken cancellationToken = default )
+    {
+        var path = $"/api-keys/{apiKeyId}";
+        var req = new HttpRequestMessage( HttpMethod.Patch, path );
+        req.Content = JsonContent.Create( new ApiKeyUpdateRequest()
+        {
+            Name = name,
+        } );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<List<ApiKey>>> ApiKeyListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/api-keys";
