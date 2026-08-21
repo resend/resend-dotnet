@@ -489,6 +489,34 @@ public partial class ResendClient : IResend
     }
 
 
+    /// <inheritdoc/>
+    public Task<ResendResponse<PaginatedResult<BroadcastClickedLink>>> BroadcastClickedLinksAsync( Guid broadcastId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/broadcasts/{broadcastId}/clicked-links";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<BroadcastClickedLink>, PaginatedResult<BroadcastClickedLink>>( req, ( x ) => x, cancellationToken );
+    }
+
+
     /// <summary />
     private async Task<ResendResponse> Execute( HttpRequestMessage req, CancellationToken cancellationToken )
     {
