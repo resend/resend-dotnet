@@ -206,7 +206,7 @@ public interface IResend
     /// <returns>
     /// Email metrics.
     /// </returns>
-    /// <see href="https://resend.com/docs/api-reference/emails/retrieve-email-metrics"/>
+    /// <see href="https://resend.com/docs/api-reference/emails/get-metrics"/>
     Task<ResendResponse<EmailMetrics>> EmailMetricsAsync( EmailMetricsQuery? query = null, CancellationToken cancellationToken = default );
 
     /// <summary>

@@ -5,7 +5,7 @@ namespace Resend;
 /// <summary>
 /// Email metrics for a given reporting period.
 /// </summary>
-/// <see href="https://resend.com/docs/api-reference/emails/retrieve-email-metrics"/>
+/// <see href="https://resend.com/docs/api-reference/emails/get-metrics"/>
 public class EmailMetrics
 {
     /// <summary />
