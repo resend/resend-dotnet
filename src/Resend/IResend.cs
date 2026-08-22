@@ -194,9 +194,6 @@ public interface IResend
     /// Retrieves aggregate email metrics (delivery, engagement, bounce, etc.) for a reporting
     /// period, optionally broken down by one or more dimensions.
     /// </summary>
-    /// <remarks>
-    /// Beta endpoint.
-    /// </remarks>
     /// <param name="query">
     /// Metrics query.
     /// </param>

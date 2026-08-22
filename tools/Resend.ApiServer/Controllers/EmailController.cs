@@ -224,12 +224,12 @@ public class EmailController : ControllerBase
 
 
     /// <summary>
-    /// Fakes the beta metrics endpoint, echoing back the request's shape (granularity,
+    /// Fakes the metrics endpoint, echoing back the request's shape (granularity,
     /// requested metrics/dimensions, filters) so tests can assert on how the SDK built the query.
     /// </summary>
     [HttpGet]
     [Route( "emails/metrics" )]
-    public EmailMetrics EmailMetrics(
+    public ActionResult<EmailMetrics> EmailMetrics(
         [FromQuery( Name = "start_date" )] string? startDate,
         [FromQuery( Name = "end_date" )] string? endDate,
         [FromQuery( Name = "timezone" )] string? timezone,
@@ -248,6 +248,19 @@ public class EmailController : ControllerBase
 
         var metricNames = SplitCsv( metrics ) ?? AllMetricNames;
         var dimensionNames = SplitCsv( dimensions ) ?? new List<string>();
+
+        var hasEmail = dimensionNames.Contains( "email" ) || string.IsNullOrEmpty( emailId ) == false;
+        var hasBroadcast = dimensionNames.Contains( "broadcast" ) || string.IsNullOrEmpty( broadcastId ) == false;
+
+        if ( hasEmail && hasBroadcast )
+        {
+            return BadRequest( new ErrorResponse()
+            {
+                StatusCode = (int) HttpStatusCode.BadRequest,
+                ErrorType = ErrorType.ValidationError,
+                Message = "The `broadcast` dimension/`broadcast_id` filter cannot be combined with the `email` dimension/`email_id` filter.",
+            } );
+        }
 
         var result = new EmailMetrics()
         {

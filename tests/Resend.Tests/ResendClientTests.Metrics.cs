@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Resend.Tests;
 
 /// <summary />
@@ -251,5 +253,58 @@ public partial class ResendClientTests
         Assert.Equal( 2, resp.Content.Totals.Count );
         Assert.True( resp.Content.Totals.ContainsKey( "delivered" ) );
         Assert.True( resp.Content.Totals.ContainsKey( "opened" ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task EmailMetricsRejectsEmailAndBroadcastDimensionsCombined()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.EmailMetricsAsync( new EmailMetricsQuery()
+        {
+            Dimensions = new List<MetricDimension>() { MetricDimension.Email, MetricDimension.Broadcast },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.BadRequest, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task EmailMetricsRejectsEmailDimensionWithBroadcastIdFilter()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.EmailMetricsAsync( new EmailMetricsQuery()
+        {
+            Dimensions = new List<MetricDimension>() { MetricDimension.Email },
+            BroadcastId = new List<Guid>() { Guid.NewGuid() },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.BadRequest, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary>
+    /// A `Kind.Unspecified` value (e.g. from `new DateTime(...)`) must be sent as-is in UTC,
+    /// not reinterpreted using the host machine's local offset.
+    /// </summary>
+    [Fact]
+    public async Task EmailMetricsTreatsUnspecifiedKindDateTimeAsUtc()
+    {
+        var start = new DateTime( 2026, 7, 1, 0, 0, 0, DateTimeKind.Unspecified );
+        var end = new DateTime( 2026, 7, 8, 0, 0, 0, DateTimeKind.Unspecified );
+
+        var resp = await _resend.EmailMetricsAsync( new EmailMetricsQuery()
+        {
+            StartDate = start,
+            EndDate = end,
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.Equal( start, resp.Content.StartDate );
+        Assert.Equal( end, resp.Content.EndDate );
     }
 }

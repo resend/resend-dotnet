@@ -240,10 +240,10 @@ public partial class ResendClient : IResend
             var qs = new Dictionary<string, string?>();
 
             if ( query.StartDate.HasValue == true )
-                qs.Add( "start_date", query.StartDate.Value.ToUniversalTime().ToString( "o" ) );
+                qs.Add( "start_date", ToUtcQueryValue( query.StartDate.Value ) );
 
             if ( query.EndDate.HasValue == true )
-                qs.Add( "end_date", query.EndDate.Value.ToUniversalTime().ToString( "o" ) );
+                qs.Add( "end_date", ToUtcQueryValue( query.EndDate.Value ) );
 
             if ( query.Timezone != null )
                 qs.Add( "timezone", query.Timezone );
@@ -272,6 +272,12 @@ public partial class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
         return Execute<EmailMetrics, EmailMetrics>( req, ( x ) => x, cancellationToken );
+    }
+
+    private static string ToUtcQueryValue( DateTime value )
+    {
+        var utc = value.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind( value, DateTimeKind.Utc ) : value.ToUniversalTime();
+        return utc.ToString( "o" );
     }
 
 
