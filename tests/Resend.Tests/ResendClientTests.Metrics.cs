@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 
 namespace Resend.Tests;
 
@@ -287,24 +288,55 @@ public partial class ResendClientTests
 
     /// <summary>
     /// A `Kind.Unspecified` value (e.g. from `new DateTime(...)`) must be sent as-is in UTC,
-    /// not reinterpreted using the host machine's local offset.
+    /// not reinterpreted using the host machine's local offset. Asserts on the literal query
+    /// string that was actually sent, rather than round-tripping the value through the fake
+    /// server, so this targets the client's own serialization directly instead of picking up
+    /// the fake server's parsing behavior along the way. Note this still can't distinguish
+    /// the fix from the regression it guards against on a host whose local timezone is
+    /// exactly UTC, since `ToUniversalTime()` on an `Unspecified` value is a no-op there
+    /// either way — that's inherent to the bug shape, not something any assertion can fix.
     /// </summary>
     [Fact]
     public async Task EmailMetricsTreatsUnspecifiedKindDateTimeAsUtc()
     {
+        var handler = new RecordingHandler();
+        var resend = ResendClient.Create( new ResendClientOptions() { ApiToken = "re_test_123" }, new HttpClient( handler ) );
+
         var start = new DateTime( 2026, 7, 1, 0, 0, 0, DateTimeKind.Unspecified );
         var end = new DateTime( 2026, 7, 8, 0, 0, 0, DateTimeKind.Unspecified );
 
-        var resp = await _resend.EmailMetricsAsync( new EmailMetricsQuery()
+        await resend.EmailMetricsAsync( new EmailMetricsQuery()
         {
             StartDate = start,
             EndDate = end,
         } );
 
-        Assert.NotNull( resp );
-        Assert.True( resp.Success );
-        Assert.NotNull( resp.Content );
-        Assert.Equal( start, resp.Content.StartDate );
-        Assert.Equal( end, resp.Content.EndDate );
+        var req = Assert.Single( handler.Requests );
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery( req.RequestUri!.Query );
+        Assert.Equal( "2026-07-01T00:00:00.0000000Z", query["start_date"].ToString() );
+        Assert.Equal( "2026-07-08T00:00:00.0000000Z", query["end_date"].ToString() );
+    }
+
+
+    /// <summary />
+    private class RecordingHandler : HttpMessageHandler
+    {
+        /// <summary />
+        public List<HttpRequestMessage> Requests { get; } = new();
+
+
+        /// <inheritdoc />
+        protected override Task<HttpResponseMessage> SendAsync( HttpRequestMessage request, CancellationToken cancellationToken )
+        {
+            Requests.Add( request );
+
+            var resp = new HttpResponseMessage( HttpStatusCode.OK );
+            resp.Content = new StringContent(
+                """{"object":"metrics","start_date":"2026-07-01T00:00:00Z","end_date":"2026-07-08T00:00:00Z","metrics":[],"dimensions":[],"granularity":"daily","totals":{}}""",
+                Encoding.UTF8,
+                "application/json" );
+
+            return Task.FromResult( resp );
+        }
     }
 }
