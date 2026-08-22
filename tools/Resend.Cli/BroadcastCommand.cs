@@ -8,6 +8,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( Broadcast.BroadcastCancelCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastDeleteCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastListCommand ) )]
+[Subcommand( typeof( Broadcast.BroadcastListRecipientsCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastRetrieveCommand ))]
 [Subcommand( typeof( Broadcast.BroadcastScheduleCommand ) )]
 [Subcommand( typeof( Broadcast.BroadcastSendCommand ) )]

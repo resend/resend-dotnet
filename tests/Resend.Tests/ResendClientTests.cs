@@ -493,6 +493,121 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task BroadcastListRecipients()
+    {
+        var resp = await _resend.BroadcastListRecipientsAsync( Guid.NewGuid(), BroadcastRecipientEventType.Delivered );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotNull( resp.Content );
+        Assert.True( resp.Content.HasMore );
+        Assert.Single( resp.Content.Data );
+
+        var recipient = resp.Content.Data[ 0 ];
+        Assert.NotEqual( "", recipient.Id );
+        Assert.NotNull( recipient.ContactId );
+        Assert.NotEqual( "", recipient.Email );
+        Assert.Null( recipient.Count );
+        Assert.Null( recipient.BounceType );
+        Assert.Null( recipient.ClickedLinks );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsOpened()
+    {
+        var resp = await _resend.BroadcastListRecipientsAsync( Guid.NewGuid(), BroadcastRecipientEventType.Opened );
+
+        Assert.NotNull( resp );
+        Assert.NotNull( resp.Content );
+
+        var recipient = resp.Content.Data[ 0 ];
+        Assert.Equal( 3, recipient.Count );
+        Assert.Null( recipient.BounceType );
+        Assert.Null( recipient.ClickedLinks );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsClicked()
+    {
+        var resp = await _resend.BroadcastListRecipientsAsync( Guid.NewGuid(), BroadcastRecipientEventType.Clicked );
+
+        Assert.NotNull( resp );
+        Assert.NotNull( resp.Content );
+
+        var recipient = resp.Content.Data[ 0 ];
+        Assert.Equal( 3, recipient.Count );
+        Assert.NotNull( recipient.ClickedLinks );
+        Assert.Single( recipient.ClickedLinks );
+        Assert.Equal( "https://resend.com/pricing", recipient.ClickedLinks[ 0 ].Url );
+        Assert.Equal( 2, recipient.ClickedLinks[ 0 ].Clicks );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsBounced()
+    {
+        var resp = await _resend.BroadcastListRecipientsAsync(
+            Guid.NewGuid(),
+            BroadcastRecipientEventType.Bounced,
+            new BroadcastListRecipientsQuery() { BounceType = BroadcastRecipientBounceType.Transient } );
+
+        Assert.NotNull( resp );
+        Assert.NotNull( resp.Content );
+
+        var recipient = resp.Content.Data[ 0 ];
+        Assert.Equal( BroadcastRecipientBounceType.Transient, recipient.BounceType );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsWithQuery()
+    {
+        var resp = await _resend.BroadcastListRecipientsAsync(
+            Guid.NewGuid(),
+            BroadcastRecipientEventType.Delivered,
+            new BroadcastListRecipientsQuery()
+            {
+                Email = "steve.wozniak@gmail.com",
+                Limit = 10,
+                After = Guid.NewGuid().ToString(),
+            } );
+
+        Assert.NotNull( resp );
+        Assert.NotNull( resp.Content );
+        Assert.Equal( "steve.wozniak@gmail.com", resp.Content.Data[ 0 ].Email );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsBounceTypeRequiresBouncedType()
+    {
+        await Assert.ThrowsAsync<ArgumentException>( () => _resend.BroadcastListRecipientsAsync(
+            Guid.NewGuid(),
+            BroadcastRecipientEventType.Delivered,
+            new BroadcastListRecipientsQuery() { BounceType = BroadcastRecipientBounceType.Permanent } ) );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastListRecipientsNotFound()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.BroadcastListRecipientsAsync( Guid.Empty, BroadcastRecipientEventType.Delivered ) );
+
+        Assert.Equal( HttpStatusCode.NotFound, ex.StatusCode );
+        Assert.Equal( ErrorType.NotFound, ex.ErrorType );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task BroadcastDelete()
     {
         var resp = await _resend.BroadcastDeleteAsync( Guid.NewGuid() );
