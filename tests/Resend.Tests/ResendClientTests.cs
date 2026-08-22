@@ -499,4 +499,39 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
         Assert.NotNull( resp );
     }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastClickedLinks()
+    {
+        var broadcastId = Guid.NewGuid();
+
+        var resp = await _resend.BroadcastClickedLinksAsync( broadcastId );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.False( resp.Content.HasMore );
+        Assert.Equal( 2, resp.Content.Data.Count );
+        Assert.Equal( "https://resend.com/pricing", resp.Content.Data[ 0 ].Url );
+        Assert.Equal( 42, resp.Content.Data[ 0 ].Clicks );
+        Assert.Equal( 30, resp.Content.Data[ 0 ].UniqueClicks );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task BroadcastClickedLinks_WithQuery()
+    {
+        var broadcastId = Guid.NewGuid();
+
+        var resp = await _resend.BroadcastClickedLinksAsync( broadcastId, new PaginatedQuery()
+        {
+            Limit = 10,
+            After = "cursor-value",
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+    }
 }

@@ -144,4 +144,40 @@ public class BroadcastController : ControllerBase
             Data = list,
         };
     }
+
+
+    /// <summary />
+    [HttpGet]
+    [Route( "broadcasts/{broadcastId}/clicked-links" )]
+    public PaginatedResult<BroadcastClickedLink> BroadcastClickedLinks(
+        [FromRoute] Guid broadcastId,
+        [FromQuery] string? limit = null,
+        [FromQuery] string? before = null,
+        [FromQuery] string? after = null
+    )
+    {
+        _logger.LogDebug( "BroadcastClickedLinks" );
+
+        return new PaginatedResult<BroadcastClickedLink>()
+        {
+            HasMore = false,
+            Data =
+            [
+                new BroadcastClickedLink()
+                {
+                    Id = "b2Zmc2V0OjA",
+                    Url = "https://resend.com/pricing",
+                    Clicks = 42,
+                    UniqueClicks = 30,
+                },
+                new BroadcastClickedLink()
+                {
+                    Id = "b2Zmc2V0OjE",
+                    Url = "https://resend.com/docs",
+                    Clicks = 17,
+                    UniqueClicks = 15,
+                },
+            ],
+        };
+    }
 }

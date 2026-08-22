@@ -853,6 +853,15 @@ public interface IResend
     /// <returns>Response.</returns>
     Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Lists the links clicked in a broadcast.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Page of clicked links.</returns>
+    Task<ResendResponse<PaginatedResult<BroadcastClickedLink>>> BroadcastClickedLinksAsync( Guid broadcastId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Receiving
