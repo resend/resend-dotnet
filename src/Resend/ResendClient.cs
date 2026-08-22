@@ -504,7 +504,12 @@ public partial class ResendClient : IResend
                 qs.Add( "email", query.Email );
 
             if ( query.BounceType.HasValue == true )
+            {
+                if ( type != BroadcastRecipientEventType.Bounced )
+                    throw new ArgumentException( "BounceType can only be set when type is Bounced.", nameof( query ) );
+
                 qs.Add( "bounce_type", JsonStringEnumValue<BroadcastRecipientBounceType>.Of( query.BounceType.Value ) );
+            }
         }
 
         var url = QueryHelpers.AddQueryString( baseUrl, qs );

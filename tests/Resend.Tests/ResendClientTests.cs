@@ -586,6 +586,17 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task BroadcastListRecipientsBounceTypeRequiresBouncedType()
+    {
+        await Assert.ThrowsAsync<ArgumentException>( () => _resend.BroadcastListRecipientsAsync(
+            Guid.NewGuid(),
+            BroadcastRecipientEventType.Delivered,
+            new BroadcastListRecipientsQuery() { BounceType = BroadcastRecipientBounceType.Permanent } ) );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task BroadcastListRecipientsNotFound()
     {
         var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.BroadcastListRecipientsAsync( Guid.Empty, BroadcastRecipientEventType.Delivered ) );

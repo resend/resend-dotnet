@@ -77,7 +77,7 @@ public class BroadcastListRecipientsCommand
         {
             var jso = new JsonSerializerOptions() { WriteIndented = true, };
 
-            var json = JsonSerializer.Serialize( results, jso );
+            var json = JsonSerializer.Serialize( results.Data, jso );
             Console.WriteLine( json );
         }
         else
@@ -94,12 +94,12 @@ public class BroadcastListRecipientsCommand
             foreach ( var d in results.Data )
             {
                 table.AddRow(
-                    new Markup( d.Id ),
-                    new Markup( d.ContactId?.ToString() ?? "" ),
-                    new Markup( d.Email ),
+                    new Markup( Markup.Escape( d.Id ) ),
+                    new Markup( Markup.Escape( d.ContactId?.ToString() ?? "" ) ),
+                    new Markup( Markup.Escape( d.Email ) ),
                     new Markup( d.Count?.ToString() ?? "" ),
                     new Markup( d.BounceType?.ToString() ?? "" ),
-                    new Markup( d.ClickedLinks == null ? "" : string.Join( ", ", d.ClickedLinks.Select( x => $"{x.Url} ({x.Clicks})" ) ) )
+                    new Markup( Markup.Escape( d.ClickedLinks == null ? "" : string.Join( ", ", d.ClickedLinks.Select( x => $"{x.Url} ({x.Clicks})" ) ) ) )
                 );
             }
 
