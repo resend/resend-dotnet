@@ -532,6 +532,47 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc/>
+    public Task<ResendResponse<PaginatedResult<BroadcastRecipient>>> BroadcastListRecipientsAsync( Guid broadcastId, BroadcastRecipientEventType type, BroadcastListRecipientsQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/broadcasts/{broadcastId}/recipients";
+
+        var qs = new Dictionary<string, string?>()
+        {
+            { "type", JsonStringEnumValue<BroadcastRecipientEventType>.Of( type ) },
+        };
+
+        if ( query != null )
+        {
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            if ( query.Email != null )
+                qs.Add( "email", query.Email );
+
+            if ( query.BounceType.HasValue == true )
+            {
+                if ( type != BroadcastRecipientEventType.Bounced )
+                    throw new ArgumentException( "BounceType can only be set when type is Bounced.", nameof( query ) );
+
+                qs.Add( "bounce_type", JsonStringEnumValue<BroadcastRecipientBounceType>.Of( query.BounceType.Value ) );
+            }
+        }
+
+        var url = QueryHelpers.AddQueryString( baseUrl, qs );
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<BroadcastRecipient>, PaginatedResult<BroadcastRecipient>>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc/>
     public Task<ResendResponse> BroadcastDeleteAsync( Guid broadcastId, CancellationToken cancellationToken = default )
     {
         var path = $"/broadcasts/{broadcastId}";

@@ -862,6 +862,17 @@ public interface IResend
     Task<ResendResponse<List<Broadcast>>> BroadcastListAsync( CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Lists a broadcast's recipients for a given event type.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="type">Recipient event type to filter by.</param>
+    /// <param name="query">Filters and pagination.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Page of recipients.</returns>
+    /// <see href="https://resend.com/docs/api-reference/broadcasts/list-broadcast-recipients"/>
+    Task<ResendResponse<PaginatedResult<BroadcastRecipient>>> BroadcastListRecipientsAsync( Guid broadcastId, BroadcastRecipientEventType type, BroadcastListRecipientsQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Removes a broadcast.
     /// </summary>
     /// <param name="broadcastId">Broadcast identifier.</param>
