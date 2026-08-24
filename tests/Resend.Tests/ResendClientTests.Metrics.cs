@@ -266,7 +266,7 @@ public partial class ResendClientTests
             Dimensions = new List<MetricDimension>() { MetricDimension.Email, MetricDimension.Broadcast },
         } ) );
 
-        Assert.Equal( HttpStatusCode.BadRequest, ex.StatusCode );
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
         Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
     }
 
@@ -281,7 +281,7 @@ public partial class ResendClientTests
             BroadcastId = new List<Guid>() { Guid.NewGuid() },
         } ) );
 
-        Assert.Equal( HttpStatusCode.BadRequest, ex.StatusCode );
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
         Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
     }
 

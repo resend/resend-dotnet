@@ -254,9 +254,9 @@ public class EmailController : ControllerBase
 
         if ( hasEmail && hasBroadcast )
         {
-            return BadRequest( new ErrorResponse()
+            return UnprocessableEntity( new ErrorResponse()
             {
-                StatusCode = (int) HttpStatusCode.BadRequest,
+                StatusCode = (int) HttpStatusCode.UnprocessableEntity,
                 ErrorType = ErrorType.ValidationError,
                 Message = "The `broadcast` dimension/`broadcast_id` filter cannot be combined with the `email` dimension/`email_id` filter.",
             } );
