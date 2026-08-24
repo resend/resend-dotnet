@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Resend.Cli;
 
 /// <summary />
-[Command( "resend", Description = "Command-line tool for Resend API" )]
+[Command( "resend", Description = "Command-line tool for Resend API (deprecated: use https://github.com/resend/resend-cli)" )]
 [Subcommand( typeof( ApiKeyCommand ) )]
 [Subcommand( typeof( BroadcastCommand ) )]
 [Subcommand( typeof( ContactCommand ) )]
@@ -26,7 +26,15 @@ public class Program
     public static int Main( string[] args )
     {
         /*
-         * 
+         *
+         */
+        Console.Error.WriteLine( "wrn: This tool is deprecated and will be removed in a future release." );
+        Console.Error.WriteLine( "wrn: Use the official Resend CLI instead: https://github.com/resend/resend-cli" );
+        Console.Error.WriteLine();
+
+
+        /*
+         *
          */
         var app = new CommandLineApplication<Program>();
 
