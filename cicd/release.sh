@@ -45,23 +45,6 @@ dotnet test    -c Release --no-restore --no-build --verbosity=normal
 
 
 #
-# Build cli tool for multiple platforms
-# RID catalog: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-# ------------------------------------------------------------------------
-
-dotnet publish -c Release --runtime=win-x64   --self-contained tools/Resend.Cli/Resend.Cli.csproj -p:Version=${VERSION} -o tmp/win-x64
-dotnet publish -c Release --runtime=linux-x64 --self-contained tools/Resend.Cli/Resend.Cli.csproj -p:Version=${VERSION} -o tmp/linux-x64
-dotnet publish -c Release --runtime=osx-x64   --self-contained tools/Resend.Cli/Resend.Cli.csproj -p:Version=${VERSION} -o tmp/osx-x64
-
-mkdir -p artifacts
-rm -f artifacts/*.zip
-
-zip -j -r  artifacts/resend-cli-win-x64-${VERSION}.zip    tmp/win-x64/resend-cli.exe
-zip -j -r  artifacts/resend-cli-linux-x64-${VERSION}.zip  tmp/linux-x64/resend-cli
-zip -j -r  artifacts/resend-cli-osx-x64-${VERSION}.zip    tmp/osx-x64/resend-cli
-
-
-#
 # Publish to nuget.org
 # ------------------------------------------------------------------------
 
@@ -76,12 +59,9 @@ dotnet nuget push "nupkg/*.nupkg" --api-key ${NUGET_APIKEY} --source=https://api
 
 
 #
-# Release, including artifacts
+# Release
 # ------------------------------------------------------------------------
 
-gh release create v${VERSION} --generate-notes --title "v${VERSION}" \
-   artifacts/resend-cli-win-x64-${VERSION}.zip \
-   artifacts/resend-cli-linux-x64-${VERSION}.zip \
-   artifacts/resend-cli-osx-x64-${VERSION}.zip
+gh release create v${VERSION} --generate-notes --title "v${VERSION}"
 
 # eof
