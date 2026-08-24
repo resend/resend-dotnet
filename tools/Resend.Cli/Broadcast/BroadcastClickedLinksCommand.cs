@@ -17,6 +17,18 @@ public class BroadcastClickedLinksCommand
     public Guid? BroadcastId { get; set; }
 
     /// <summary />
+    [Option( "-l|--limit", CommandOptionType.SingleValue, Description = "Number of links to return" )]
+    public int? Limit { get; set; }
+
+    /// <summary />
+    [Option( "-b|--before", CommandOptionType.SingleValue, Description = "Links before cursor" )]
+    public string? BeforeId { get; set; }
+
+    /// <summary />
+    [Option( "-a|--after", CommandOptionType.SingleValue, Description = "Links after cursor" )]
+    public string? AfterId { get; set; }
+
+    /// <summary />
     [Option( "-j|--json", CommandOptionType.NoValue, Description = "Emit output as JSON array" )]
     public bool InJson { get; set; }
 
@@ -31,7 +43,14 @@ public class BroadcastClickedLinksCommand
     /// <summary />
     public async Task<int> OnExecuteAsync()
     {
-        var res = await _resend.BroadcastClickedLinksAsync( this.BroadcastId!.Value );
+        var q = new PaginatedQuery()
+        {
+            Limit = this.Limit,
+            Before = this.BeforeId,
+            After = this.AfterId,
+        };
+
+        var res = await _resend.BroadcastClickedLinksAsync( this.BroadcastId!.Value, q );
         var rows = res.Content.Data;
 
         if ( this.InJson == true )
@@ -52,7 +71,7 @@ public class BroadcastClickedLinksCommand
             foreach ( var c in rows )
             {
                 table.AddRow(
-                   new Markup( c.Url ),
+                   new Markup( Markup.Escape( c.Url ) ),
                    new Markup( c.Clicks.ToString() ),
                    new Markup( c.UniqueClicks.ToString() )
                 );
