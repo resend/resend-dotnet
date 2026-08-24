@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
 using System.Net;
+using System.Text.Json;
 
 namespace Resend.ApiServer.Controllers;
 
@@ -222,8 +223,190 @@ public class EmailController : ControllerBase
     }
 
 
+    /// <summary>
+    /// Fakes the metrics endpoint, echoing back the request's shape (granularity,
+    /// requested metrics/dimensions, filters) so tests can assert on how the SDK built the query.
+    /// </summary>
+    [HttpGet]
+    [Route( "emails/metrics" )]
+    public ActionResult<EmailMetrics> EmailMetrics(
+        [FromQuery( Name = "start_date" )] string? startDate,
+        [FromQuery( Name = "end_date" )] string? endDate,
+        [FromQuery( Name = "timezone" )] string? timezone,
+        [FromQuery( Name = "granularity" )] string? granularity,
+        [FromQuery( Name = "metrics" )] string? metrics,
+        [FromQuery( Name = "dimensions" )] string? dimensions,
+        [FromQuery( Name = "domain_id" )] string? domainId,
+        [FromQuery( Name = "email_id" )] string? emailId,
+        [FromQuery( Name = "broadcast_id" )] string? broadcastId
+    )
+    {
+        _logger.LogDebug( "EmailMetrics" );
+
+        var end = string.IsNullOrEmpty( endDate ) == false ? DateTime.Parse( endDate ).ToUniversalTime() : DateTime.UtcNow;
+        var start = string.IsNullOrEmpty( startDate ) == false ? DateTime.Parse( startDate ).ToUniversalTime() : end.AddDays( -6 );
+
+        var metricNames = SplitCsv( metrics ) ?? AllMetricNames;
+        var dimensionNames = SplitCsv( dimensions ) ?? new List<string>();
+
+        var hasEmail = dimensionNames.Contains( "email" ) || string.IsNullOrEmpty( emailId ) == false;
+        var hasBroadcast = dimensionNames.Contains( "broadcast" ) || string.IsNullOrEmpty( broadcastId ) == false;
+
+        if ( hasEmail && hasBroadcast )
+        {
+            return UnprocessableEntity( new ErrorResponse()
+            {
+                StatusCode = (int) HttpStatusCode.UnprocessableEntity,
+                ErrorType = ErrorType.ValidationError,
+                Message = "The `broadcast` dimension/`broadcast_id` filter cannot be combined with the `email` dimension/`email_id` filter.",
+            } );
+        }
+
+        var result = new EmailMetrics()
+        {
+            Object = "metrics",
+            StartDate = start,
+            EndDate = end,
+            Metrics = metricNames.Select( ParseMetricType ).ToList(),
+            Dimensions = dimensionNames.Select( ParseMetricDimension ).ToList(),
+            Granularity = granularity switch
+            {
+                "hourly" => MetricsGranularity.Hourly,
+                "weekly" => MetricsGranularity.Weekly,
+                "monthly" => MetricsGranularity.Monthly,
+                _ => MetricsGranularity.Daily,
+            },
+            Totals = metricNames.ToDictionary( x => x, x => 10d ),
+        };
+
+        if ( dimensionNames.Count > 0 )
+        {
+            var row = new EmailMetricsDataPoint();
+
+            if ( dimensionNames.Contains( "period" ) == true )
+                row.Period = start.ToString( "yyyy-MM-dd" );
+
+            if ( dimensionNames.Contains( "domain" ) == true )
+            {
+                row.DomainId = SplitCsv( domainId )?.Select( Guid.Parse ).FirstOrDefault() ?? Guid.NewGuid();
+                row.DomainName = "example.com";
+            }
+
+            if ( dimensionNames.Contains( "email" ) == true )
+                row.EmailId = SplitCsv( emailId )?.Select( Guid.Parse ).FirstOrDefault() ?? Guid.NewGuid();
+
+            if ( dimensionNames.Contains( "broadcast" ) == true )
+            {
+                row.BroadcastId = SplitCsv( broadcastId )?.Select( Guid.Parse ).FirstOrDefault() ?? Guid.NewGuid();
+                row.BroadcastName = "July Newsletter";
+            }
+
+            foreach ( var name in metricNames )
+                row.MetricValues[ name ] = JsonSerializer.SerializeToElement( 10d );
+
+            result.Data = new List<EmailMetricsDataPoint>() { row };
+        }
+
+        return result;
+    }
+
+
+    /// <summary />
+    private static readonly List<string> AllMetricNames = Enum.GetValues<MetricType>()
+        .Select( ParseableName )
+        .ToList();
+
+
+    /// <summary />
+    private static List<string>? SplitCsv( string? value )
+    {
+        if ( string.IsNullOrWhiteSpace( value ) == true )
+            return null;
+
+        return value.Split( ',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries ).ToList();
+    }
+
+
+    /// <summary />
+    private static string ParseableName( MetricType value )
+    {
+        return value switch
+        {
+            MetricType.Received => "received",
+            MetricType.Delivered => "delivered",
+            MetricType.Complained => "complained",
+            MetricType.Suppressed => "suppressed",
+            MetricType.Bounced => "bounced",
+            MetricType.BouncedTransient => "bounced_transient",
+            MetricType.BouncedPermanent => "bounced_permanent",
+            MetricType.BouncedUndetermined => "bounced_undetermined",
+            MetricType.Opened => "opened",
+            MetricType.Clicked => "clicked",
+            MetricType.Unsubscribed => "unsubscribed",
+            MetricType.DeliveryDelayed => "delivery_delayed",
+            MetricType.Failed => "failed",
+            MetricType.Sent => "sent",
+            MetricType.UniqueOpened => "unique_opened",
+            MetricType.UniqueClicked => "unique_clicked",
+            MetricType.DeliveryRate => "delivery_rate",
+            MetricType.OpenRate => "open_rate",
+            MetricType.ClickRate => "click_rate",
+            MetricType.BounceRate => "bounce_rate",
+            MetricType.ComplaintRate => "complaint_rate",
+            MetricType.UnsubscribeRate => "unsubscribe_rate",
+            _ => throw new NotImplementedException( $"Unmapped metric type: {value}" ),
+        };
+    }
+
+
     private static readonly HashSet<string> ValidExpiresIn = new( StringComparer.OrdinalIgnoreCase )
     {
         "48h", "10m", "2 hours", "1 day", "1h 30m",
     };
+
+
+    /// <summary />
+    private static MetricType ParseMetricType( string value )
+    {
+        return value switch
+        {
+            "received" => MetricType.Received,
+            "delivered" => MetricType.Delivered,
+            "complained" => MetricType.Complained,
+            "suppressed" => MetricType.Suppressed,
+            "bounced" => MetricType.Bounced,
+            "bounced_transient" => MetricType.BouncedTransient,
+            "bounced_permanent" => MetricType.BouncedPermanent,
+            "bounced_undetermined" => MetricType.BouncedUndetermined,
+            "opened" => MetricType.Opened,
+            "clicked" => MetricType.Clicked,
+            "unsubscribed" => MetricType.Unsubscribed,
+            "delivery_delayed" => MetricType.DeliveryDelayed,
+            "failed" => MetricType.Failed,
+            "sent" => MetricType.Sent,
+            "unique_opened" => MetricType.UniqueOpened,
+            "unique_clicked" => MetricType.UniqueClicked,
+            "delivery_rate" => MetricType.DeliveryRate,
+            "open_rate" => MetricType.OpenRate,
+            "click_rate" => MetricType.ClickRate,
+            "bounce_rate" => MetricType.BounceRate,
+            "complaint_rate" => MetricType.ComplaintRate,
+            "unsubscribe_rate" => MetricType.UnsubscribeRate,
+            _ => throw new ArgumentOutOfRangeException( nameof( value ), $"Unknown metric: '{value}'" ),
+        };
+    }
+
+
+    /// <summary />
+    private static MetricDimension ParseMetricDimension( string value )
+    {
+        return value switch
+        {
+            "period" => MetricDimension.Period,
+            "domain" => MetricDimension.Domain,
+            "email" => MetricDimension.Email,
+            "broadcast" => MetricDimension.Broadcast,
+            _ => throw new ArgumentOutOfRangeException( nameof( value ), $"Unknown dimension: '{value}'" ),
+        };
+    }
 }

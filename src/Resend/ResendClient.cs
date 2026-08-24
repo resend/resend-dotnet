@@ -230,6 +230,58 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<EmailMetrics>> EmailMetricsAsync( EmailMetricsQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = "/emails/metrics";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.StartDate.HasValue == true )
+                qs.Add( "start_date", ToUtcQueryValue( query.StartDate.Value ) );
+
+            if ( query.EndDate.HasValue == true )
+                qs.Add( "end_date", ToUtcQueryValue( query.EndDate.Value ) );
+
+            if ( query.Timezone != null )
+                qs.Add( "timezone", query.Timezone );
+
+            if ( query.Granularity.HasValue == true )
+                qs.Add( "granularity", JsonStringEnumValue<MetricsGranularity>.Of( query.Granularity.Value ) );
+
+            if ( query.Metrics?.Count > 0 )
+                qs.Add( "metrics", string.Join( ",", query.Metrics.Select( x => JsonStringEnumValue<MetricType>.Of( x ) ) ) );
+
+            if ( query.Dimensions?.Count > 0 )
+                qs.Add( "dimensions", string.Join( ",", query.Dimensions.Select( x => JsonStringEnumValue<MetricDimension>.Of( x ) ) ) );
+
+            if ( query.DomainId?.Count > 0 )
+                qs.Add( "domain_id", string.Join( ",", query.DomainId ) );
+
+            if ( query.EmailId?.Count > 0 )
+                qs.Add( "email_id", string.Join( ",", query.EmailId ) );
+
+            if ( query.BroadcastId?.Count > 0 )
+                qs.Add( "broadcast_id", string.Join( ",", query.BroadcastId ) );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<EmailMetrics, EmailMetrics>( req, ( x ) => x, cancellationToken );
+    }
+
+    private static string ToUtcQueryValue( DateTime value )
+    {
+        var utc = value.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind( value, DateTimeKind.Utc ) : value.ToUniversalTime();
+        return utc.ToString( "o" );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<Domain>> DomainAddAsync( string domainName, DeliveryRegion? region = null, CancellationToken cancellationToken = default )
     {
         var path = $"/domains";

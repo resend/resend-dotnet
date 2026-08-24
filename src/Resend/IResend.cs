@@ -191,6 +191,22 @@ public interface IResend
     Task<ResendResponse<EmailShareResult>> EmailShareAsync( Guid emailId, string? expiresIn = null, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Retrieves aggregate email metrics (delivery, engagement, bounce, etc.) for a reporting
+    /// period, optionally broken down by one or more dimensions.
+    /// </summary>
+    /// <param name="query">
+    /// Metrics query.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Email metrics.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/emails/get-metrics"/>
+    Task<ResendResponse<EmailMetrics>> EmailMetricsAsync( EmailMetricsQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists email attachments from a sent email.
     /// </summary>
     /// <param name="emailId">Sent email identifier.</param>
