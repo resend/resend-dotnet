@@ -70,4 +70,60 @@ public partial class ResendClient
 
         return Execute( req, cancellationToken );
     }
+
+
+    public Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/webhooks/{webhookId}/events";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<WebhookEventListResult, WebhookEventListResult>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    public Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Get, $"/webhooks/{webhookId}/events/{eventId}" );
+
+        return Execute<WebhookEventDetails, WebhookEventDetails>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    public Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/webhooks/{webhookId}/events/{eventId}/attempts";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<WebhookEventAttemptListResult, WebhookEventAttemptListResult>( req, ( x ) => x, cancellationToken );
+    }
 }

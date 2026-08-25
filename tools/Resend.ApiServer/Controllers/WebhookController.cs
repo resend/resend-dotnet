@@ -121,4 +121,82 @@ public class WebhookController : ControllerBase
             ],
         };
     }
+
+
+    [HttpGet]
+    [Route( "webhooks/{webhookId}/events" )]
+    public WebhookEventListResult WebhookEventList(
+        [FromRoute] Guid webhookId,
+        [FromQuery] string? limit = null,
+        [FromQuery] string? after = null
+    )
+    {
+        _logger.LogDebug( "WebhookEventList" );
+
+        return new WebhookEventListResult()
+        {
+            Object = "list",
+            HasMore = limit == "1" && after == "msg_1srOrx2ZWZBpBUvZwXKQmoEYga2",
+            Data = [
+                new WebhookEventLog()
+                {
+                    Id = "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7",
+                    Type = "email.sent",
+                    MomentCreated = DateTime.UtcNow,
+                    Status = WebhookEventLogStatus.Success,
+                },
+            ],
+        };
+    }
+
+
+    [HttpGet]
+    [Route( "webhooks/{webhookId}/events/{eventId}" )]
+    public WebhookEventDetails WebhookEventRetrieve( [FromRoute] Guid webhookId, [FromRoute] string eventId )
+    {
+        _logger.LogDebug( "WebhookEventRetrieve" );
+
+        return new WebhookEventDetails()
+        {
+            Object = "webhook_event",
+            Id = eventId,
+            Type = "email.sent",
+            MomentCreated = DateTime.UtcNow,
+            Status = WebhookEventLogStatus.Failed,
+            MomentNextAttempt = null,
+            Payload = System.Text.Json.JsonSerializer.SerializeToElement( new
+            {
+                type = "email.sent",
+                data = new { email_id = "email_123" },
+            } ),
+        };
+    }
+
+
+    [HttpGet]
+    [Route( "webhooks/{webhookId}/events/{eventId}/attempts" )]
+    public WebhookEventAttemptListResult WebhookEventAttemptList(
+        [FromRoute] Guid webhookId,
+        [FromRoute] string eventId,
+        [FromQuery] string? limit = null,
+        [FromQuery] string? after = null
+    )
+    {
+        _logger.LogDebug( "WebhookEventAttemptList" );
+
+        return new WebhookEventAttemptListResult()
+        {
+            Object = "list",
+            HasMore = limit == "1" && after == "atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd",
+            Data = [
+                new WebhookEventAttempt()
+                {
+                    Id = "atmpt_3ZbUCwvGmIT4mLIN6d3Yz0Ainbe",
+                    HttpStatusCode = 200,
+                    Response = "{\"ok\":true}",
+                    MomentSent = DateTime.UtcNow,
+                },
+            ],
+        };
+    }
 }

@@ -1155,6 +1155,12 @@ public interface IResend
     /// <returns>Response.</returns>
     Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
 
+    Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
+
+    Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
+
+    Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Logs

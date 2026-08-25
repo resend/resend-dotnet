@@ -68,4 +68,57 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
     }
+
+
+    [Fact]
+    public async Task WebhookEventList()
+    {
+        var resp = await _resend.WebhookEventListAsync( Guid.NewGuid(), new PaginatedAfterQuery()
+        {
+            Limit = 1,
+            After = "msg_1srOrx2ZWZBpBUvZwXKQmoEYga2",
+        } );
+
+        Assert.NotNull( resp.Content );
+        Assert.Equal( "list", resp.Content.Object );
+        Assert.True( resp.Content.HasMore );
+        Assert.Single( resp.Content.Data );
+        Assert.Equal( "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7", resp.Content.Data[ 0 ].Id );
+        Assert.Equal( WebhookEventLogStatus.Success, resp.Content.Data[ 0 ].Status );
+    }
+
+
+    [Fact]
+    public async Task WebhookEventRetrieve()
+    {
+        var resp = await _resend.WebhookEventRetrieveAsync( Guid.NewGuid(), "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7" );
+
+        Assert.NotNull( resp.Content );
+        Assert.Equal( "webhook_event", resp.Content.Object );
+        Assert.Equal( WebhookEventLogStatus.Failed, resp.Content.Status );
+        Assert.Null( resp.Content.MomentNextAttempt );
+        Assert.Equal( "email.sent", resp.Content.Payload.GetProperty( "type" ).GetString() );
+    }
+
+
+    [Fact]
+    public async Task WebhookEventAttemptList()
+    {
+        var resp = await _resend.WebhookEventAttemptListAsync(
+            Guid.NewGuid(),
+            "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7",
+            new PaginatedAfterQuery()
+            {
+                Limit = 1,
+                After = "atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd",
+            }
+        );
+
+        Assert.NotNull( resp.Content );
+        Assert.Equal( "list", resp.Content.Object );
+        Assert.True( resp.Content.HasMore );
+        Assert.Single( resp.Content.Data );
+        Assert.Equal( "atmpt_3ZbUCwvGmIT4mLIN6d3Yz0Ainbe", resp.Content.Data[ 0 ].Id );
+        Assert.Equal( 200, resp.Content.Data[ 0 ].HttpStatusCode );
+    }
 }
