@@ -98,7 +98,7 @@ public partial class ResendClient
 
     public Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default )
     {
-        var req = new HttpRequestMessage( HttpMethod.Get, $"/webhooks/{webhookId}/events/{eventId}" );
+        var req = new HttpRequestMessage( HttpMethod.Get, $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}" );
 
         return Execute<WebhookEventDetails, WebhookEventDetails>( req, ( x ) => x, cancellationToken );
     }
@@ -106,7 +106,7 @@ public partial class ResendClient
 
     public Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
     {
-        var baseUrl = $"/webhooks/{webhookId}/events/{eventId}/attempts";
+        var baseUrl = $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}/attempts";
         var url = baseUrl;
 
         if ( query != null )
