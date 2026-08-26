@@ -1,4 +1,7 @@
-﻿namespace Resend.Tests;
+using System.Net;
+using System.Text;
+
+namespace Resend.Tests;
 
 /// <summary />
 public partial class ResendClientTests
@@ -73,7 +76,7 @@ public partial class ResendClientTests
     [Fact]
     public async Task WebhookEventList()
     {
-        var resp = await _resend.WebhookEventListAsync( Guid.NewGuid(), new PaginatedQuery()
+        var resp = await _resend.WebhookEventListAsync( Guid.NewGuid(), new PaginatedAfterQuery()
         {
             Limit = 1,
             After = "msg_1srOrx2ZWZBpBUvZwXKQmoEYga2",
@@ -86,6 +89,24 @@ public partial class ResendClientTests
         Assert.Equal( "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7", resp.Content.Data[ 0 ].Id );
         Assert.Equal( WebhookEventType.EmailSent, resp.Content.Data[ 0 ].Type );
         Assert.Equal( WebhookEventLogStatus.Success, resp.Content.Data[ 0 ].Status );
+    }
+
+
+    [Fact]
+    public async Task WebhookEventList_SendsSupportedPaginationQuery()
+    {
+        var handler = new WebhookRecordingHandler();
+        var resend = ResendClient.Create( new ResendClientOptions() { ApiToken = "re_test_123" }, new HttpClient( handler ) );
+        var webhookId = Guid.NewGuid();
+
+        await resend.WebhookEventListAsync( webhookId, new PaginatedAfterQuery()
+        {
+            Limit = 1,
+            After = "msg_cursor",
+        } );
+
+        var req = Assert.Single( handler.Requests );
+        Assert.Equal( $"/webhooks/{webhookId}/events?limit=1&after=msg_cursor", req.RequestUri!.PathAndQuery );
     }
 
 
@@ -111,7 +132,7 @@ public partial class ResendClientTests
         var resp = await _resend.WebhookEventAttemptListAsync(
             Guid.NewGuid(),
             "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7?attempt=1",
-            new PaginatedQuery()
+            new PaginatedAfterQuery()
             {
                 Limit = 1,
                 After = "atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd",
@@ -124,5 +145,40 @@ public partial class ResendClientTests
         Assert.Single( resp.Content.Data );
         Assert.Equal( "atmpt_3ZbUCwvGmIT4mLIN6d3Yz0Ainbe", resp.Content.Data[ 0 ].Id );
         Assert.Equal( 200, resp.Content.Data[ 0 ].HttpStatusCode );
+    }
+
+
+    [Fact]
+    public async Task WebhookEventAttemptList_SendsSupportedPaginationQuery()
+    {
+        var handler = new WebhookRecordingHandler();
+        var resend = ResendClient.Create( new ResendClientOptions() { ApiToken = "re_test_123" }, new HttpClient( handler ) );
+        var webhookId = Guid.NewGuid();
+
+        await resend.WebhookEventAttemptListAsync( webhookId, "msg_event", new PaginatedAfterQuery()
+        {
+            Limit = 1,
+            After = "atmpt_cursor",
+        } );
+
+        var req = Assert.Single( handler.Requests );
+        Assert.Equal( $"/webhooks/{webhookId}/events/msg_event/attempts?limit=1&after=atmpt_cursor", req.RequestUri!.PathAndQuery );
+    }
+
+
+    private class WebhookRecordingHandler : HttpMessageHandler
+    {
+        public List<HttpRequestMessage> Requests { get; } = new();
+
+
+        protected override Task<HttpResponseMessage> SendAsync( HttpRequestMessage request, CancellationToken cancellationToken )
+        {
+            Requests.Add( request );
+
+            var resp = new HttpResponseMessage( HttpStatusCode.OK );
+            resp.Content = new StringContent( """{"object":"list","has_more":false,"data":[]}""", Encoding.UTF8, "application/json" );
+
+            return Task.FromResult( resp );
+        }
     }
 }

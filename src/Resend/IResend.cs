@@ -1162,7 +1162,7 @@ public interface IResend
     /// <param name="query">Paginated query.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>List of webhook events.</returns>
-    Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+    Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Retrieves a webhook event.
@@ -1181,7 +1181,7 @@ public interface IResend
     /// <param name="query">Paginated query.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>List of webhook event delivery attempts.</returns>
-    Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+    Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
 
     #endregion
 
