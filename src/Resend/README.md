@@ -23,7 +23,7 @@ The `ResendClient` supports the following objects (and methods):
 * Segment (List, Create, Retrieve, Update, Delete)
 * Topics (List, Create, Retrieve, Update, Delete)
 * Templates (List, Create, Retrieve, Update, Delete, Publish, Duplicate)
-* Webhooks (List, Create, Retrieve, Update, Delete)
+* Webhooks (List, Create, Retrieve, Update, Delete, Event List, Event Retrieve, Event Attempt List)
 
 
 Installing via NuGet
