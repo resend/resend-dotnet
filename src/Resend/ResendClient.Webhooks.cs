@@ -72,7 +72,8 @@ public partial class ResendClient
     }
 
 
-    public Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
+    /// <inheritdoc />
+    public Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
     {
         var baseUrl = $"/webhooks/{webhookId}/events";
         var url = baseUrl;
@@ -96,6 +97,7 @@ public partial class ResendClient
     }
 
 
+    /// <inheritdoc />
     public Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}" );
@@ -104,7 +106,8 @@ public partial class ResendClient
     }
 
 
-    public Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
+    /// <inheritdoc />
+    public Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
     {
         var baseUrl = $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}/attempts";
         var url = baseUrl;

@@ -73,7 +73,7 @@ public partial class ResendClientTests
     [Fact]
     public async Task WebhookEventList()
     {
-        var resp = await _resend.WebhookEventListAsync( Guid.NewGuid(), new PaginatedAfterQuery()
+        var resp = await _resend.WebhookEventListAsync( Guid.NewGuid(), new PaginatedQuery()
         {
             Limit = 1,
             After = "msg_1srOrx2ZWZBpBUvZwXKQmoEYga2",
@@ -84,6 +84,7 @@ public partial class ResendClientTests
         Assert.True( resp.Content.HasMore );
         Assert.Single( resp.Content.Data );
         Assert.Equal( "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7", resp.Content.Data[ 0 ].Id );
+        Assert.Equal( WebhookEventType.EmailSent, resp.Content.Data[ 0 ].Type );
         Assert.Equal( WebhookEventLogStatus.Success, resp.Content.Data[ 0 ].Status );
     }
 
@@ -97,6 +98,7 @@ public partial class ResendClientTests
         Assert.NotNull( resp.Content );
         Assert.Equal( "webhook_event", resp.Content.Object );
         Assert.Equal( eventId, resp.Content.Id );
+        Assert.Equal( WebhookEventType.EmailSent, resp.Content.Type );
         Assert.Equal( WebhookEventLogStatus.Failed, resp.Content.Status );
         Assert.Null( resp.Content.MomentNextAttempt );
         Assert.Equal( "email.sent", resp.Content.Payload.GetProperty( "type" ).GetString() );
@@ -109,7 +111,7 @@ public partial class ResendClientTests
         var resp = await _resend.WebhookEventAttemptListAsync(
             Guid.NewGuid(),
             "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7?attempt=1",
-            new PaginatedAfterQuery()
+            new PaginatedQuery()
             {
                 Limit = 1,
                 After = "atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd",

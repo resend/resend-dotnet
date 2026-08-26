@@ -123,6 +123,7 @@ public class WebhookController : ControllerBase
     }
 
 
+    /// <summary />
     [HttpGet]
     [Route( "webhooks/{webhookId}/events" )]
     public WebhookEventListResult WebhookEventList(
@@ -141,7 +142,7 @@ public class WebhookController : ControllerBase
                 new WebhookEventLog()
                 {
                     Id = "msg_2aQqFEiKYaC8Q35b3e97qyRmaN7",
-                    Type = "email.sent",
+                    Type = WebhookEventType.EmailSent,
                     MomentCreated = DateTime.UtcNow,
                     Status = WebhookEventLogStatus.Success,
                 },
@@ -150,6 +151,7 @@ public class WebhookController : ControllerBase
     }
 
 
+    /// <summary />
     [HttpGet]
     [Route( "webhooks/{webhookId}/events/{eventId}" )]
     public WebhookEventDetails WebhookEventRetrieve( [FromRoute] Guid webhookId, [FromRoute] string eventId )
@@ -160,7 +162,7 @@ public class WebhookController : ControllerBase
         {
             Object = "webhook_event",
             Id = eventId,
-            Type = "email.sent",
+            Type = WebhookEventType.EmailSent,
             MomentCreated = DateTime.UtcNow,
             Status = WebhookEventLogStatus.Failed,
             MomentNextAttempt = null,
@@ -173,6 +175,7 @@ public class WebhookController : ControllerBase
     }
 
 
+    /// <summary />
     [HttpGet]
     [Route( "webhooks/{webhookId}/events/{eventId}/attempts" )]
     public WebhookEventAttemptListResult WebhookEventAttemptList(
