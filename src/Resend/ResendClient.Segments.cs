@@ -55,6 +55,17 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<SegmentUpdateResult>> SegmentUpdateAsync( Guid segmentId, SegmentData segment, CancellationToken cancellationToken = default )
+    {
+        var path = $"/segments/{segmentId}";
+        var req = new HttpRequestMessage( HttpMethod.Patch, path );
+        req.Content = JsonContent.Create( segment );
+
+        return Execute<SegmentUpdateResult, SegmentUpdateResult>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse> SegmentDeleteAsync( Guid segmentId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/segments/{segmentId}" );

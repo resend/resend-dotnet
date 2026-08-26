@@ -20,7 +20,7 @@ The `ResendClient` supports the following objects (and methods):
 * Broadcast (List, Add, Retrieve, Update, Send, Schedule, Delete)
 * Audience (List, Add, Retrieve, Delete)
 * Contact (List, Add, Retrieve, Update, Delete)
-* Segment (List, Create, Retrieve, Delete)
+* Segment (List, Create, Retrieve, Update, Delete)
 * Topics (List, Create, Retrieve, Update, Delete)
 * Templates (List, Create, Retrieve, Update, Delete, Publish, Duplicate)
 * Webhooks (List, Create, Retrieve, Update, Delete)

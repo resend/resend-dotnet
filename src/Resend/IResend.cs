@@ -956,6 +956,15 @@ public interface IResend
     Task<ResendResponse<Segment>> SegmentRetrieveAsync( Guid segmentId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Updates a segment.
+    /// </summary>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="segment">Segment data.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Updated segment.</returns>
+    Task<ResendResponse<SegmentUpdateResult>> SegmentUpdateAsync( Guid segmentId, SegmentData segment, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Deletes a segment.
     /// </summary>
     /// <param name="segmentId">Segment identifier.</param>
