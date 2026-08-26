@@ -8,6 +8,7 @@ namespace Resend.Cli;
 [Subcommand( typeof( Segment.SegmentDeleteCommand ) )]
 [Subcommand( typeof( Segment.SegmentListCommand ) )]
 [Subcommand( typeof( Segment.SegmentRetrieveCommand ) )]
+[Subcommand( typeof( Segment.SegmentUpdateCommand ) )]
 public class SegmentCommand
 {
     /// <summary />
