@@ -1164,6 +1164,34 @@ public interface IResend
     /// <returns>Response.</returns>
     Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Lists webhook events.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of webhook events.</returns>
+    Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a webhook event.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="eventId">Webhook event identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Webhook event.</returns>
+    Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists delivery attempts for a webhook event.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="eventId">Webhook event identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of webhook event delivery attempts.</returns>
+    Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Logs
