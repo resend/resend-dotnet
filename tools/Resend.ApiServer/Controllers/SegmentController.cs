@@ -27,7 +27,6 @@ public class SegmentController : ControllerBase
         {
             Object = "segment",
             Id = id,
-            Name = data.Name,
         };
     }
 }

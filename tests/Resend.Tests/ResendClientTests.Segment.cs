@@ -17,6 +17,5 @@ public partial class ResendClientTests
         Assert.NotNull( resp );
         Assert.NotNull( resp.Content );
         Assert.Equal( segmentId, resp.Content.Id );
-        Assert.Equal( "Renamed segment", resp.Content.Name );
     }
 }

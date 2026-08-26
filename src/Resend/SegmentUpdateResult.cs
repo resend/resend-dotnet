@@ -18,10 +18,4 @@ public class SegmentUpdateResult
     /// </summary>
     [JsonPropertyName( "id" )]
     public Guid Id { get; set; }
-
-    /// <summary>
-    /// Segment name.
-    /// </summary>
-    [JsonPropertyName( "name" )]
-    public string Name { get; set; } = default!;
 }
