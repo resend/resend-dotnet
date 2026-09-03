@@ -176,6 +176,21 @@ public class WebhookController : ControllerBase
 
 
     /// <summary />
+    [HttpPost]
+    [Route( "webhooks/{webhookId}/events/{eventId}/replay" )]
+    public WebhookEventReplayResult WebhookEventReplay( [FromRoute] Guid webhookId, [FromRoute] string eventId )
+    {
+        _logger.LogDebug( "WebhookEventReplay" );
+
+        return new WebhookEventReplayResult()
+        {
+            Object = "webhook_event",
+            Id = eventId,
+        };
+    }
+
+
+    /// <summary />
     [HttpGet]
     [Route( "webhooks/{webhookId}/events/{eventId}/attempts" )]
     public WebhookEventAttemptListResult WebhookEventAttemptList(

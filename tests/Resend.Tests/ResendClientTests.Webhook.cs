@@ -127,6 +127,33 @@ public partial class ResendClientTests
 
 
     [Fact]
+    public async Task WebhookEventReplay()
+    {
+        var eventId = "msg_1srOrx2ZWZBpBUvZwXKQmoEYga2";
+        var resp = await _resend.WebhookEventReplayAsync( Guid.NewGuid(), eventId );
+
+        Assert.NotNull( resp.Content );
+        Assert.Equal( "webhook_event", resp.Content.Object );
+        Assert.Equal( eventId, resp.Content.Id );
+    }
+
+
+    [Fact]
+    public async Task WebhookEventReplay_PostsToReplayPath()
+    {
+        var handler = new WebhookRecordingHandler();
+        var resend = ResendClient.Create( new ResendClientOptions() { ApiToken = "re_test_123" }, new HttpClient( handler ) );
+        var webhookId = Guid.NewGuid();
+
+        await resend.WebhookEventReplayAsync( webhookId, "msg_event" );
+
+        var req = Assert.Single( handler.Requests );
+        Assert.Equal( HttpMethod.Post, req.Method );
+        Assert.Equal( $"/webhooks/{webhookId}/events/msg_event/replay", req.RequestUri!.PathAndQuery );
+    }
+
+
+    [Fact]
     public async Task WebhookEventAttemptList()
     {
         var resp = await _resend.WebhookEventAttemptListAsync(
