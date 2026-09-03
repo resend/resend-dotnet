@@ -178,15 +178,11 @@ public class WebhookController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "webhooks/{webhookId}/events/{eventId}/replay" )]
-    public WebhookEventReplayResult WebhookEventReplay( [FromRoute] Guid webhookId, [FromRoute] string eventId )
+    public ActionResult WebhookEventReplay( [FromRoute] Guid webhookId, [FromRoute] string eventId )
     {
         _logger.LogDebug( "WebhookEventReplay" );
 
-        return new WebhookEventReplayResult()
-        {
-            Object = "webhook_event",
-            Id = eventId,
-        };
+        return Ok( new { @object = "webhook_event", id = eventId } );
     }
 
 

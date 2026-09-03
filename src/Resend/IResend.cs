@@ -1188,8 +1188,8 @@ public interface IResend
     /// <param name="webhookId">Webhook identifier.</param>
     /// <param name="eventId">Webhook event identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Replayed webhook event.</returns>
-    Task<ResendResponse<WebhookEventReplayResult>> WebhookEventReplayAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
+    /// <returns>Response.</returns>
+    Task<ResendResponse> WebhookEventReplayAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Lists delivery attempts for a webhook event.
