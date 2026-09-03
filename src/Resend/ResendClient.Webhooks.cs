@@ -107,6 +107,15 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse> WebhookEventReplayAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}/replay" );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<WebhookEventAttemptListResult>> WebhookEventAttemptListAsync( Guid webhookId, string eventId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
     {
         var baseUrl = $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}/attempts";

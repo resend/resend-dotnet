@@ -1183,6 +1183,15 @@ public interface IResend
     Task<ResendResponse<WebhookEventDetails>> WebhookEventRetrieveAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Replays a webhook event.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="eventId">Webhook event identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response.</returns>
+    Task<ResendResponse> WebhookEventReplayAsync( Guid webhookId, string eventId, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists delivery attempts for a webhook event.
     /// </summary>
     /// <param name="webhookId">Webhook identifier.</param>
