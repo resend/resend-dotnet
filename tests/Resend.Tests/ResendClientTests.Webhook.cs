@@ -127,7 +127,7 @@ public partial class ResendClientTests
 
 
     [Fact]
-    public async Task WebhookEventReplay_PostsToReplayPath()
+    public async Task WebhookEventReplay()
     {
         var handler = new WebhookRecordingHandler();
         var resend = ResendClient.Create( new ResendClientOptions() { ApiToken = "re_test_123" }, new HttpClient( handler ) );
