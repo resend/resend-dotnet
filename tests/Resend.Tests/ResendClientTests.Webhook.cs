@@ -73,6 +73,19 @@ public partial class ResendClientTests
     }
 
 
+    /// <summary/>
+    [Fact]
+    public async Task WebhookRotateSigningSecret()
+    {
+        var webhookId = Guid.NewGuid();
+        var resp = await _resend.WebhookRotateSigningSecretAsync( webhookId );
+
+        Assert.NotNull( resp );
+        Assert.Equal( webhookId, resp.Content.Id );
+        Assert.Equal( "whsec_rotated-secret", resp.Content.SigningSecret );
+    }
+
+
     [Fact]
     public async Task WebhookEventList()
     {

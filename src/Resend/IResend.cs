@@ -1165,6 +1165,14 @@ public interface IResend
     Task<ResendResponse> WebhookDeleteAsync( Guid webhookId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Rotates the signing secret of a webhook.
+    /// </summary>
+    /// <param name="webhookId">Webhook identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Webhook identifier and new signing secret.</returns>
+    Task<ResendResponse<WebhookNew>> WebhookRotateSigningSecretAsync( Guid webhookId, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists webhook events.
     /// </summary>
     /// <param name="webhookId">Webhook identifier.</param>
