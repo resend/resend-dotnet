@@ -78,6 +78,21 @@ public class WebhookController : ControllerBase
 
 
     /// <summary />
+    [HttpPost]
+    [Route( "webhooks/{id}/signing-secret/rotate" )]
+    public WebhookNew WebhookRotateSigningSecret( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "WebhookRotateSigningSecret" );
+
+        return new WebhookNew()
+        {
+            Id = id,
+            SigningSecret = "whsec_rotated-secret",
+        };
+    }
+
+
+    /// <summary />
     [HttpGet]
     [Route( "webhooks" )]
     public PaginatedResult<Webhook> WebhookList(

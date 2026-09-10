@@ -73,6 +73,15 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<WebhookNew>> WebhookRotateSigningSecretAsync( Guid webhookId, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/webhooks/{webhookId}/signing-secret/rotate" );
+
+        return Execute<WebhookNew, WebhookNew>( req, ( x ) => x, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<WebhookEventListResult>> WebhookEventListAsync( Guid webhookId, PaginatedAfterQuery? query = null, CancellationToken cancellationToken = default )
     {
         var baseUrl = $"/webhooks/{webhookId}/events";

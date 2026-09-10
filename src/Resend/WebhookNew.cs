@@ -3,7 +3,7 @@
 namespace Resend;
 
 /// <summary>
-/// Response when the webhook is created.
+/// Response when the webhook is created or its signing secret is rotated.
 /// </summary>
 public class WebhookNew
 {
