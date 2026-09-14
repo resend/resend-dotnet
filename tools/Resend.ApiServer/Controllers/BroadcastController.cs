@@ -91,6 +91,21 @@ public class BroadcastController : ControllerBase
     }
 
 
+    /// <summary />
+    [HttpPost]
+    [Route( "broadcasts/{broadcastId}/duplicate" )]
+    public ObjectId BroadcastDuplicate( [FromRoute] Guid broadcastId )
+    {
+        _logger.LogDebug( "BroadcastDuplicate" );
+
+        return new ObjectId()
+        {
+            Object = "broadcast",
+            Id = Guid.NewGuid(),
+        };
+    }
+
+
     /// <summary>
     /// The fake server has no persisted state, so the well-known empty id doubles as the
     /// "broadcast not found" fixture for tests, mirroring <see cref="EmailController.EmailShare"/>.

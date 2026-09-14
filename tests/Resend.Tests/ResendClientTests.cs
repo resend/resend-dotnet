@@ -487,6 +487,21 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary/>
     [Fact]
+    public async Task BroadcastDuplicate()
+    {
+        var broadcastId = Guid.NewGuid();
+
+        var resp = await _resend.BroadcastDuplicateAsync( broadcastId );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+        Assert.NotEqual( broadcastId, resp.Content );
+    }
+
+
+    /// <summary/>
+    [Fact]
     public async Task BroadcastList()
     {
         var resp = await _resend.BroadcastListAsync();

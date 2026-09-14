@@ -855,6 +855,15 @@ public interface IResend
     Task<ResendResponse> BroadcastCancelAsync( Guid broadcastId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Duplicates a broadcast.
+    /// </summary>
+    /// <param name="broadcastId">Broadcast identifier.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>Identifier of newly created duplicate.</returns>
+    /// <see href="https://resend.com/docs/api-reference/broadcasts/duplicate-broadcast"/>
+    Task<ResendResponse<Guid>> BroadcastDuplicateAsync( Guid broadcastId, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Lists all broadcasts.
     /// </summary>
     /// <param name="cancellationToken">Cancelation token.</param>

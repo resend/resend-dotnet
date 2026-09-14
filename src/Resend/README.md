@@ -17,7 +17,7 @@ The `ResendClient` supports the following objects (and methods):
 * Receiving (List, Retrieve, Attachment List, Attachment Retrieve)
 * Domain (List, Add, Retrieve, Update, Verify, Delete)
 * API key (List, Create, Delete)
-* Broadcast (List, Add, Retrieve, Update, Send, Schedule, Delete)
+* Broadcast (List, Add, Retrieve, Update, Send, Schedule, Duplicate, Delete)
 * Audience (List, Add, Retrieve, Delete)
 * Contact (List, Add, Retrieve, Update, Delete)
 * Segment (List, Create, Retrieve, Update, Delete)
