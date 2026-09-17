@@ -188,4 +188,41 @@ public class WebhookEventConverterTests
         Assert.Equal( expectedSuppression.SourceId, actualSuppression.SourceId );
         Assert.Equal( expectedSuppression.MomentCreated, actualSuppression.MomentCreated );
     }
+
+
+    /// <summary />
+    /// <remarks>
+    /// Unlike <see cref="SuppressionEventRoundtrip"/>, this deserializes a fixed JSON literal
+    /// so a typo in the <see cref="JsonStringValueAttribute"/> on <see cref="WebhookEventType"/>
+    /// (which both serialization and deserialization share) can't hide a mismatch with the
+    /// wire format Resend actually sends.
+    /// </remarks>
+    [Theory]
+    [InlineData( "suppression.added", WebhookEventType.SuppressionAdded )]
+    [InlineData( "suppression.removed", WebhookEventType.SuppressionRemoved )]
+    public void SuppressionEvent_DeserializesLiteralWireType( string wireType, WebhookEventType expectedEventType )
+    {
+        var json = $$"""
+        {
+            "type": "{{wireType}}",
+            "created_at": "2024-01-01T00:00:00.000Z",
+            "data": {
+                "id": "e169aa45-1ecf-4183-9955-b1499d5701d3",
+                "email": "test@example.com",
+                "origin": "bounce",
+                "source_id": null,
+                "created_at": "2024-01-01T00:00:00.000Z"
+            }
+        }
+        """;
+
+        var actual = JsonSerializer.Deserialize<WebhookEvent>( json );
+
+        Assert.NotNull( actual );
+        Assert.Equal( expectedEventType, actual.EventType );
+
+        var data = actual.DataAs<SuppressionEventData>();
+        Assert.Equal( "test@example.com", data.Email );
+        Assert.Equal( SuppressionOrigin.Bounce, data.Origin );
+    }
 }
