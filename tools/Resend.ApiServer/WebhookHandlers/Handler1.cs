@@ -60,6 +60,12 @@ public class Handler1 : IWebhookHandler
 
                     _logger.LogDebug( "Contact {ContactId}: {Email}", ced.ContactId, ced.Email );
                     break;
+
+                case WebhookEventTypeCategory.Suppression:
+                    var sed = @event.DataAs<SuppressionEventData>();
+
+                    _logger.LogDebug( "Suppression {Id}: {Email}", sed.Id, sed.Email );
+                    break;
             }
         }
         else
