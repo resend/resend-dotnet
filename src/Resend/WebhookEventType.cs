@@ -130,4 +130,17 @@ public enum WebhookEventType
     /// </summary>
     [JsonStringValue( "domain.deleted" )]
     DomainDeleted,
+
+
+    /// <summary>
+    /// An email address was added to the suppression list.
+    /// </summary>
+    [JsonStringValue( "suppression.added" )]
+    SuppressionAdded,
+
+    /// <summary>
+    /// An email address was removed from the suppression list.
+    /// </summary>
+    [JsonStringValue( "suppression.removed" )]
+    SuppressionRemoved,
 }

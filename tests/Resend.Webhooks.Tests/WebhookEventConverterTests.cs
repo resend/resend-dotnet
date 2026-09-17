@@ -137,4 +137,55 @@ public class WebhookEventConverterTests
         Assert.Equal( expectedDomain.Status, actualDomain.Status );
         Assert.Equal( expectedDomain.MomentCreated, actualDomain.MomentCreated );
     }
+
+
+    /// <summary />
+    [Theory]
+    [InlineData( WebhookEventType.SuppressionAdded )]
+    [InlineData( WebhookEventType.SuppressionRemoved )]
+    public void SuppressionEventRoundtrip( WebhookEventType eventType )
+    {
+        // Reproduces https://github.com/resend/resend-dotnet/issues/161
+        var utcNow = DateTime.UtcNow;
+        utcNow = new DateTime(
+            utcNow.Ticks - ( utcNow.Ticks % TimeSpan.TicksPerSecond ),
+            utcNow.Kind
+        );
+
+
+        /*
+         *
+         */
+        var expectedSuppression = new SuppressionEventData();
+        expectedSuppression.Id = Guid.NewGuid();
+        expectedSuppression.Email = "test@example.com";
+        expectedSuppression.Origin = SuppressionOrigin.Bounce;
+        expectedSuppression.SourceId = Guid.NewGuid().ToString();
+        expectedSuppression.MomentCreated = utcNow;
+
+        var expected = new WebhookEvent();
+        expected.EventType = eventType;
+        expected.MomentCreated = utcNow;
+        expected.Data = expectedSuppression;
+
+        var json = JsonSerializer.Serialize( expected );
+        var actual = JsonSerializer.Deserialize<WebhookEvent>( json );
+
+
+        /*
+         *
+         */
+        Assert.NotNull( actual );
+        Assert.Equal( expected.EventType, actual.EventType );
+        Assert.Equal( expected.MomentCreated, actual.MomentCreated );
+        Assert.Equal( expected.Data.GetType(), actual.Data.GetType() );
+
+        var actualSuppression = actual.DataAs<SuppressionEventData>();
+
+        Assert.Equal( expectedSuppression.Id, actualSuppression.Id );
+        Assert.Equal( expectedSuppression.Email, actualSuppression.Email );
+        Assert.Equal( expectedSuppression.Origin, actualSuppression.Origin );
+        Assert.Equal( expectedSuppression.SourceId, actualSuppression.SourceId );
+        Assert.Equal( expectedSuppression.MomentCreated, actualSuppression.MomentCreated );
+    }
 }
