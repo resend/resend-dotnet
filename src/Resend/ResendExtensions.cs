@@ -20,6 +20,10 @@ public static class ResendExtensions
             case WebhookEventType.ContactDeleted:
                 return WebhookEventTypeCategory.Contact;
 
+            case WebhookEventType.SuppressionAdded:
+            case WebhookEventType.SuppressionRemoved:
+                return WebhookEventTypeCategory.Suppression;
+
             case WebhookEventType.EmailBounced:
             case WebhookEventType.EmailClicked:
             case WebhookEventType.EmailComplained:

@@ -125,6 +125,15 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
             value.Data = data;
         }
+        else if ( category == WebhookEventTypeCategory.Suppression )
+        {
+            var data = rawData.Deserialize<SuppressionEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
         else
         {
             throw new NotSupportedException( $"Unexpected '{value.EventType}' event type" );
@@ -132,7 +141,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
 
         /*
-         * 
+         *
          */
         reader.Read();
 
@@ -183,6 +192,13 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
             var o3 = (JsonConverter<DomainEventData>) options.GetConverter( t3 );
 
             o3.Write( writer, value.DataAs<DomainEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.Suppression )
+        {
+            var t4 = typeof( SuppressionEventData );
+            var o4 = (JsonConverter<SuppressionEventData>) options.GetConverter( t4 );
+
+            o4.Write( writer, value.DataAs<SuppressionEventData>(), options );
         }
         else
         {

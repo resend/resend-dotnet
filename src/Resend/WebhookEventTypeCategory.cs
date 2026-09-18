@@ -17,4 +17,9 @@ public enum WebhookEventTypeCategory
     /// Domain.
     /// </summary>
     Domain,
+
+    /// <summary>
+    /// Suppression.
+    /// </summary>
+    Suppression,
 }
