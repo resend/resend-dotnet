@@ -18,4 +18,17 @@ public partial class ResendClientTests
         Assert.NotNull( resp.Content );
         Assert.Equal( segmentId, resp.Content.Id );
     }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task SegmentListContacts()
+    {
+        var resp = await _resend.SegmentListContactsAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+        Assert.NotNull( resp.Content );
+        Assert.Single( resp.Content.Data );
+        Assert.False( resp.Content.HasMore );
+    }
 }

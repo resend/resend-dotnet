@@ -29,4 +29,31 @@ public class SegmentController : ControllerBase
             Id = id,
         };
     }
+
+
+    /// <summary />
+    [HttpGet]
+    [Route( "segments/{id}/contacts" )]
+    public PaginatedResult<Contact> SegmentListContacts( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "SegmentListContacts" );
+
+        var list = new List<Contact>();
+
+        list.Add( new Contact()
+        {
+            Id = Guid.NewGuid(),
+            Email = "test@mail.com",
+            FirstName = "Bob",
+            LastName = "Test",
+            MomentCreated = DateTime.UtcNow,
+            IsUnsubscribed = false,
+        } );
+
+        return new PaginatedResult<Contact>()
+        {
+            HasMore = false,
+            Data = list,
+        };
+    }
 }

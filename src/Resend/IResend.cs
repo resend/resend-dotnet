@@ -981,6 +981,16 @@ public interface IResend
     /// <returns>Response.</returns>
     Task<ResendResponse> SegmentDeleteAsync( Guid segmentId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Lists contacts in a segment.
+    /// </summary>
+    /// <param name="segmentId">Segment identifier.</param>
+    /// <param name="query">Paginated query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of contacts.</returns>
+    /// <see href="https://resend.com/docs/api-reference/segments/list-segment-contacts" />
+    Task<ResendResponse<PaginatedResult<Contact>>> SegmentListContactsAsync( Guid segmentId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Templates

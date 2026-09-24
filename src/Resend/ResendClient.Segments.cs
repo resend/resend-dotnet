@@ -72,4 +72,32 @@ public partial class ResendClient
 
         return Execute( req, cancellationToken );
     }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<PaginatedResult<Contact>>> SegmentListContactsAsync( Guid segmentId, PaginatedQuery? query = null, CancellationToken cancellationToken = default )
+    {
+        var baseUrl = $"/segments/{segmentId}/contacts";
+        var url = baseUrl;
+
+        if ( query != null )
+        {
+            var qs = new Dictionary<string, string?>();
+
+            if ( query.Limit.HasValue == true )
+                qs.Add( "limit", query.Limit.Value.ToString() );
+
+            if ( query.Before != null )
+                qs.Add( "before", query.Before );
+
+            if ( query.After != null )
+                qs.Add( "after", query.After );
+
+            url = QueryHelpers.AddQueryString( baseUrl, qs );
+        }
+
+        var req = new HttpRequestMessage( HttpMethod.Get, url );
+
+        return Execute<PaginatedResult<Contact>, PaginatedResult<Contact>>( req, ( x ) => x, cancellationToken );
+    }
 }
