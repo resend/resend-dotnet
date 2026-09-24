@@ -56,9 +56,9 @@ public class SegmentContactListCommand
             {
                 table.AddRow(
                    new Markup( c.Id.ToString() ),
-                   new Markup( c.Email ),
-                   new Markup( c.FirstName != null ? c.FirstName : "" ),
-                   new Markup( c.LastName != null ? c.LastName : "" ),
+                   new Markup( Markup.Escape( c.Email ) ),
+                   new Markup( Markup.Escape( c.FirstName ?? "" ) ),
+                   new Markup( Markup.Escape( c.LastName ?? "" ) ),
                    new Markup( c.MomentCreated.ToShortDateString() ),
                    new Markup( IsUnsubscribed( c.IsUnsubscribed ) )
                 );
