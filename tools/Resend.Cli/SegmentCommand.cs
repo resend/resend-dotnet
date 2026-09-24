@@ -5,7 +5,6 @@ namespace Resend.Cli;
 /// <summary />
 [Command( "segment", Description = "Segments management (Deprecated)" )]
 [Subcommand( typeof( Segment.SegmentAddCommand ) )]
-[Subcommand( typeof( Segment.SegmentContactListCommand ) )]
 [Subcommand( typeof( Segment.SegmentDeleteCommand ) )]
 [Subcommand( typeof( Segment.SegmentListCommand ) )]
 [Subcommand( typeof( Segment.SegmentRetrieveCommand ) )]
