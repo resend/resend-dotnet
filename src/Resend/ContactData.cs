@@ -40,7 +40,11 @@ public class ContactData
     /// <summary>
     /// Key/value custom properties for the contact.
     /// </summary>
+    /// <remarks>
+    /// Values may be a string, a number or null. A null value clears the property.
+    /// Boolean values are accepted only during Contact/Update.
+    /// </remarks>
     [JsonPropertyName( "properties" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public Dictionary<string, string>? Properties { get; set; }
+    public Dictionary<string, object?>? Properties { get; set; }
 }
