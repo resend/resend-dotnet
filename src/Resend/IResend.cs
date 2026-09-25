@@ -1252,6 +1252,18 @@ public interface IResend
 
     #endregion
 
+    #region Usage
+
+    /// <summary>
+    /// Retrieves account-level usage and quota data.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Usage snapshot.</returns>
+    /// <see href="https://resend.com/docs/api-reference/usage/retrieve-usage"/>
+    Task<ResendResponse<Usage>> UsageAsync( CancellationToken cancellationToken = default );
+
+    #endregion
+
     #region Suppressions
 
     /// <summary>
