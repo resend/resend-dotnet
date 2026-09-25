@@ -19,9 +19,13 @@ public partial class ResendClientTests
         Assert.Null( resp.Content.Emails.Daily.Limit );
         Assert.Equal( 57, resp.Content.Emails.Daily.Sent );
         Assert.Equal( 201, resp.Content.Emails.Daily.Received );
+        Assert.Equal( DateTime.Parse( "2026-07-17T00:00:00.000Z" ).ToUniversalTime(), resp.Content.Emails.Daily.MomentReset.ToUniversalTime() );
 
-        Assert.Equal( 5422, resp.Content.Emails.Monthly.Used );
+        Assert.Equal( 5442, resp.Content.Emails.Monthly.Used );
         Assert.Equal( 10000, resp.Content.Emails.Monthly.Limit );
+        Assert.Equal( 1000, resp.Content.Emails.Monthly.Sent );
+        Assert.Equal( 4442, resp.Content.Emails.Monthly.Received );
+        Assert.Equal( DateTime.Parse( "2026-08-01T00:00:00.000Z" ).ToUniversalTime(), resp.Content.Emails.Monthly.MomentReset.ToUniversalTime() );
 
         Assert.Equal( 85000, resp.Content.Contacts.Used );
         Assert.Equal( 150000, resp.Content.Contacts.Limit );
@@ -38,6 +42,7 @@ public partial class ResendClientTests
 
         Assert.Equal( 0, resp.Content.AutomationRuns.Used );
         Assert.Equal( 1000, resp.Content.AutomationRuns.Limit );
+        Assert.Equal( DateTime.Parse( "2026-08-01T00:00:00.000Z" ).ToUniversalTime(), resp.Content.AutomationRuns.MomentReset.ToUniversalTime() );
 
         Assert.Equal( 1, resp.Content.Domains.Used );
         Assert.Equal( 1000, resp.Content.Domains.Limit );

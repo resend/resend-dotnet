@@ -39,7 +39,7 @@ public class UsageController : ControllerBase
                 },
                 Monthly = new UsageEmailMonthly()
                 {
-                    Used = 5422,
+                    Used = 5442,
                     Limit = 10000,
                     Sent = 1000,
                     Received = 4442,
