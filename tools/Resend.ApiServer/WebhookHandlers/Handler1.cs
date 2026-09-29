@@ -66,6 +66,18 @@ public class Handler1 : IWebhookHandler
 
                     _logger.LogDebug( "Suppression {Id}: {Email}", sed.Id, sed.Email );
                     break;
+
+                case WebhookEventTypeCategory.ContactTopics:
+                    var cted = @event.DataAs<ContactTopicsEventData>();
+
+                    _logger.LogDebug( "Contact topics {Email}: {Count}", cted.Email, cted.Topics.Count );
+                    break;
+
+                case WebhookEventTypeCategory.Topic:
+                    var ted = @event.DataAs<TopicEventData>();
+
+                    _logger.LogDebug( "Topic {Id}: {Name}", ted.Id, ted.Name );
+                    break;
             }
         }
         else
