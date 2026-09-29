@@ -70,7 +70,7 @@ public class Handler1 : IWebhookHandler
                 case WebhookEventTypeCategory.ContactTopics:
                     var cted = @event.DataAs<ContactTopicsEventData>();
 
-                    _logger.LogDebug( "Contact topics {Email}: {Count}", cted.Email, cted.Topics.Count );
+                    _logger.LogDebug( "Contact topics {Email}: {Count}", cted.Email, cted.Topics?.Count ?? 0 );
                     break;
 
                 case WebhookEventTypeCategory.Topic:
