@@ -112,6 +112,12 @@ public enum WebhookEventType
     [JsonStringValue( "contact.deleted" )]
     ContactDeleted,
 
+    /// <summary>
+    /// A contact's topic subscriptions changed.
+    /// </summary>
+    [JsonStringValue( "contact.topics.updated" )]
+    ContactTopicsUpdated,
+
 
     /// <summary>
     /// A domain was successfully created.
@@ -143,4 +149,23 @@ public enum WebhookEventType
     /// </summary>
     [JsonStringValue( "suppression.removed" )]
     SuppressionRemoved,
+
+
+    /// <summary>
+    /// A topic was successfully created.
+    /// </summary>
+    [JsonStringValue( "topic.created" )]
+    TopicCreated,
+
+    /// <summary>
+    /// A topic was successfully updated.
+    /// </summary>
+    [JsonStringValue( "topic.updated" )]
+    TopicUpdated,
+
+    /// <summary>
+    /// A topic was successfully deleted.
+    /// </summary>
+    [JsonStringValue( "topic.deleted" )]
+    TopicDeleted,
 }
