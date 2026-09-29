@@ -22,4 +22,14 @@ public enum WebhookEventTypeCategory
     /// Suppression.
     /// </summary>
     Suppression,
+
+    /// <summary>
+    /// Contact topic subscriptions.
+    /// </summary>
+    ContactTopics,
+
+    /// <summary>
+    /// Topic.
+    /// </summary>
+    Topic,
 }

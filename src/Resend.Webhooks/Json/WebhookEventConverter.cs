@@ -134,6 +134,24 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
             value.Data = data;
         }
+        else if ( category == WebhookEventTypeCategory.ContactTopics )
+        {
+            var data = rawData.Deserialize<ContactTopicsEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.Topic )
+        {
+            var data = rawData.Deserialize<TopicEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
         else
         {
             throw new NotSupportedException( $"Unexpected '{value.EventType}' event type" );
@@ -199,6 +217,20 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
             var o4 = (JsonConverter<SuppressionEventData>) options.GetConverter( t4 );
 
             o4.Write( writer, value.DataAs<SuppressionEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.ContactTopics )
+        {
+            var t5 = typeof( ContactTopicsEventData );
+            var o5 = (JsonConverter<ContactTopicsEventData>) options.GetConverter( t5 );
+
+            o5.Write( writer, value.DataAs<ContactTopicsEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.Topic )
+        {
+            var t6 = typeof( TopicEventData );
+            var o6 = (JsonConverter<TopicEventData>) options.GetConverter( t6 );
+
+            o6.Write( writer, value.DataAs<TopicEventData>(), options );
         }
         else
         {
