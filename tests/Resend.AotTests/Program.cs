@@ -33,6 +33,7 @@ public static class Program
         var failures = 0;
 
         failures += await Run( "ResendClient", ResendClientChecks );
+        failures += await Run( "ObjectValues", ObjectValueChecks );
         failures += await Run( "Webhooks", WebhookChecks );
         failures += await Run( "MapResendWebhook", WebApplicationChecks );
         failures += await Run( "FluentEmail", FluentEmailChecks );
@@ -144,6 +145,77 @@ public static class Program
         var propBody = handler.LastBody( "POST", "/contact-properties" );
         Check( propBody.Contains( "\"fallback_value\":42" ), "fallback_value serialized as 42" );
         Check( propBody.Contains( "\"type\":\"number\"" ), "property type enum" );
+    }
+
+
+    /*
+     * object-typed properties: primitives, enums, collections and POCOs
+     * must round-trip without reflection-based serialization.
+     */
+    private static async Task ObjectValueChecks()
+    {
+        var handler = new StubHandler( Respond );
+        var resend = ResendClient.Create(
+            new ResendClientOptions { ApiToken = "re_test", ThrowExceptions = false },
+            new HttpClient( handler ) );
+
+        async Task ExpectFallback( object? value, string expected )
+        {
+            var resp = await resend.ContactPropCreateAsync( new ContactPropertyData
+            {
+                Key = "k",
+                PropertyType = ContactPropertyType.Number,
+                DefaultValue = value,
+            } );
+
+            Check( resp.Success, $"ContactPropCreateAsync success ({expected})" );
+
+            var body = handler.LastBody( "POST", "/contact-properties" );
+            Check( body.Contains( $"\"fallback_value\":{expected}" ), $"expected fallback_value:{expected} in {body}" );
+        }
+
+        await ExpectFallback( (uint) 42, "42" );
+        await ExpectFallback( (short) -3, "-3" );
+        await ExpectFallback( (byte) 7, "7" );
+        await ExpectFallback( (sbyte) -1, "-1" );
+        await ExpectFallback( (ushort) 9, "9" );
+        await ExpectFallback( ulong.MaxValue, "18446744073709551615" );
+        await ExpectFallback( SmokeTier.Gold, "2" );
+        await ExpectFallback( new List<int> { 1, 2 }, "[1,2]" );
+        await ExpectFallback( new[] { "a", "b" }, "[\"a\",\"b\"]" );
+        await ExpectFallback( new Dictionary<string, string> { [ "k" ] = "v" }, "{\"k\":\"v\"}" );
+        await ExpectFallback( new byte[] { 1, 2, 3 }, "\"AQID\"" );
+        await ExpectFallback( new DateOnly( 2026, 10, 1 ), "\"2026-10-01\"" );
+        await ExpectFallback( new Dictionary<string, object?> { [ "n" ] = (uint) 7, [ "l" ] = new List<object?> { (short) 1 } }, "{\"n\":7,\"l\":[1]}" );
+
+
+        /*
+         * Dictionary<string, object?> property.
+         */
+        var contact = await resend.ContactAddAsync( new ContactData
+        {
+            Email = "a@b.c",
+            Properties = new() { [ "score" ] = (uint) 7, [ "tags" ] = new List<object?> { (short) 1 } },
+        } );
+
+        Check( contact.Success, "ContactAddAsync success" );
+
+        var contactBody = handler.LastBody( "POST", "/contacts" );
+        Check( contactBody.Contains( "\"properties\":{\"score\":7,\"tags\":[1]}" ), $"expected properties object in {contactBody}" );
+
+
+        /*
+         * Arbitrary POCO: must fail with a descriptive error.
+         */
+        var poco = await resend.ContactPropCreateAsync( new ContactPropertyData
+        {
+            Key = "p",
+            PropertyType = ContactPropertyType.String,
+            DefaultValue = new SmokePoco { X = 1 },
+        } );
+
+        Check( poco.Success == false, "POCO must fail under AOT" );
+        Check( poco.Exception != null && poco.Exception.ToString()!.Contains( "SmokePoco" ), $"exception names the type: {poco.Exception}" );
     }
 
 
@@ -300,6 +372,9 @@ public static class Program
         if ( request.Method == HttpMethod.Post && path == "/contact-properties" )
             return (HttpStatusCode.OK, $"{{\"id\":\"{ContactPropId}\"}}");
 
+        if ( request.Method == HttpMethod.Post && path == "/contacts" )
+            return (HttpStatusCode.OK, $"{{\"id\":\"{ContactPropId}\"}}");
+
         return (HttpStatusCode.NotFound, "{\"statusCode\":404,\"name\":\"not_found\",\"message\":\"Not found\"}");
     }
 }
@@ -364,6 +439,25 @@ internal sealed class StubHandler : HttpMessageHandler
             Content = new StringContent( json, Encoding.UTF8, "application/json" ),
         };
     }
+}
+
+
+/// <summary />
+public enum SmokeTier
+{
+    /// <summary />
+    Silver = 1,
+
+    /// <summary />
+    Gold = 2,
+}
+
+
+/// <summary />
+public sealed class SmokePoco
+{
+    /// <summary />
+    public int X { get; set; }
 }
 
 

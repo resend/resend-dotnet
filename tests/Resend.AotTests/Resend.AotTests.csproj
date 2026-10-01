@@ -23,7 +23,7 @@
     <ProjectReference Include="..\..\src\Resend.FluentEmail\Resend.FluentEmail.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(RootLibraries)' != 'false' ">
     <TrimmerRootAssembly Include="Resend" />
     <TrimmerRootAssembly Include="Resend.Webhooks" />
     <TrimmerRootAssembly Include="Resend.FluentEmail" />

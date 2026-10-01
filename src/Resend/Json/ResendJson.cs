@@ -22,6 +22,7 @@ internal static class ResendJson
     private static JsonSerializerOptions CreateOptions()
     {
         var options = new JsonSerializerOptions( JsonSerializerDefaults.Web );
+        options.Converters.Add( ObjectValueConverter.Instance );
 
         if ( JsonSerializer.IsReflectionEnabledByDefault )
             options.TypeInfoResolver = JsonTypeInfoResolver.Combine( ResendJsonContext.Default, CreateReflectionResolver() );
