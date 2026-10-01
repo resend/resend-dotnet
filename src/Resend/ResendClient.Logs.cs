@@ -28,7 +28,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Log>, PaginatedResult<Log>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Log>, PaginatedResult<Log>>( req, ResendJson.PaginatedResultLog, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,6 +38,6 @@ public partial class ResendClient
         var path = $"/logs/{logId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Log, Log>( req, ( x ) => x, cancellationToken );
+        return Execute<Log, Log>( req, ResendJson.Log, ( x ) => x, cancellationToken );
     }
 }

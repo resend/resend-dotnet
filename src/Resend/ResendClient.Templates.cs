@@ -30,7 +30,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<TemplateSummary>, PaginatedResult<TemplateSummary>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<TemplateSummary>, PaginatedResult<TemplateSummary>>( req, ResendJson.PaginatedResultTemplateSummary, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,9 +38,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> TemplateCreateAsync( TemplateData template, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/templates" );
-        req.Content = JsonContent.Create( template );
+        req.Content = JsonContent.Create( template, ResendJson.TemplateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -50,7 +50,7 @@ public partial class ResendClient
         var path = $"/templates/{templateId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Template, Template>( req, ( x ) => x, cancellationToken );
+        return Execute<Template, Template>( req, ResendJson.Template, ( x ) => x, cancellationToken );
     }
 
 
@@ -60,7 +60,7 @@ public partial class ResendClient
         var path = $"/templates/{templateAlias}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Template, Template>( req, ( x ) => x, cancellationToken );
+        return Execute<Template, Template>( req, ResendJson.Template, ( x ) => x, cancellationToken );
     }
 
 
@@ -68,7 +68,7 @@ public partial class ResendClient
     public Task<ResendResponse> TemplateUpdateAsync( Guid templateId, TemplateData template, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/templates/{templateId}" );
-        req.Content = JsonContent.Create( template );
+        req.Content = JsonContent.Create( template, ResendJson.TemplateData );
 
         return Execute( req, cancellationToken );
     }
@@ -78,7 +78,7 @@ public partial class ResendClient
     public Task<ResendResponse> TemplateUpdateAsync( string templateAlias, TemplateData template, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/templates/{templateAlias}" );
-        req.Content = JsonContent.Create( template );
+        req.Content = JsonContent.Create( template, ResendJson.TemplateData );
 
         return Execute( req, cancellationToken );
     }
@@ -125,7 +125,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateId}/duplicate" );
 
-        return Execute<ObjectId, Guid>( req, x => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, x => x.Id, cancellationToken );
     }
 
 
@@ -134,6 +134,6 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/templates/{templateAlias}/duplicate" );
 
-        return Execute<ObjectId, Guid>( req, x => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, x => x.Id, cancellationToken );
     }
 }

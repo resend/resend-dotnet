@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Resend;
 
@@ -27,7 +28,8 @@ public class ResendClientOptions
 
 
 /// <summary />
-internal class OptionsSnapshot<T> : IOptionsSnapshot<T>
+internal class OptionsSnapshot<
+    [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicParameterlessConstructor )] T> : IOptionsSnapshot<T>
     where T : class
 {
     private readonly T _value;
