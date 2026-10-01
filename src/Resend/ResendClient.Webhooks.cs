@@ -29,7 +29,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Webhook>, PaginatedResult<Webhook>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Webhook>, PaginatedResult<Webhook>>( req, ResendJson.PaginatedResultWebhook, ( x ) => x, cancellationToken );
     }
 
 
@@ -37,9 +37,9 @@ public partial class ResendClient
     public Task<ResendResponse<WebhookNew>> WebhookCreateAsync( WebhookData webhook, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/webhooks" );
-        req.Content = JsonContent.Create( webhook );
+        req.Content = JsonContent.Create( webhook, ResendJson.WebhookData );
 
-        return Execute<WebhookNew, WebhookNew>( req, ( x ) => x, cancellationToken );
+        return Execute<WebhookNew, WebhookNew>( req, ResendJson.WebhookNew, ( x ) => x, cancellationToken );
     }
 
 
@@ -49,7 +49,7 @@ public partial class ResendClient
         var path = $"/webhooks/{webhookId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Webhook, Webhook>( req, ( x ) => x, cancellationToken );
+        return Execute<Webhook, Webhook>( req, ResendJson.Webhook, ( x ) => x, cancellationToken );
     }
 
 
@@ -57,7 +57,7 @@ public partial class ResendClient
     public Task<ResendResponse> WebhookUpdateAsync( Guid webhookId, WebhookData webhook, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/webhooks/{webhookId}" );
-        req.Content = JsonContent.Create( webhook );
+        req.Content = JsonContent.Create( webhook, ResendJson.WebhookData );
 
         return Execute( req, cancellationToken );
     }
@@ -77,7 +77,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/webhooks/{webhookId}/signing-secret/rotate" );
 
-        return Execute<WebhookNew, WebhookNew>( req, ( x ) => x, cancellationToken );
+        return Execute<WebhookNew, WebhookNew>( req, ResendJson.WebhookNew, ( x ) => x, cancellationToken );
     }
 
 
@@ -102,7 +102,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<WebhookEventListResult, WebhookEventListResult>( req, ( x ) => x, cancellationToken );
+        return Execute<WebhookEventListResult, WebhookEventListResult>( req, ResendJson.WebhookEventListResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -111,7 +111,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/webhooks/{webhookId}/events/{Uri.EscapeDataString( eventId )}" );
 
-        return Execute<WebhookEventDetails, WebhookEventDetails>( req, ( x ) => x, cancellationToken );
+        return Execute<WebhookEventDetails, WebhookEventDetails>( req, ResendJson.WebhookEventDetails, ( x ) => x, cancellationToken );
     }
 
 
@@ -145,6 +145,6 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<WebhookEventAttemptListResult, WebhookEventAttemptListResult>( req, ( x ) => x, cancellationToken );
+        return Execute<WebhookEventAttemptListResult, WebhookEventAttemptListResult>( req, ResendJson.WebhookEventAttemptListResult, ( x ) => x, cancellationToken );
     }
 }

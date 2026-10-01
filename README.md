@@ -120,6 +120,20 @@ public class FeatureImplementation
 ```
 
 
+Native AOT
+--------------------------------------------------------------------------
+
+The `Resend`, `Resend.Webhooks` and `Resend.FluentEmail` packages are
+compatible with trimming and Native AOT publishing.
+
+When publishing with Native AOT, values assigned to `object` properties
+-- such as `ContactPropertyData.DefaultValue`, `ContactPropertyUpdateData.DefaultValue`
+and `TemplateVariable.Default` -- must be primitives (string, bool, numeric
+types, Guid, DateTime), `JsonElement`, `JsonNode`, `Dictionary<string, object?>`,
+or `List<object?>`. Arbitrary POCOs remain supported in JIT-compiled
+applications.
+
+
 License
 --------------------------------------------------------------------------
 

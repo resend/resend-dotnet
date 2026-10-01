@@ -29,4 +29,11 @@ dotnet restore --packages .nuget
 dotnet build   -c Release --no-restore
 dotnet test    -c Release --no-restore --no-build --verbosity=normal
 
+
+#
+# Native AOT smoke test
+# ------------------------------------------------------------------------
+dotnet publish tests/Resend.AotTests/Resend.AotTests.csproj -c Release -r linux-x64
+./tests/Resend.AotTests/bin/Release/net8.0/linux-x64/publish/Resend.AotTests
+
 # eof

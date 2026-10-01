@@ -30,7 +30,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<ContactProperty>, PaginatedResult<ContactProperty>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<ContactProperty>, PaginatedResult<ContactProperty>>( req, ResendJson.PaginatedResultContactProperty, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,9 +38,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> ContactPropCreateAsync( ContactPropertyData prop, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/contact-properties" );
-        req.Content = JsonContent.Create( prop );
+        req.Content = JsonContent.Create( prop, ResendJson.ContactPropertyData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -50,7 +50,7 @@ public partial class ResendClient
         var path = $"/contact-properties/{propId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ContactProperty, ContactProperty>( req, ( x ) => x, cancellationToken );
+        return Execute<ContactProperty, ContactProperty>( req, ResendJson.ContactProperty, ( x ) => x, cancellationToken );
     }
 
 
@@ -58,7 +58,7 @@ public partial class ResendClient
     public Task<ResendResponse> ContactPropUpdateAsync( Guid propId, ContactPropertyUpdateData prop, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/contact-properties/{propId}" );
-        req.Content = JsonContent.Create( prop );
+        req.Content = JsonContent.Create( prop, ResendJson.ContactPropertyUpdateData );
 
         return Execute( req, cancellationToken );
     }
