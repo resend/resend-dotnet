@@ -73,7 +73,7 @@ Below is a (non-comprehensive) list of template rendering engines in
 .NET.
 
 
-* [Razor](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-9.0&tabs=visual-studio) (Apache 2.0) - [📂 Example](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor)
+* [Razor](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/?view=aspnetcore-10.0&tabs=visual-studio) (Apache 2.0) - [📂 Example](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor)
 
 > Razor is a lightweight, syntax-efficient templating engine in ASP.NET.
 
