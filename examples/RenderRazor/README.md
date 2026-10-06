@@ -1,7 +1,7 @@
 .NET SDK: Render Razor
 =====================================================================
 
-This example shows how to send emails, by using [Razor](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor?view=aspnetcore-9.0)
+This example shows how to send emails, by using [Razor](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor?view=aspnetcore-10.0)
 as the rendering engine.
 
 
@@ -24,4 +24,4 @@ References
 ---------------------------------------------------------------------
 
 * [Generate HTML Email from Razor View Page with a Strongly Typed Model](https://stackoverflow.com/questions/78085196/generate-html-email-from-razor-view-page-with-a-strongly-typed-model)
-* [Render Razor components outside of ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-components-outside-of-aspnetcore?view=aspnetcore-8.0)
+* [Render Razor components outside of ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-components-outside-of-aspnetcore?view=aspnetcore-10.0)

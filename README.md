@@ -19,6 +19,8 @@ Install
 PM> Install-Package Resend
 ```
 
+The packages target .NET 8 and .NET 10. Apps on .NET 9 use the .NET 8 build.
+
 
 Examples
 --------------------------------------------------------------------------

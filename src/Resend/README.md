@@ -43,6 +43,8 @@ From within Visual Studio using Package Manager Console:
 PM> Install-Package Resend
 ```
 
+The package targets .NET 8 and .NET 10. Apps on .NET 9 use the .NET 8 build.
+
 
 Getting started
 --------------------------------------------------------------------------
