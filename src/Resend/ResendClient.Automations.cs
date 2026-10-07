@@ -10,9 +10,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> AutomationCreateAsync( AutomationCreateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/automations" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.AutomationCreateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -20,9 +20,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> AutomationUpdateAsync( Guid automationId, AutomationUpdateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/automations/{automationId}" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.AutomationUpdateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -31,7 +31,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/automations/{automationId}" );
 
-        return Execute<Automation, Automation>( req, ( x ) => x, cancellationToken );
+        return Execute<Automation, Automation>( req, ResendJson.Automation, ( x ) => x, cancellationToken );
     }
 
 
@@ -62,7 +62,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<AutomationSummary>, PaginatedResult<AutomationSummary>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<AutomationSummary>, PaginatedResult<AutomationSummary>>( req, ResendJson.PaginatedResultAutomationSummary, ( x ) => x, cancellationToken );
     }
 
 
@@ -71,7 +71,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/automations/{automationId}/duplicate" );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -80,7 +80,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/automations/{automationId}/stop" );
 
-        return Execute<AutomationStopResult, AutomationStopResult>( req, ( x ) => x, cancellationToken );
+        return Execute<AutomationStopResult, AutomationStopResult>( req, ResendJson.AutomationStopResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -89,7 +89,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/automations/{automationId}" );
 
-        return Execute<AutomationDeleteResult, AutomationDeleteResult>( req, ( x ) => x, cancellationToken );
+        return Execute<AutomationDeleteResult, AutomationDeleteResult>( req, ResendJson.AutomationDeleteResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -120,7 +120,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<AutomationRunSummary>, PaginatedResult<AutomationRunSummary>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<AutomationRunSummary>, PaginatedResult<AutomationRunSummary>>( req, ResendJson.PaginatedResultAutomationRunSummary, ( x ) => x, cancellationToken );
     }
 
 
@@ -129,6 +129,6 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/automations/{automationId}/runs/{runId}" );
 
-        return Execute<AutomationRun, AutomationRun>( req, ( x ) => x, cancellationToken );
+        return Execute<AutomationRun, AutomationRun>( req, ResendJson.AutomationRun, ( x ) => x, cancellationToken );
     }
 }

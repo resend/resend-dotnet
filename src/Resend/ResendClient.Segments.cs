@@ -30,7 +30,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Segment>, PaginatedResult<Segment>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Segment>, PaginatedResult<Segment>>( req, ResendJson.PaginatedResultSegment, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,9 +38,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> SegmentCreateAsync( SegmentData segment, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/segments" );
-        req.Content = JsonContent.Create( segment );
+        req.Content = JsonContent.Create( segment, ResendJson.SegmentData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -50,7 +50,7 @@ public partial class ResendClient
         var path = $"/segments/{segmentId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Segment, Segment>( req, ( x ) => x, cancellationToken );
+        return Execute<Segment, Segment>( req, ResendJson.Segment, ( x ) => x, cancellationToken );
     }
 
 
@@ -59,9 +59,9 @@ public partial class ResendClient
     {
         var path = $"/segments/{segmentId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
-        req.Content = JsonContent.Create( segment );
+        req.Content = JsonContent.Create( segment, ResendJson.SegmentData );
 
-        return Execute<SegmentUpdateResult, SegmentUpdateResult>( req, ( x ) => x, cancellationToken );
+        return Execute<SegmentUpdateResult, SegmentUpdateResult>( req, ResendJson.SegmentUpdateResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -98,6 +98,6 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Contact>, PaginatedResult<Contact>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Contact>, PaginatedResult<Contact>>( req, ResendJson.PaginatedResultContact, ( x ) => x, cancellationToken );
     }
 }

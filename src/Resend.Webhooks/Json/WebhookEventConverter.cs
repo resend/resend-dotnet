@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Resend.Webhooks;
 
@@ -100,7 +101,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
          */
         if ( category == WebhookEventTypeCategory.Email )
         {
-            var data = rawData.Deserialize<EmailEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<EmailEventData>) options.GetTypeInfo( typeof( EmailEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -109,7 +110,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Contact )
         {
-            var data = rawData.Deserialize<ContactEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<ContactEventData>) options.GetTypeInfo( typeof( ContactEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -118,7 +119,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Domain )
         {
-            var data = rawData.Deserialize<DomainEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<DomainEventData>) options.GetTypeInfo( typeof( DomainEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -127,7 +128,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Suppression )
         {
-            var data = rawData.Deserialize<SuppressionEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<SuppressionEventData>) options.GetTypeInfo( typeof( SuppressionEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -136,7 +137,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.ContactTopics )
         {
-            var data = rawData.Deserialize<ContactTopicsEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<ContactTopicsEventData>) options.GetTypeInfo( typeof( ContactTopicsEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -145,7 +146,7 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
         }
         else if ( category == WebhookEventTypeCategory.Topic )
         {
-            var data = rawData.Deserialize<TopicEventData>( options );
+            var data = rawData.Deserialize( (JsonTypeInfo<TopicEventData>) options.GetTypeInfo( typeof( TopicEventData ) ) );
 
             if ( data == null )
                 throw new JsonException( "Expected non-null data" );
@@ -192,45 +193,27 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
         if ( value.EventType.Category() == WebhookEventTypeCategory.Email )
         {
-            var t1 = typeof( EmailEventData );
-            var o1 = (JsonConverter<EmailEventData>) options.GetConverter( t1 );
-
-            o1.Write( writer, value.DataAs<EmailEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<EmailEventData>(), (JsonTypeInfo<EmailEventData>) options.GetTypeInfo( typeof( EmailEventData ) ) );
         }
         else if ( value.EventType.Category() == WebhookEventTypeCategory.Contact )
         {
-            var t2 = typeof( ContactEventData );
-            var o2 = (JsonConverter<ContactEventData>) options.GetConverter( t2 );
-
-            o2.Write( writer, value.DataAs<ContactEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<ContactEventData>(), (JsonTypeInfo<ContactEventData>) options.GetTypeInfo( typeof( ContactEventData ) ) );
         }
         else if ( value.EventType.Category() == WebhookEventTypeCategory.Domain )
         {
-            var t3 = typeof( DomainEventData );
-            var o3 = (JsonConverter<DomainEventData>) options.GetConverter( t3 );
-
-            o3.Write( writer, value.DataAs<DomainEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<DomainEventData>(), (JsonTypeInfo<DomainEventData>) options.GetTypeInfo( typeof( DomainEventData ) ) );
         }
         else if ( value.EventType.Category() == WebhookEventTypeCategory.Suppression )
         {
-            var t4 = typeof( SuppressionEventData );
-            var o4 = (JsonConverter<SuppressionEventData>) options.GetConverter( t4 );
-
-            o4.Write( writer, value.DataAs<SuppressionEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<SuppressionEventData>(), (JsonTypeInfo<SuppressionEventData>) options.GetTypeInfo( typeof( SuppressionEventData ) ) );
         }
         else if ( value.EventType.Category() == WebhookEventTypeCategory.ContactTopics )
         {
-            var t5 = typeof( ContactTopicsEventData );
-            var o5 = (JsonConverter<ContactTopicsEventData>) options.GetConverter( t5 );
-
-            o5.Write( writer, value.DataAs<ContactTopicsEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<ContactTopicsEventData>(), (JsonTypeInfo<ContactTopicsEventData>) options.GetTypeInfo( typeof( ContactTopicsEventData ) ) );
         }
         else if ( value.EventType.Category() == WebhookEventTypeCategory.Topic )
         {
-            var t6 = typeof( TopicEventData );
-            var o6 = (JsonConverter<TopicEventData>) options.GetConverter( t6 );
-
-            o6.Write( writer, value.DataAs<TopicEventData>(), options );
+            JsonSerializer.Serialize( writer, value.DataAs<TopicEventData>(), (JsonTypeInfo<TopicEventData>) options.GetTypeInfo( typeof( TopicEventData ) ) );
         }
         else
         {
