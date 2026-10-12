@@ -32,6 +32,38 @@ public static class ResendExtensions
             case WebhookEventType.TopicDeleted:
                 return WebhookEventTypeCategory.Topic;
 
+            case WebhookEventType.InboxCreated:
+            case WebhookEventType.InboxUpdated:
+                return WebhookEventTypeCategory.Inbox;
+
+            case WebhookEventType.InboxDeleted:
+                return WebhookEventTypeCategory.InboxDeleted;
+
+            case WebhookEventType.InboxThreadCreated:
+            case WebhookEventType.InboxEmailReceived:
+            case WebhookEventType.InboxEmailSent:
+                return WebhookEventTypeCategory.InboxThreadEmail;
+
+            case WebhookEventType.InboxThreadFolderUpdated:
+                return WebhookEventTypeCategory.InboxThreadFolder;
+
+            case WebhookEventType.InboxThreadAssigned:
+                return WebhookEventTypeCategory.InboxThreadAssigned;
+
+            case WebhookEventType.InboxThreadUnassigned:
+                return WebhookEventTypeCategory.InboxThreadUnassigned;
+
+            case WebhookEventType.InboxThreadLabelsUpdated:
+                return WebhookEventTypeCategory.InboxThreadLabels;
+
+            case WebhookEventType.InboxDraftCreated:
+            case WebhookEventType.InboxDraftUpdated:
+            case WebhookEventType.InboxDraftDeleted:
+                return WebhookEventTypeCategory.InboxDraft;
+
+            case WebhookEventType.InboxDraftSent:
+                return WebhookEventTypeCategory.InboxDraftSent;
+
             case WebhookEventType.EmailBounced:
             case WebhookEventType.EmailClicked:
             case WebhookEventType.EmailComplained:

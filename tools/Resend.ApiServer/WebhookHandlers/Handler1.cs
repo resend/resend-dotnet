@@ -78,6 +78,60 @@ public class Handler1 : IWebhookHandler
 
                     _logger.LogDebug( "Topic {Id}: {Name}", ted.Id, ted.Name );
                     break;
+
+                case WebhookEventTypeCategory.Inbox:
+                    var ied = @event.DataAs<InboxEventData>();
+
+                    _logger.LogDebug( "Inbox {InboxId}: {Source}", ied.InboxId, ied.Source );
+                    break;
+
+                case WebhookEventTypeCategory.InboxDeleted:
+                    var idd = @event.DataAs<InboxDeletedEventData>();
+
+                    _logger.LogDebug( "Inbox deleted {InboxId}: {Source}", idd.InboxId, idd.Source );
+                    break;
+
+                case WebhookEventTypeCategory.InboxThreadEmail:
+                    var ited = @event.DataAs<InboxThreadEmailEventData>();
+
+                    _logger.LogDebug( "Inbox thread {ThreadId}: {EmailId}", ited.ThreadId, ited.EmailId );
+                    break;
+
+                case WebhookEventTypeCategory.InboxThreadFolder:
+                    var itfd = @event.DataAs<InboxThreadFolderUpdatedEventData>();
+
+                    _logger.LogDebug( "Inbox thread {ThreadId}: {From} to {To}", itfd.ThreadId, itfd.From, itfd.To );
+                    break;
+
+                case WebhookEventTypeCategory.InboxThreadAssigned:
+                    var itad = @event.DataAs<InboxThreadAssignedEventData>();
+
+                    _logger.LogDebug( "Inbox thread {ThreadId}: assigned to {Assignee}", itad.ThreadId, itad.AssigneeEmail );
+                    break;
+
+                case WebhookEventTypeCategory.InboxThreadUnassigned:
+                    var itud = @event.DataAs<InboxThreadUnassignedEventData>();
+
+                    _logger.LogDebug( "Inbox thread {ThreadId}: unassigned from {Assignee}", itud.ThreadId, itud.PreviousAssigneeEmail );
+                    break;
+
+                case WebhookEventTypeCategory.InboxThreadLabels:
+                    var itld = @event.DataAs<InboxThreadLabelsUpdatedEventData>();
+
+                    _logger.LogDebug( "Inbox thread {ThreadId}: {Added} added, {Removed} removed", itld.ThreadId, itld.Added.Count, itld.Removed.Count );
+                    break;
+
+                case WebhookEventTypeCategory.InboxDraft:
+                    var idrd = @event.DataAs<InboxDraftEventData>();
+
+                    _logger.LogDebug( "Inbox draft {DraftId}: {Source}", idrd.DraftId, idrd.Source );
+                    break;
+
+                case WebhookEventTypeCategory.InboxDraftSent:
+                    var idsd = @event.DataAs<InboxDraftSentEventData>();
+
+                    _logger.LogDebug( "Inbox draft {DraftId}: sent as {EmailId}", idsd.DraftId, idsd.EmailId );
+                    break;
             }
         }
         else

@@ -169,4 +169,88 @@ public enum WebhookEventType
     /// </summary>
     [JsonStringValue( "topic.deleted" )]
     TopicDeleted,
+
+    /// <summary>
+    /// An inbox was created.
+    /// </summary>
+    [JsonStringValue( "inbox.created" )]
+    InboxCreated,
+
+    /// <summary>
+    /// The settings of an inbox changed.
+    /// </summary>
+    [JsonStringValue( "inbox.updated" )]
+    InboxUpdated,
+
+    /// <summary>
+    /// An inbox was deleted. The payload carries only the inbox identifier.
+    /// </summary>
+    [JsonStringValue( "inbox.deleted" )]
+    InboxDeleted,
+
+    /// <summary>
+    /// The first email of a thread landed in an inbox, inbound or outbound.
+    /// </summary>
+    [JsonStringValue( "inbox.thread.created" )]
+    InboxThreadCreated,
+
+    /// <summary>
+    /// An inbound email was added to a thread.
+    /// </summary>
+    [JsonStringValue( "inbox.email.received" )]
+    InboxEmailReceived,
+
+    /// <summary>
+    /// An outbound email was accepted for delivery and added to a thread.
+    /// </summary>
+    [JsonStringValue( "inbox.email.sent" )]
+    InboxEmailSent,
+
+    /// <summary>
+    /// A thread moved between folders.
+    /// </summary>
+    [JsonStringValue( "inbox.thread.folder.updated" )]
+    InboxThreadFolderUpdated,
+
+    /// <summary>
+    /// A thread was assigned or reassigned.
+    /// </summary>
+    [JsonStringValue( "inbox.thread.assigned" )]
+    InboxThreadAssigned,
+
+    /// <summary>
+    /// A thread was unassigned.
+    /// </summary>
+    [JsonStringValue( "inbox.thread.unassigned" )]
+    InboxThreadUnassigned,
+
+    /// <summary>
+    /// A label was applied to or removed from a thread. One event carries one label.
+    /// </summary>
+    [JsonStringValue( "inbox.thread.labels.updated" )]
+    InboxThreadLabelsUpdated,
+
+    /// <summary>
+    /// A draft was created, standalone or reply.
+    /// </summary>
+    [JsonStringValue( "inbox.draft.created" )]
+    InboxDraftCreated,
+
+    /// <summary>
+    /// A draft was edited.
+    /// </summary>
+    [JsonStringValue( "inbox.draft.updated" )]
+    InboxDraftUpdated,
+
+    /// <summary>
+    /// A draft was sent.
+    /// </summary>
+    [JsonStringValue( "inbox.draft.sent" )]
+    InboxDraftSent,
+
+    /// <summary>
+    /// A draft was discarded.
+    /// </summary>
+    [JsonStringValue( "inbox.draft.deleted" )]
+    InboxDraftDeleted,
 }
