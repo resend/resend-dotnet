@@ -22,13 +22,12 @@ public class InboxThreadUpdateData
     /// Moves the thread to this folder.
     /// </summary>
     /// <remarks>
-    /// <see cref="InboxFolder.Sent"/> is assigned automatically and cannot be set. Moving a
-    /// thread out of <see cref="InboxFolder.Trash"/> restores it and clears its deletion
-    /// deadline.
+    /// Moving a thread out of <see cref="InboxMoveFolder.Trash"/> restores it and clears its
+    /// deletion deadline.
     /// </remarks>
     [JsonPropertyName( "folder" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public InboxFolder? Folder { get; set; }
+    public InboxMoveFolder? Folder { get; set; }
 
     /// <summary>
     /// Applies this label to the thread, the same as one entry in <see cref="AddLabelIds"/>.

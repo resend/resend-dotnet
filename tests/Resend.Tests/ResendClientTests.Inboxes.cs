@@ -306,7 +306,7 @@ public partial class ResendClientTests
         var resp = await _resend.InboxThreadUpdateAsync( Guid.NewGuid(), threadId, new InboxThreadUpdateData()
         {
             IsRead = true,
-            Folder = InboxFolder.Archive,
+            Folder = InboxMoveFolder.Archive,
             AddLabelIds = new List<Guid>() { labelId },
         } );
 

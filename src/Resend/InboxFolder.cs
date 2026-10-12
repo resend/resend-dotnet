@@ -31,7 +31,8 @@ public enum InboxFolder
     /// Threads whose emails are all outbound.
     /// </summary>
     /// <remarks>
-    /// Assigned automatically. A thread cannot be moved to this folder.
+    /// Assigned automatically. A thread cannot be moved to this folder, so
+    /// <see cref="InboxMoveFolder"/> has no such value.
     /// </remarks>
     [JsonStringValue( "sent" )]
     Sent,

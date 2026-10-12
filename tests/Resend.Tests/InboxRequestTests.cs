@@ -264,7 +264,7 @@ public class InboxRequestTests
     {
         await _resend.InboxThreadUpdateAsync( InboxId, ThreadId, new InboxThreadUpdateData()
         {
-            Folder = InboxFolder.Archive,
+            Folder = InboxMoveFolder.Archive,
             AddLabelIds = new List<Guid>() { LabelId },
         } );
 
@@ -278,6 +278,32 @@ public class InboxRequestTests
         Assert.False( body.TryGetProperty( "read", out _ ) );
         Assert.False( body.TryGetProperty( "label_id", out _ ) );
         Assert.False( body.TryGetProperty( "remove_label_ids", out _ ) );
+    }
+
+
+    /// <summary />
+    [Theory]
+    [InlineData( InboxMoveFolder.Inbox, "inbox" )]
+    [InlineData( InboxMoveFolder.Archive, "archive" )]
+    [InlineData( InboxMoveFolder.Spam, "spam" )]
+    [InlineData( InboxMoveFolder.Trash, "trash" )]
+    public async Task InboxThreadUpdate_Folder( InboxMoveFolder folder, string expected )
+    {
+        await _resend.InboxThreadUpdateAsync( InboxId, ThreadId, new InboxThreadUpdateData()
+        {
+            Folder = folder,
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( expected, body.GetProperty( "folder" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void InboxMoveFolder_HasNoSent()
+    {
+        Assert.DoesNotContain( "Sent", Enum.GetNames<InboxMoveFolder>() );
     }
 
 

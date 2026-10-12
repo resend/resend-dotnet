@@ -291,16 +291,21 @@ public class InboxController : ControllerBase
         if ( request.IsRead == null && request.Folder == null && labelId == null && request.AddLabelIds == null && request.RemoveLabelIds == null )
             return Invalid( "At least one of `read`, `folder`, `label_id`, `add_label_ids`, or `remove_label_ids` is required." );
 
-        if ( request.Folder == InboxFolder.Sent )
-            return Invalid( "The `folder` must be one of: inbox, archive, spam, trash." );
-
         var add = ( request.AddLabelIds ?? new List<Guid>() ).Concat( labelId.HasValue == true ? new[] { labelId.Value } : Array.Empty<Guid>() ).Distinct().ToList();
         var remove = request.RemoveLabelIds ?? new List<Guid>();
 
         if ( add.Intersect( remove ).Any() == true )
             return Invalid( "A label ID cannot be both added and removed in the same request." );
 
-        var summary = ThreadSummary( threadId, request.Folder ?? InboxFolder.Inbox, request.IsRead ?? false );
+        var folder = request.Folder switch
+        {
+            InboxMoveFolder.Archive => InboxFolder.Archive,
+            InboxMoveFolder.Spam => InboxFolder.Spam,
+            InboxMoveFolder.Trash => InboxFolder.Trash,
+            _ => InboxFolder.Inbox,
+        };
+
+        var summary = ThreadSummary( threadId, folder, request.IsRead ?? false );
         summary.Labels = add.Select( x => new InboxThreadLabel() { Id = x, Name = "Urgent", Color = "#E93D82" } ).ToList();
 
         return summary;
