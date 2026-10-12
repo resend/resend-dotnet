@@ -322,6 +322,17 @@ public partial class ResendClientTests
 
     /// <summary />
     [Fact]
+    public async Task InboxThreadUpdateRequiresAField()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxThreadUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxThreadUpdateData() ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task InboxThreadUpdateRejectsSameLabelAddedAndRemoved()
     {
         var labelId = Guid.NewGuid();

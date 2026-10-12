@@ -119,6 +119,18 @@ public class InboxWebhookEventTests
 
     /// <summary />
     [Fact]
+    public void InboxEmailSentEvent_Outbound()
+    {
+        var actual = Deserialize( "inbox.email.sent", DataFor( WebhookEventTypeCategory.InboxThreadEmail ).Replace( "\"inbound\"", "\"outbound\"" ) );
+
+        var data = actual.DataAs<InboxThreadEmailEventData>();
+        Assert.NotNull( data.Email );
+        Assert.Equal( InboxEmailDirection.Outbound, data.Email.Direction );
+    }
+
+
+    /// <summary />
+    [Fact]
     public void InboxThreadFolderUpdatedEvent_Fields()
     {
         var actual = Deserialize( "inbox.thread.folder.updated", DataFor( WebhookEventTypeCategory.InboxThreadFolder ) );
@@ -169,7 +181,7 @@ public class InboxWebhookEventTests
         Assert.Equal( Guid.Parse( "9a2b7c4d-1e3f-4a5b-8c6d-0e1f2a3b4c5d" ), data.DraftId );
         Assert.NotNull( data.Draft );
         Assert.Equal( InboxDraftType.Reply, data.Draft.DraftType );
-        Assert.Null( data.Draft.EmailId );
+        Assert.Equal( data.EmailId, data.Draft.EmailId );
         Assert.Null( data.Email );
     }
 
@@ -243,7 +255,7 @@ public class InboxWebhookEventTests
                 { "source": "api", {{ids}}, "draft_id": "9a2b7c4d-1e3f-4a5b-8c6d-0e1f2a3b4c5d", "thread": {{Thread}}, "draft": {{Draft}} }
                 """,
             WebhookEventTypeCategory.InboxDraftSent => $$"""
-                { "source": "api", {{ids}}, "email_id": "4ef9a417-02e9-4d39-ad75-9611e0fcc33c", "draft_id": "9a2b7c4d-1e3f-4a5b-8c6d-0e1f2a3b4c5d", "thread": {{Thread}}, "draft": {{Draft}} }
+                { "source": "api", {{ids}}, "email_id": "6a0c8e58-3d9e-4f7a-8b14-2e3f4a5b6c71", "draft_id": "9a2b7c4d-1e3f-4a5b-8c6d-0e1f2a3b4c5d", "thread": {{Thread}}, "draft": {{Draft.Replace( "\"email_id\": null", "\"email_id\": \"6a0c8e58-3d9e-4f7a-8b14-2e3f4a5b6c71\"" )}} }
                 """,
             _ => throw new NotSupportedException(),
         };

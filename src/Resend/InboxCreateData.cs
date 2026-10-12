@@ -13,8 +13,9 @@ public class InboxCreateData
     /// </summary>
     /// <remarks>
     /// The API trims and lowercases it. The part before the <c>@</c> is at most 64
-    /// characters and contains only letters, numbers, and <c>. _ % + -</c>. It cannot start
-    /// or end with a dot or contain two dots in a row.
+    /// characters and contains only letters, numbers, and <c>.</c>, <c>_</c>, <c>%</c>,
+    /// <c>+</c> and <c>-</c>. It cannot start or end with a dot or contain two dots in a
+    /// row.
     /// </remarks>
     [JsonPropertyName( "email_address" )]
     public string EmailAddress { get; set; } = default!;

@@ -140,13 +140,15 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxAgentUpdate" );
 
-        if ( request.EnumerateObject().Any() == false )
+        var fields = new[] { "instructions", "tone", "enabled_actions" };
+
+        if ( request.ValueKind != JsonValueKind.Object || fields.Any( x => request.TryGetProperty( x, out _ ) ) == false )
             return Invalid( "At least one of `instructions`, `tone`, or `enabled_actions` is required." );
 
         return new ObjectId()
         {
             Object = "inbox_agent",
-            Id = Guid.NewGuid(),
+            Id = AgentId( id ),
         };
     }
 
@@ -282,10 +284,17 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxThreadUpdate" );
 
+#pragma warning disable CS0618
+        var labelId = request.LabelId;
+#pragma warning restore CS0618
+
+        if ( request.IsRead == null && request.Folder == null && labelId == null && request.AddLabelIds == null && request.RemoveLabelIds == null )
+            return Invalid( "At least one of `read`, `folder`, `label_id`, `add_label_ids`, or `remove_label_ids` is required." );
+
         if ( request.Folder == InboxFolder.Sent )
             return Invalid( "The `folder` must be one of: inbox, archive, spam, trash." );
 
-        var add = request.AddLabelIds ?? new List<Guid>();
+        var add = ( request.AddLabelIds ?? new List<Guid>() ).Concat( labelId.HasValue == true ? new[] { labelId.Value } : Array.Empty<Guid>() ).Distinct().ToList();
         var remove = request.RemoveLabelIds ?? new List<Guid>();
 
         if ( add.Intersect( remove ).Any() == true )
@@ -431,16 +440,34 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxDraftUpdate" );
 
-        if ( request.EnumerateObject().Any() == false )
+        if ( request.ValueKind != JsonValueKind.Object )
+            return Invalid( "At least one draft content field is required." );
+
+        var data = request.Deserialize<InboxDraftUpdateData>()!;
+        var fields = new[] { "to", "cc", "bcc", "subject", "text", "html" };
+
+        if ( fields.Any( x => request.TryGetProperty( x, out _ ) ) == false )
             return Invalid( "At least one draft content field is required." );
 
         var draft = Draft( draftId );
 
-        if ( request.TryGetProperty( "subject", out var subject ) == true )
-            draft.Subject = subject.ValueKind == JsonValueKind.Null ? null : subject.GetString();
+        if ( request.TryGetProperty( "to", out _ ) == true )
+            draft.To = data.To;
 
-        if ( request.TryGetProperty( "to", out var to ) == true && to.ValueKind == JsonValueKind.Null )
-            draft.To = null;
+        if ( request.TryGetProperty( "cc", out _ ) == true )
+            draft.Cc = data.Cc ?? new EmailAddressList();
+
+        if ( request.TryGetProperty( "bcc", out _ ) == true )
+            draft.Bcc = data.Bcc ?? new EmailAddressList();
+
+        if ( request.TryGetProperty( "subject", out _ ) == true )
+            draft.Subject = data.Subject;
+
+        if ( request.TryGetProperty( "text", out _ ) == true || request.TryGetProperty( "html", out _ ) == true )
+        {
+            draft.TextBody = data.TextBody;
+            draft.HtmlBody = data.HtmlBody;
+        }
 
         return draft;
     }
@@ -485,6 +512,18 @@ public class InboxController : ControllerBase
             ErrorType = ErrorType.ValidationError,
             Message = message,
         } );
+    }
+
+
+    /// <summary>
+    /// The agent has its own identifier, distinct from the inbox identifier.
+    /// </summary>
+    private static Guid AgentId( Guid inboxId )
+    {
+        var bytes = inboxId.ToByteArray();
+        bytes[ 0 ] ^= 0xFF;
+
+        return new Guid( bytes );
     }
 
 
