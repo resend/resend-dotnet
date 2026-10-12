@@ -17,7 +17,6 @@ public class InboxAgentUpdateData
     private readonly HashSet<string> _assigned = new();
     private string? _instructions;
     private string? _tone;
-    private List<InboxAgentAction>? _enabledActions;
 
 
     /// <summary>
@@ -52,11 +51,7 @@ public class InboxAgentUpdateData
     /// <remarks>
     /// Assign an empty list to disable all actions. Null is left out of the request.
     /// </remarks>
-    public List<InboxAgentAction>? EnabledActions
-    {
-        get => _enabledActions;
-        set { _enabledActions = value; _assigned.Add( "enabled_actions" ); }
-    }
+    public List<InboxAgentAction>? EnabledActions { get; set; }
 
 
     /// <summary />
