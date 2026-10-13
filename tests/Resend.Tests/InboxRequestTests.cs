@@ -479,6 +479,36 @@ public class InboxRequestTests
 
     /// <summary />
     [Fact]
+    public async Task InboxIdempotencyKey_Header()
+    {
+        await _resend.InboxDraftCreateAsync( "draft-key", InboxId, new InboxDraftCreateData() { TextBody = "Refund issued." } );
+        await _resend.InboxDraftSendAsync( "send-key", InboxId, DraftId );
+        await _resend.InboxThreadEmailReplyAsync( "reply-key", InboxId, ThreadId, EmailId, new InboxThreadEmailReplyData() { TextBody = "Refund issued." } );
+        await _resend.InboxThreadEmailForwardAsync( "forward-key", InboxId, ThreadId, EmailId, new InboxThreadEmailForwardData() { To = "colleague@example.org" } );
+
+        Assert.Equal( 4, _handler.Requests.Count );
+        Assert.Equal( new[] { "draft-key", "send-key", "reply-key", "forward-key" }, _handler.Requests.Select( x => x.Headers.GetValues( "Idempotency-Key" ).Single() ) );
+        Assert.Equal( $"/inboxes/{InboxId}/drafts", _handler.Requests[ 0 ].RequestUri!.AbsolutePath );
+        Assert.Equal( $"/inboxes/{InboxId}/drafts/{DraftId}/send", _handler.Requests[ 1 ].RequestUri!.AbsolutePath );
+        Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/emails/{EmailId}/reply", _handler.Requests[ 2 ].RequestUri!.AbsolutePath );
+        Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/emails/{EmailId}/forward", _handler.Requests[ 3 ].RequestUri!.AbsolutePath );
+        Assert.Equal( "Refund issued.", _handler.Bodies[ 0 ].RootElement.GetProperty( "text" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftSend_NoKey_NoHeader()
+    {
+        await _resend.InboxDraftSendAsync( InboxId, DraftId );
+
+        var req = Assert.Single( _handler.Requests );
+        Assert.False( req.Headers.Contains( "Idempotency-Key" ) );
+    }
+
+
+    /// <summary />
+    [Fact]
     public void InboxDraftUpdateData_Roundtrip_KeepsAssignment()
     {
         var json = """{"subject":null,"to":["ada@example.org"]}""";

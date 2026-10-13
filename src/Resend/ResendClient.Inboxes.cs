@@ -240,10 +240,32 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
+    public Task<ResendResponse<Guid>> InboxThreadEmailReplyAsync( string idempotencyKey, Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailReplyData data, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/threads/{threadId}/emails/{emailId}/reply" );
+        req.Content = JsonContent.Create( data );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/threads/{threadId}/emails/{emailId}/forward" );
         req.Content = JsonContent.Create( data );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( string idempotencyKey, Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/threads/{threadId}/emails/{emailId}/forward" );
+        req.Content = JsonContent.Create( data );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
@@ -264,6 +286,17 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts" );
         req.Content = JsonContent.Create( data );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Guid>> InboxDraftCreateAsync( string idempotencyKey, Guid inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts" );
+        req.Content = JsonContent.Create( data );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
@@ -301,6 +334,16 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts/{draftId}/send" );
+
+        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, CancellationToken cancellationToken = default )
+    {
+        var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts/{draftId}/send" );
+        req.Headers.Add( IdempotencyKey, idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }

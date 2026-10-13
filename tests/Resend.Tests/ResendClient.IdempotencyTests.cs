@@ -40,4 +40,33 @@ public partial class ResendClientTests
         Assert.True( resp.Success );
         Assert.NotEqual( Guid.Empty, resp.Content );
     }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftCreate_Key()
+    {
+        var resp = await _resend.InboxDraftCreateAsync( IdempotencyKey.New(), Guid.NewGuid(), new InboxDraftCreateData()
+        {
+            TextBody = "Refund issued for order 1041.",
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftSend_Key()
+    {
+        var draftId = Guid.NewGuid();
+
+        var resp = await _resend.InboxDraftSendAsync( IdempotencyKey.New<Guid>( "draft", draftId ), Guid.NewGuid(), draftId );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
 }

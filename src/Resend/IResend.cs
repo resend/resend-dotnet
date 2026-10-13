@@ -1831,6 +1831,33 @@ public interface IResend
     Task<ResendResponse<Guid>> InboxThreadEmailReplyAsync( Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailReplyData data, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Sends a reply to an email of an inbox thread using idempotency key, such that retries do
+    /// not yield duplicate submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to reply to, as returned by <see cref="InboxThreadEmailListAsync(Guid, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Reply content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The to recipients come from the message you reply to. For a
+    /// message the inbox received, the reply goes to its Reply-To addresses, or to its
+    /// sender when it has no Reply-To. For a message the inbox sent, the reply goes to that
+    /// message's to recipients. Set <see cref="InboxThreadEmailReplyData.ReplyAll"/> to also
+    /// copy the other recipients of the message. The reply threads under the message
+    /// through the In-Reply-To and References headers.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first response, with the
+    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
+    /// while the first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/reply-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailReplyAsync( string idempotencyKey, Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailReplyData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Forwards an email of an inbox thread, from the inbox address, right away.
     /// </summary>
     /// <param name="inboxId">Inbox identifier.</param>
@@ -1848,6 +1875,32 @@ public interface IResend
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
     Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Forwards an email of an inbox thread using idempotency key, such that retries do not
+    /// yield duplicate submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to forward, as returned by <see cref="InboxThreadEmailListAsync(Guid, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Recipients and optional note.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The original message is quoted under a forwarded-message banner,
+    /// below the optional note. The attachments of the original message are sent with the
+    /// forward, together with any attachments you add. The request fails when they exceed
+    /// 10 files or 25 MB of content in total. An original attachment that was sent from a
+    /// URL cannot be forwarded, and the request returns a 422.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first response, with the
+    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
+    /// while the first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( string idempotencyKey, Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Lists the unsent drafts on an inbox, most recently updated first.
@@ -1880,6 +1933,31 @@ public interface IResend
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
     Task<ResendResponse<Guid>> InboxDraftCreateAsync( Guid inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates an unsent draft on an inbox using idempotency key, such that retries do not
+    /// yield duplicate drafts.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier.</param>
+    /// <param name="data">Draft content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Draft identifier.</returns>
+    /// <remarks>
+    /// Attachments are stored on the draft, so each one needs content, a filename and a
+    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// request for an email that already has one returns the identifier of the existing
+    /// draft. That request ignores every other field, except attachments, which replace the
+    /// attachments of the existing draft. A reply draft created without a subject stores an
+    /// empty subject and gets no <c>Re:</c> prefix, so set one before you send it.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first response, with the
+    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
+    /// while the first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftCreateAsync( string idempotencyKey, Guid inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Retrieves a single draft.
@@ -1934,6 +2012,29 @@ public interface IResend
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
     Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a draft using idempotency key, such that retries do not yield duplicate
+    /// submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// A reply draft is sent in its thread. A draft without a thread starts a new thread.
+    /// The draft must have at least one to recipient, a non-empty subject, and an HTML or
+    /// plain text body, or the request returns a 422. A draft that was already sent returns
+    /// a 409.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first response, with the
+    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
+    /// while the first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, CancellationToken cancellationToken = default );
 
     #endregion
 }
