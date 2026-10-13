@@ -76,12 +76,7 @@ public class InboxDraftUpdateDataConverter : JsonConverter<InboxDraftUpdateData>
         WriteAssigned( writer, value, "subject", value.Subject, options );
         WriteAssigned( writer, value, "html", value.HtmlBody, options );
         WriteAssigned( writer, value, "text", value.TextBody, options );
-
-        if ( value.Attachments != null )
-        {
-            writer.WritePropertyName( "attachments" );
-            JsonSerializer.Serialize( writer, value.Attachments, options );
-        }
+        WriteAssigned( writer, value, "attachments", value.Attachments, options );
 
         writer.WriteEndObject();
     }

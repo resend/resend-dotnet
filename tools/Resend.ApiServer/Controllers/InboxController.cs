@@ -461,8 +461,8 @@ public class InboxController : ControllerBase
         if ( request.ValueKind != JsonValueKind.Object )
             return Invalid( "At least one draft content field is required." );
 
-        if ( request.TryGetProperty( "attachments", out var attachments ) == true && attachments.ValueKind != JsonValueKind.Array )
-            return Invalid( "The `attachments` field must be an array." );
+        if ( request.TryGetProperty( "attachments", out var attachments ) == true && attachments.ValueKind != JsonValueKind.Array && attachments.ValueKind != JsonValueKind.Null )
+            return Invalid( "The `attachments` field must be an array or null." );
 
         var data = request.Deserialize<InboxDraftUpdateData>()!;
         var fields = new[] { "to", "cc", "bcc", "subject", "text", "html", "attachments" };
@@ -489,8 +489,8 @@ public class InboxController : ControllerBase
         if ( invalid != null )
             return invalid;
 
-        if ( data.Attachments != null )
-            draft.Attachments = data.Attachments.Select( x => Stored( x ) ).ToList();
+        if ( request.TryGetProperty( "attachments", out _ ) == true )
+            draft.Attachments = data.Attachments?.Select( x => Stored( x ) ).ToList() ?? new List<InboxDraftAttachment>();
 
         if ( request.TryGetProperty( "text", out _ ) == true || request.TryGetProperty( "html", out _ ) == true )
         {
@@ -538,12 +538,20 @@ public class InboxController : ControllerBase
 
 
     /// <summary>
-    /// Resend sets these headers itself, so the API rejects them in any letter case.
+    /// Resend sets the reserved headers itself, so the API rejects them in any letter case.
     /// </summary>
     private UnprocessableEntityObjectResult? ReservedHeader( Dictionary<string, string>? headers )
     {
+        if ( headers == null )
+            return null;
+
+        var unsafeChars = new[] { '\r', '\n', '\0' };
+
+        if ( headers.Any( x => x.Key.Length == 0 || x.Key.IndexOfAny( unsafeChars ) >= 0 || x.Value.IndexOfAny( unsafeChars ) >= 0 ) == true )
+            return Invalid( "Header names cannot be empty, and names and values cannot contain line breaks or null characters." );
+
         var reserved = new[] { "In-Reply-To", "References", "Reply-To" };
-        var name = headers?.Keys.FirstOrDefault( x => reserved.Contains( x, StringComparer.OrdinalIgnoreCase ) );
+        var name = headers.Keys.FirstOrDefault( x => reserved.Contains( x, StringComparer.OrdinalIgnoreCase ) );
 
         if ( name == null )
             return null;

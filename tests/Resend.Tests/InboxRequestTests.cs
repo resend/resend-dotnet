@@ -436,16 +436,28 @@ public class InboxRequestTests
 
 
     /// <summary>
-    /// The API rejects a null attachment list, so a null assignment is left out and the
-    /// draft keeps its attachments.
+    /// A null assignment removes every attachment, while an unassigned list keeps them.
     /// </summary>
     [Fact]
-    public async Task InboxDraftUpdate_NullAttachments_Omitted()
+    public async Task InboxDraftUpdate_NullAttachments_Sent()
+    {
+        await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
+        {
+            Attachments = null,
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( JsonValueKind.Null, body.GetProperty( "attachments" ).ValueKind );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdate_UnassignedAttachments_Omitted()
     {
         await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
         {
             Subject = "Refund",
-            Attachments = null,
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;

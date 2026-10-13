@@ -438,7 +438,9 @@ public partial class ResendClientTests
     [InlineData( "Reply-To" )]
     [InlineData( "in-reply-to" )]
     [InlineData( "REFERENCES" )]
-    public async Task InboxThreadEmailReplyRejectsReservedHeader( string header )
+    [InlineData( "X-Bad\nName" )]
+    [InlineData( "" )]
+    public async Task InboxThreadEmailReplyRejectsInvalidHeader( string header )
     {
         var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxThreadEmailReplyAsync( Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), new InboxThreadEmailReplyData()
         {
@@ -581,6 +583,21 @@ public partial class ResendClientTests
         var resp = await _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
         {
             Attachments = new List<EmailAttachment>(),
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Empty( resp.Content.Attachments );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdateNullAttachmentsRemovesAll()
+    {
+        var resp = await _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
+        {
+            Attachments = null,
         } );
 
         Assert.NotNull( resp );

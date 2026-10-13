@@ -25,6 +25,7 @@ public class InboxDraftUpdateData
     private string? _subject;
     private string? _html;
     private string? _text;
+    private List<EmailAttachment>? _attachments;
 
 
     /// <summary>
@@ -108,10 +109,13 @@ public class InboxDraftUpdateData
     /// and <see cref="EmailAttachment.ContentType"/>. A path or a content identifier returns
     /// a 422. The files on a draft can total at most 25 MB. An empty file or a blocked file
     /// type returns a 422. Assigning a list replaces every attachment on the draft. Assign an
-    /// empty list to remove them all. Null is left out of the request and keeps the current
-    /// attachments.
+    /// empty list or null to remove them all.
     /// </remarks>
-    public List<EmailAttachment>? Attachments { get; set; }
+    public List<EmailAttachment>? Attachments
+    {
+        get => _attachments;
+        set { _attachments = value; _assigned.Add( "attachments" ); }
+    }
 
 
     /// <summary />

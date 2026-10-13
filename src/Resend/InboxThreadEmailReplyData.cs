@@ -81,7 +81,9 @@ public class InboxThreadEmailReplyData
     /// </summary>
     /// <remarks>
     /// The In-Reply-To, References and Reply-To headers are set by Resend and cannot be set
-    /// here. Sending one of them, in any letter case, returns a 422.
+    /// here. Sending one of them, in any letter case, returns a 422. A header name cannot be
+    /// empty, and names and values cannot contain line breaks or null characters, or the
+    /// request returns a 422.
     /// </remarks>
     [JsonPropertyName( "headers" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
@@ -93,7 +95,8 @@ public class InboxThreadEmailReplyData
     /// <remarks>
     /// Each one needs content or a path. Up to 10 files. The content of all files can total
     /// at most 25 MB. A path file counts toward the 10 files only, because it is fetched
-    /// when the email is sent.
+    /// when the email is sent. An empty file, a blocked file type, or a path that is not an
+    /// http or https URL, or that points to localhost, returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]

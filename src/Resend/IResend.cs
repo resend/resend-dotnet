@@ -1849,9 +1849,10 @@ public interface IResend
     /// copy the other recipients of the message. The reply threads under the message
     /// through the In-Reply-To and References headers.
     /// <para>
-    /// A retry with the same key within 24 hours returns the first response, with the
-    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
-    /// while the first request is still running, returns a 409.
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
     /// </para>
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/reply-thread-email"/>
@@ -1894,9 +1895,10 @@ public interface IResend
     /// 10 files or 25 MB of content in total. An original attachment that was sent from a
     /// URL cannot be forwarded, and the request returns a 422.
     /// <para>
-    /// A retry with the same key within 24 hours returns the first response, with the
-    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
-    /// while the first request is still running, returns a 409.
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
     /// </para>
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
@@ -1951,9 +1953,10 @@ public interface IResend
     /// attachments of the existing draft. A reply draft created without a subject stores an
     /// empty subject and gets no <c>Re:</c> prefix, so set one before you send it.
     /// <para>
-    /// A retry with the same key within 24 hours returns the first response, with the
-    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
-    /// while the first request is still running, returns a 409.
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
     /// </para>
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
@@ -2030,9 +2033,10 @@ public interface IResend
     /// plain text body, or the request returns a 422. A draft that was already sent returns
     /// a 409.
     /// <para>
-    /// A retry with the same key within 24 hours returns the first response, with the
-    /// <c>idempotent-replayed: true</c> header. Reusing the key with a different body, or
-    /// while the first request is still running, returns a 409.
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
     /// </para>
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>

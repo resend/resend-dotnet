@@ -13,7 +13,9 @@ public class InboxDraftSendData
     /// </summary>
     /// <remarks>
     /// The In-Reply-To, References and Reply-To headers are set by Resend and cannot be set
-    /// here. Sending one of them, in any letter case, returns a 422.
+    /// here. Sending one of them, in any letter case, returns a 422. A header name cannot be
+    /// empty, and names and values cannot contain line breaks or null characters, or the
+    /// request returns a 422.
     /// </remarks>
     [JsonPropertyName( "headers" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
