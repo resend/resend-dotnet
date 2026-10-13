@@ -284,14 +284,10 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxThreadUpdate" );
 
-#pragma warning disable CS0618
-        var labelId = request.LabelId;
-#pragma warning restore CS0618
+        if ( request.IsRead == null && request.Folder == null && request.AddLabelIds == null && request.RemoveLabelIds == null )
+            return Invalid( "At least one of `read`, `folder`, `add_label_ids`, or `remove_label_ids` is required." );
 
-        if ( request.IsRead == null && request.Folder == null && labelId == null && request.AddLabelIds == null && request.RemoveLabelIds == null )
-            return Invalid( "At least one of `read`, `folder`, `label_id`, `add_label_ids`, or `remove_label_ids` is required." );
-
-        var add = ( request.AddLabelIds ?? new List<Guid>() ).Concat( labelId.HasValue == true ? new[] { labelId.Value } : Array.Empty<Guid>() ).Distinct().ToList();
+        var add = request.AddLabelIds ?? new List<Guid>();
         var remove = request.RemoveLabelIds ?? new List<Guid>();
 
         if ( add.Intersect( remove ).Any() == true )

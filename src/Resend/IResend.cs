@@ -1755,8 +1755,9 @@ public interface IResend
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated thread summary.</returns>
     /// <remarks>
-    /// A label identifier cannot be both added and removed in the same request. Moving a
-    /// thread out of trash restores it and clears its deletion deadline.
+    /// A label identifier cannot be both added and removed in the same request. Removing a
+    /// label from a thread keeps the label itself. Moving a thread out of trash restores it
+    /// and clears its deletion deadline.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/update-thread"/>
     Task<ResendResponse<InboxThreadSummary>> InboxThreadUpdateAsync( Guid inboxId, Guid threadId, InboxThreadUpdateData data, CancellationToken cancellationToken = default );

@@ -30,17 +30,6 @@ public class InboxThreadUpdateData
     public InboxMoveFolder? Folder { get; set; }
 
     /// <summary>
-    /// Applies this label to the thread, the same as one entry in <see cref="AddLabelIds"/>.
-    /// </summary>
-    /// <remarks>
-    /// A label identifier that does not exist in the inbox returns a 404.
-    /// </remarks>
-    [Obsolete( "Use AddLabelIds instead." )]
-    [JsonPropertyName( "label_id" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public Guid? LabelId { get; set; }
-
-    /// <summary>
     /// Label identifiers to apply to the thread.
     /// </summary>
     /// <remarks>
@@ -55,8 +44,8 @@ public class InboxThreadUpdateData
     /// Label identifiers to remove from the thread.
     /// </summary>
     /// <remarks>
-    /// Between 1 and 10 identifiers. A label identifier that does not exist in the inbox
-    /// returns a 404.
+    /// Between 1 and 10 identifiers. The labels themselves are kept. A label identifier that
+    /// does not exist in the inbox returns a 404.
     /// </remarks>
     [JsonPropertyName( "remove_label_ids" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
