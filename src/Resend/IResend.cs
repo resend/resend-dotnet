@@ -1863,8 +1863,10 @@ public interface IResend
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Draft identifier.</returns>
     /// <remarks>
-    /// Only one unsent reply draft can target an email, so a reply draft request for an
-    /// email that already has one returns the identifier of the existing draft.
+    /// Attachments are stored on the draft, so each one needs content, a filename and a
+    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// request for an email that already has one returns the identifier of the existing
+    /// draft.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
     Task<ResendResponse<Guid>> InboxDraftCreateAsync( Guid inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
@@ -1888,7 +1890,8 @@ public interface IResend
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated draft.</returns>
     /// <remarks>
-    /// A draft that was already sent, or that changed during the request, returns a 409.
+    /// Assigning attachments replaces every attachment on the draft. A draft that was
+    /// already sent, or that changed during the request, returns a 409.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/update-draft"/>
     Task<ResendResponse<InboxDraft>> InboxDraftUpdateAsync( Guid inboxId, Guid draftId, InboxDraftUpdateData data, CancellationToken cancellationToken = default );

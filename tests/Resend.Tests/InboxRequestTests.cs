@@ -401,6 +401,60 @@ public class InboxRequestTests
 
     /// <summary />
     [Fact]
+    public async Task InboxDraftCreate_Attachments()
+    {
+        await _resend.InboxDraftCreateAsync( InboxId, new InboxDraftCreateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "note.txt", Content = Encoding.UTF8.GetBytes( "hello" ), ContentType = "text/plain" },
+            },
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
+        Assert.Equal( "note.txt", attachment.GetProperty( "filename" ).GetString() );
+        Assert.Equal( "text/plain", attachment.GetProperty( "content_type" ).GetString() );
+        Assert.Equal( Convert.ToBase64String( Encoding.UTF8.GetBytes( "hello" ) ), attachment.GetProperty( "content" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdate_EmptyAttachments_Sent()
+    {
+        await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
+        {
+            Attachments = new List<EmailAttachment>(),
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( 0, body.GetProperty( "attachments" ).GetArrayLength() );
+        Assert.Single( body.EnumerateObject() );
+    }
+
+
+    /// <summary>
+    /// The API rejects a null attachment list, so a null assignment is left out and the
+    /// draft keeps its attachments.
+    /// </summary>
+    [Fact]
+    public async Task InboxDraftUpdate_NullAttachments_Omitted()
+    {
+        await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
+        {
+            Subject = "Refund",
+            Attachments = null,
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.False( body.TryGetProperty( "attachments", out _ ) );
+        Assert.Equal( "Refund", body.GetProperty( "subject" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task InboxDraftUpdate_NothingAssigned_EmptyObject()
     {
         await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData() );
@@ -435,6 +489,7 @@ public class InboxRequestTests
         Assert.Equal( JsonValueKind.Null, again.GetProperty( "subject" ).ValueKind );
         Assert.Equal( "ada@example.org", again.GetProperty( "to" )[ 0 ].GetString() );
         Assert.False( again.TryGetProperty( "html", out _ ) );
+        Assert.False( again.TryGetProperty( "attachments", out _ ) );
     }
 
 

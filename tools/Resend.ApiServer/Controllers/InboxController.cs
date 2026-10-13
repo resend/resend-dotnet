@@ -415,6 +415,9 @@ public class InboxController : ControllerBase
         if ( request.ThreadId.HasValue != request.ReplyToEmailId.HasValue )
             return Invalid( "`thread_id` and `reply_to_email_id` must be provided together." );
 
+        if ( request.Attachments?.Any( x => x.Path != null || x.ContentId != null ) == true )
+            return Invalid( "Draft attachments do not support `path` or `content_id`. Send `content` instead." );
+
         return StatusCode( (int) HttpStatusCode.Created, new ObjectId()
         {
             Object = "inbox_draft",
@@ -445,7 +448,7 @@ public class InboxController : ControllerBase
             return Invalid( "At least one draft content field is required." );
 
         var data = request.Deserialize<InboxDraftUpdateData>()!;
-        var fields = new[] { "to", "cc", "bcc", "subject", "text", "html" };
+        var fields = new[] { "to", "cc", "bcc", "subject", "text", "html", "attachments" };
 
         if ( fields.Any( x => request.TryGetProperty( x, out _ ) ) == false )
             return Invalid( "At least one draft content field is required." );
@@ -463,6 +466,9 @@ public class InboxController : ControllerBase
 
         if ( request.TryGetProperty( "subject", out _ ) == true )
             draft.Subject = data.Subject;
+
+        if ( data.Attachments != null )
+            draft.Attachments = data.Attachments.Select( x => Stored( x ) ).ToList();
 
         if ( request.TryGetProperty( "text", out _ ) == true || request.TryGetProperty( "html", out _ ) == true )
         {
@@ -610,8 +616,25 @@ public class InboxController : ControllerBase
             Subject = "Refund for order 1041",
             HtmlBody = "<p>Refund issued for order 1041.</p>",
             TextBody = "Refund issued for order 1041.",
+            Attachments = new List<InboxDraftAttachment>()
+            {
+                new InboxDraftAttachment() { Id = Guid.NewGuid(), Filename = "receipt.pdf", ContentType = "application/pdf", FileSize = 20841 },
+            },
             MomentCreated = DateTime.UtcNow,
             MomentUpdated = DateTime.UtcNow,
+        };
+    }
+
+
+    /// <summary />
+    private static InboxDraftAttachment Stored( EmailAttachment attachment )
+    {
+        return new InboxDraftAttachment()
+        {
+            Id = Guid.NewGuid(),
+            Filename = attachment.Filename,
+            ContentType = attachment.ContentType ?? "",
+            FileSize = attachment.Content?.Length ?? 0,
         };
     }
 }

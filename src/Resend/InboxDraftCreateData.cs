@@ -7,8 +7,8 @@ namespace Resend;
 /// </summary>
 /// <remarks>
 /// At least one of <see cref="To"/>, <see cref="Cc"/>, <see cref="Bcc"/>,
-/// <see cref="Subject"/>, <see cref="TextBody"/> or <see cref="HtmlBody"/> must be
-/// non-empty. The combined recipients cannot exceed 50. Omit <see cref="ThreadId"/> and
+/// <see cref="Subject"/>, <see cref="TextBody"/>, <see cref="HtmlBody"/> or
+/// <see cref="Attachments"/> must be non-empty. The combined recipients cannot exceed 50. Omit <see cref="ThreadId"/> and
 /// <see cref="ReplyToEmailId"/> for a draft that starts a new thread. Set both together
 /// for a reply draft in an existing thread.
 /// </remarks>
@@ -66,6 +66,18 @@ public class InboxDraftCreateData
     [JsonPropertyName( "text" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? TextBody { get; set; }
+
+    /// <summary>
+    /// Files to store on the draft.
+    /// </summary>
+    /// <remarks>
+    /// Each one needs <see cref="EmailAttachment.Content"/>, <see cref="EmailAttachment.Filename"/>
+    /// and <see cref="EmailAttachment.ContentType"/>. A path or a content identifier returns
+    /// a 422. A draft can carry up to 10 files and 25 MB in total.
+    /// </remarks>
+    [JsonPropertyName( "attachments" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public List<EmailAttachment>? Attachments { get; set; }
 
     /// <summary>
     /// Thread identifier to reply in. Must be set with <see cref="ReplyToEmailId"/>.

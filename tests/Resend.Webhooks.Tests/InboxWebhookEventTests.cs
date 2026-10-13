@@ -38,6 +38,7 @@ public class InboxWebhookEventTests
             "thread_id": "7c1f0a2e-5d3b-4e8a-9f61-2b8d4c6e1a90",
             "reply_to_email_id": "4ef9a417-02e9-4d39-ad75-9611e0fcc33c",
             "email_id": null,
+            "attachments": [ { "id": "5c1e9d2a-7b3f-4e8a-9c6d-2f0a1b3c4d5e", "filename": "receipt.pdf", "content_type": "application/pdf", "size": 20841 } ],
             "created_at": "2026-09-29T11:58:00.000Z",
             "updated_at": "2026-09-29T12:00:00.000Z"
         }
@@ -182,6 +183,7 @@ public class InboxWebhookEventTests
         Assert.NotNull( data.Draft );
         Assert.Equal( InboxDraftType.Reply, data.Draft.DraftType );
         Assert.Equal( data.EmailId, data.Draft.EmailId );
+        Assert.Equal( "application/pdf", Assert.Single( data.Draft.Attachments ).ContentType );
         Assert.Null( data.Email );
     }
 

@@ -54,6 +54,12 @@ public class InboxEventDraft
     public string? Subject { get; set; }
 
     /// <summary>
+    /// Files stored on the draft.
+    /// </summary>
+    [JsonPropertyName( "attachments" )]
+    public List<InboxDraftAttachment> Attachments { get; set; } = new();
+
+    /// <summary>
     /// Thread identifier, when the draft is a reply.
     /// </summary>
     [JsonPropertyName( "thread_id" )]

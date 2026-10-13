@@ -51,6 +51,10 @@ public class InboxDraftUpdateDataConverter : JsonConverter<InboxDraftUpdateData>
                     value.TextBody = JsonSerializer.Deserialize<string?>( ref reader, options );
                     break;
 
+                case "attachments":
+                    value.Attachments = JsonSerializer.Deserialize<List<EmailAttachment>?>( ref reader, options );
+                    break;
+
                 default:
                     reader.Skip();
                     break;
@@ -72,6 +76,12 @@ public class InboxDraftUpdateDataConverter : JsonConverter<InboxDraftUpdateData>
         WriteAssigned( writer, value, "subject", value.Subject, options );
         WriteAssigned( writer, value, "html", value.HtmlBody, options );
         WriteAssigned( writer, value, "text", value.TextBody, options );
+
+        if ( value.Attachments != null )
+        {
+            writer.WritePropertyName( "attachments" );
+            JsonSerializer.Serialize( writer, value.Attachments, options );
+        }
 
         writer.WriteEndObject();
     }

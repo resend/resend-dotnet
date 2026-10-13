@@ -485,6 +485,56 @@ public partial class ResendClientTests
 
     /// <summary />
     [Fact]
+    public async Task InboxDraftCreateRejectsPathAttachment()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxDraftCreateAsync( Guid.NewGuid(), new InboxDraftCreateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "receipt.pdf", Path = "https://example.com/receipt.pdf" },
+            },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdateReplacesAttachments()
+    {
+        var resp = await _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "note.txt", Content = "hello", ContentType = "text/plain" },
+            },
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Equal( "note.txt", Assert.Single( resp.Content.Attachments ).Filename );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdateEmptyAttachmentsRemovesAll()
+    {
+        var resp = await _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
+        {
+            Attachments = new List<EmailAttachment>(),
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Empty( resp.Content.Attachments );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task InboxDraftCreateReplyNeedsBothIds()
     {
         var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxDraftCreateAsync( Guid.NewGuid(), new InboxDraftCreateData()
@@ -512,6 +562,11 @@ public partial class ResendClientTests
         Assert.Equal( "inbox_draft", resp.Content.Object );
         Assert.Equal( draftId, resp.Content.Id );
         Assert.Null( resp.Content.EmailId );
+
+        var attachment = Assert.Single( resp.Content.Attachments );
+        Assert.Equal( "receipt.pdf", attachment.Filename );
+        Assert.Equal( "application/pdf", attachment.ContentType );
+        Assert.Equal( 20841, attachment.FileSize );
     }
 
 
