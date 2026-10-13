@@ -657,7 +657,8 @@ public class InboxController : ControllerBase
 
     /// <summary>
     /// A draft stores the bytes at once, so each file needs its content, filename and content
-    /// type, and the API rejects a path or a content identifier.
+    /// type, and the API rejects a path or a content identifier. The API has no file-count
+    /// limit for drafts, only a 25 MB total.
     /// </summary>
     private UnprocessableEntityObjectResult? InvalidAttachments( List<EmailAttachment>? attachments )
     {
@@ -667,8 +668,8 @@ public class InboxController : ControllerBase
         if ( attachments.Any( x => x.Path != null || x.ContentId != null ) == true )
             return Invalid( "Draft attachments do not support `path` or `content_id`. Send `content` instead." );
 
-        if ( attachments.Any( x => x.Content == null || string.IsNullOrEmpty( x.Filename ) == true || string.IsNullOrEmpty( x.ContentType ) == true ) == true )
-            return Invalid( "Each draft attachment needs `content`, `filename` and `content_type`." );
+        if ( attachments.Any( x => x.Content == null || x.Content.Value.Length == 0 || string.IsNullOrEmpty( x.Filename ) == true || string.IsNullOrEmpty( x.ContentType ) == true ) == true )
+            return Invalid( "Each draft attachment needs non-empty `content`, a `filename` and a `content_type`." );
 
         return null;
     }

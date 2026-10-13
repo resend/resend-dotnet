@@ -65,10 +65,12 @@ public class InboxThreadEmailReplyData
     /// Reply to everyone on the original message.
     /// </summary>
     /// <remarks>
-    /// The reply goes to the author of the message, or to its Reply-To addresses if it has
-    /// any. The other to and cc recipients of the message are copied in cc. The inbox
-    /// address is always excluded. For a message the inbox sent, the reply goes to that
-    /// message's to recipients and copies its cc recipients. Defaults server-side to false.
+    /// For a message the inbox received, the reply goes to its Reply-To addresses, or to its
+    /// sender when it has none, and copies the other addresses of its To header and its cc
+    /// recipients in cc. For a message the inbox sent, the reply goes to that message's
+    /// Reply-To addresses when they are not the inbox address, otherwise to its to
+    /// recipients, and copies its cc recipients. The inbox address is always excluded, and
+    /// duplicates are removed. Defaults server-side to false.
     /// </remarks>
     [JsonPropertyName( "reply_all" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]

@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 namespace Resend;
 
 /// <summary>
-/// Request body to update the agent settings of an inbox. Provide at least one field.
+/// Request body to update the agent settings of an inbox. Provide at least one of
+/// <see cref="Instructions"/>, <see cref="Tone"/> or <see cref="EnabledActions"/>.
 /// </summary>
 /// <remarks>
 /// A property that is not assigned is left out of the request and keeps its current value.
@@ -49,7 +50,8 @@ public class InboxAgentUpdateData
     /// Actions the agent can take. Replaces the whole set.
     /// </summary>
     /// <remarks>
-    /// Assign an empty list to disable all actions. Null is left out of the request.
+    /// Duplicates are removed. Assign an empty list to disable all actions. Null is left out
+    /// of the request.
     /// </remarks>
     public List<InboxAgentAction>? EnabledActions { get; set; }
 

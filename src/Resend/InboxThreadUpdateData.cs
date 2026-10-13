@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 namespace Resend;
 
 /// <summary>
-/// Request body to update an inbox thread. Provide at least one field.
+/// Request body to update an inbox thread. Provide at least one of <see cref="IsRead"/>,
+/// <see cref="Folder"/>, <see cref="AddLabelIds"/> or <see cref="RemoveLabelIds"/>.
 /// </summary>
 /// <remarks>
 /// A label identifier cannot be both added and removed in the same request.

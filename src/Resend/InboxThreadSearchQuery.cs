@@ -7,7 +7,9 @@ namespace Resend;
 /// Different parameters combine, so a thread must match all of them.
 /// <see cref="InboxThreadListQuery.Folders"/>, <see cref="InboxThreadListQuery.Labels"/>
 /// and <see cref="InboxThreadListQuery.IsRead"/> apply to the thread. The other filters
-/// must all match the same email in the thread.
+/// must all match the same email in the thread. When any of these email filters is set, the
+/// matching email must itself be in one of the folders. For <see cref="InboxFolder.Sent"/>,
+/// that means an email the inbox sent.
 /// </remarks>
 public class InboxThreadSearchQuery : InboxThreadListQuery
 {
@@ -18,8 +20,6 @@ public class InboxThreadSearchQuery : InboxThreadListQuery
     /// <remarks>
     /// Every word must match. Wrap words in double quotes to match an exact phrase. Start a
     /// word or quoted phrase with <c>-</c> to exclude it. Max 256 characters and 32 words.
-    /// With a query, <see cref="InboxFolder.Sent"/> also requires the matching email to be
-    /// one the inbox sent.
     /// </remarks>
     public string? Query { get; set; }
 

@@ -73,7 +73,8 @@ public class InboxDraftCreateData
     /// <remarks>
     /// Each one needs <see cref="EmailAttachment.Content"/>, <see cref="EmailAttachment.Filename"/>
     /// and <see cref="EmailAttachment.ContentType"/>. A path or a content identifier returns
-    /// a 422. A draft can carry up to 10 files and 25 MB in total.
+    /// a 422. The files on a draft can total at most 25 MB. An empty file or a blocked file
+    /// type returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]

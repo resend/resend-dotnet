@@ -537,6 +537,25 @@ public partial class ResendClientTests
     }
 
 
+    /// <summary>
+    /// Drafts have no file-count limit, only a total size limit.
+    /// </summary>
+    [Fact]
+    public async Task InboxDraftCreateAcceptsElevenAttachments()
+    {
+        var resp = await _resend.InboxDraftCreateAsync( Guid.NewGuid(), new InboxDraftCreateData()
+        {
+            Attachments = Enumerable.Range( 1, 11 )
+                .Select( x => new EmailAttachment() { Filename = $"f{x}.txt", Content = $"file {x}", ContentType = "text/plain" } )
+                .ToList(),
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
     /// <summary />
     [Fact]
     public async Task InboxDraftUpdateEmptyAttachmentsRemovesAll()

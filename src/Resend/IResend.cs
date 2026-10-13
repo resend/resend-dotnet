@@ -1556,7 +1556,8 @@ public interface IResend
     /// verified for sending, and Resend generates a receiving address on the team inbound
     /// domain. A domain that does not meet these rules returns a 422 validation_error. An
     /// address or receiving address that is already in use returns a 409. A team that has
-    /// reached the inbox limit of its plan returns a 403 validation_error.
+    /// reached the inbox limit of its plan returns a 403 validation_error. A blocked account
+    /// returns a 451.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/create-inbox"/>
     Task<ResendResponse<Guid>> InboxCreateAsync( InboxCreateData data, CancellationToken cancellationToken = default );
@@ -1569,7 +1570,9 @@ public interface IResend
     /// <returns>Page of inboxes.</returns>
     /// <remarks>
     /// The list items carry fewer fields than a single inbox. Use
-    /// <see cref="InboxRetrieveAsync(Guid, CancellationToken)"/> to get all its fields.
+    /// <see cref="InboxRetrieveAsync(Guid, CancellationToken)"/> to get all its fields. The
+    /// cursors take an inbox identifier. A value that is not a UUID returns a 422, and an
+    /// unknown identifier returns a 404.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/list-inboxes"/>
     Task<ResendResponse<PaginatedResult<InboxSummary>>> InboxListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
@@ -1708,7 +1711,8 @@ public interface IResend
     /// <remarks>
     /// A thread is a conversation made up of one or more emails. The cursors take a thread
     /// identifier, and only one of them can be passed. A date cursor returns a 422
-    /// validation_error. To find threads by text, sender, recipient, attachment, or date,
+    /// validation_error. A cursor thread that is not in the selected folders returns a 404.
+    /// To find threads by text, sender, recipient, attachment, or date,
     /// use <see cref="InboxThreadSearchAsync"/>.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/list-threads"/>
@@ -1757,7 +1761,9 @@ public interface IResend
     /// <remarks>
     /// A label identifier cannot be both added and removed in the same request. Removing a
     /// label from a thread keeps the label itself. Moving a thread out of trash restores it
-    /// and clears its deletion deadline.
+    /// and clears its deletion deadline. The changes apply in this order: read, folder,
+    /// added labels, removed labels. They are not atomic, so a 404 for a label leaves the
+    /// earlier changes applied.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/update-thread"/>
     Task<ResendResponse<InboxThreadSummary>> InboxThreadUpdateAsync( Guid inboxId, Guid threadId, InboxThreadUpdateData data, CancellationToken cancellationToken = default );
@@ -1787,7 +1793,8 @@ public interface IResend
     /// <remarks>
     /// Pass the identifier of the last email as the after cursor to get the next, newer
     /// page. Pass the identifier of the first email as the before cursor to get the
-    /// previous, older page. You cannot combine the two cursors.
+    /// previous, older page. You cannot combine the two cursors. A cursor that is not an
+    /// email of the thread returns a 404.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/list-thread-emails"/>
     Task<ResendResponse<PaginatedResult<InboxThreadEmail>>> InboxThreadEmailListAsync( Guid inboxId, Guid threadId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
@@ -1836,7 +1843,8 @@ public interface IResend
     /// No draft is stored. The original message is quoted under a forwarded-message banner,
     /// below the optional note. The attachments of the original message are sent with the
     /// forward, together with any attachments you add. The request fails when they exceed
-    /// 10 files or 25 MB of content in total.
+    /// 10 files or 25 MB of content in total. An original attachment that was sent from a
+    /// URL cannot be forwarded, and the request returns a 422.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
     Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( Guid inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default );
@@ -1866,7 +1874,9 @@ public interface IResend
     /// Attachments are stored on the draft, so each one needs content, a filename and a
     /// content type. Only one unsent reply draft can target an email, so a reply draft
     /// request for an email that already has one returns the identifier of the existing
-    /// draft.
+    /// draft. That request ignores every other field, except attachments, which replace the
+    /// attachments of the existing draft. A reply draft created without a subject stores an
+    /// empty subject and gets no <c>Re:</c> prefix, so set one before you send it.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
     Task<ResendResponse<Guid>> InboxDraftCreateAsync( Guid inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
@@ -1918,8 +1928,9 @@ public interface IResend
     /// <returns>Identifier of the sent email.</returns>
     /// <remarks>
     /// A reply draft is sent in its thread. A draft without a thread starts a new thread.
-    /// The draft must have at least one to recipient, or the request returns a 422. A draft
-    /// that was already sent returns a 409.
+    /// The draft must have at least one to recipient, a non-empty subject, and an HTML or
+    /// plain text body, or the request returns a 422. A draft that was already sent returns
+    /// a 409.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
     Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, CancellationToken cancellationToken = default );

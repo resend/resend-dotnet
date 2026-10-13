@@ -67,7 +67,8 @@ public class InboxThreadEmailForwardData
     /// Each one needs content or a path. They share one limit with the attachments of the
     /// original message, which the forward also sends. Together they can have up to 10
     /// files and at most 25 MB of content. A path file counts toward the 10 files only,
-    /// because it is fetched when the email is sent.
+    /// because it is fetched when the email is sent. An original attachment that was sent
+    /// from a URL cannot be forwarded, and the request returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
