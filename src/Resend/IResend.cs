@@ -2002,6 +2002,7 @@ public interface IResend
     /// </summary>
     /// <param name="inboxId">Inbox identifier.</param>
     /// <param name="draftId">Draft identifier.</param>
+    /// <param name="data">Optional custom headers. Without it, the request has no body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Identifier of the sent email.</returns>
     /// <remarks>
@@ -2011,7 +2012,7 @@ public interface IResend
     /// a 409.
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
-    Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default );
 
     /// <summary>
     /// Sends a draft using idempotency key, such that retries do not yield duplicate
@@ -2020,6 +2021,7 @@ public interface IResend
     /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
     /// <param name="inboxId">Inbox identifier.</param>
     /// <param name="draftId">Draft identifier.</param>
+    /// <param name="data">Optional custom headers. Without it, the request has no body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Identifier of the sent email.</returns>
     /// <remarks>
@@ -2034,7 +2036,7 @@ public interface IResend
     /// </para>
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
-    Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default );
 
     #endregion
 }

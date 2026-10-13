@@ -331,18 +331,25 @@ public partial class ResendClient
 
 
     /// <inheritdoc />
-    public Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> InboxDraftSendAsync( Guid inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts/{draftId}/send" );
+
+        if ( data != null )
+            req.Content = JsonContent.Create( data );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
     }
 
 
     /// <inheritdoc />
-    public Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, CancellationToken cancellationToken = default )
+    public Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, Guid inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, $"/inboxes/{inboxId}/drafts/{draftId}/send" );
+
+        if ( data != null )
+            req.Content = JsonContent.Create( data );
+
         req.Headers.Add( IdempotencyKey, idempotencyKey );
 
         return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );

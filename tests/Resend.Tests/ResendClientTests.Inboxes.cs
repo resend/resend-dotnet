@@ -434,6 +434,24 @@ public partial class ResendClientTests
 
 
     /// <summary />
+    [Theory]
+    [InlineData( "Reply-To" )]
+    [InlineData( "in-reply-to" )]
+    [InlineData( "REFERENCES" )]
+    public async Task InboxThreadEmailReplyRejectsReservedHeader( string header )
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxThreadEmailReplyAsync( Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), new InboxThreadEmailReplyData()
+        {
+            TextBody = "Refund issued.",
+            Headers = new Dictionary<string, string>() { { header, "x" } },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
     [Fact]
     public async Task InboxThreadEmailForward()
     {
@@ -645,6 +663,34 @@ public partial class ResendClientTests
         Assert.NotNull( resp.Content );
         Assert.Equal( draftId, resp.Content.Id );
         Assert.True( resp.Content.Deleted );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftSendWithHeaders()
+    {
+        var resp = await _resend.InboxDraftSendAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftSendData()
+        {
+            Headers = new Dictionary<string, string>() { { "X-Ticket-Id", "4821" } },
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftSendRejectsReservedHeader()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxDraftSendAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftSendData()
+        {
+            Headers = new Dictionary<string, string>() { { "Reply-To", "a@example.com" } },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
     }
 
 

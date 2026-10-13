@@ -328,6 +328,7 @@ public class InboxRequestTests
         Assert.Equal( "Refund issued.", body.GetProperty( "text" ).GetString() );
         Assert.False( body.TryGetProperty( "html", out _ ) );
         Assert.False( body.TryGetProperty( "reply_all", out _ ) );
+        Assert.False( body.TryGetProperty( "headers", out _ ) );
 
         var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
         Assert.Equal( "note.txt", attachment.GetProperty( "filename" ).GetString() );
@@ -493,6 +494,39 @@ public class InboxRequestTests
         Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/emails/{EmailId}/reply", _handler.Requests[ 2 ].RequestUri!.AbsolutePath );
         Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/emails/{EmailId}/forward", _handler.Requests[ 3 ].RequestUri!.AbsolutePath );
         Assert.Equal( "Refund issued.", _handler.Bodies[ 0 ].RootElement.GetProperty( "text" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftSend_Headers_Body()
+    {
+        await _resend.InboxDraftSendAsync( "send-key", InboxId, DraftId, new InboxDraftSendData()
+        {
+            Headers = new Dictionary<string, string>() { { "X-Ticket-Id", "4821" } },
+        } );
+
+        var req = Assert.Single( _handler.Requests );
+        Assert.Equal( "send-key", req.Headers.GetValues( "Idempotency-Key" ).Single() );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( "4821", body.GetProperty( "headers" ).GetProperty( "X-Ticket-Id" ).GetString() );
+        Assert.Single( body.EnumerateObject() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadEmailForward_Headers()
+    {
+        await _resend.InboxThreadEmailForwardAsync( InboxId, ThreadId, EmailId, new InboxThreadEmailForwardData()
+        {
+            To = "colleague@example.org",
+            Headers = new Dictionary<string, string>() { { "X-Ticket-Id", "4821" } },
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( "4821", body.GetProperty( "headers" ).GetProperty( "X-Ticket-Id" ).GetString() );
     }
 
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Resend.Payloads;
 using System.Net;
 using System.Text;
@@ -360,6 +361,11 @@ public class InboxController : ControllerBase
         if ( string.IsNullOrWhiteSpace( request.HtmlBody ) == true && string.IsNullOrWhiteSpace( request.TextBody ) == true )
             return Invalid( "At least one of `html` or `text` must contain more than whitespace." );
 
+        var reserved = ReservedHeader( request.Headers );
+
+        if ( reserved != null )
+            return reserved;
+
         return new ObjectId()
         {
             Id = Guid.NewGuid(),
@@ -376,6 +382,11 @@ public class InboxController : ControllerBase
 
         if ( request.To.Count == 0 )
             return Invalid( "The `to` field must name at least one address." );
+
+        var reserved = ReservedHeader( request.Headers );
+
+        if ( reserved != null )
+            return reserved;
 
         return new ObjectId()
         {
@@ -510,14 +521,34 @@ public class InboxController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "inboxes/{id:guid}/drafts/{draftId:guid}/send" )]
-    public ObjectId InboxDraftSend( [FromRoute] Guid id, [FromRoute] Guid draftId )
+    public ActionResult<ObjectId> InboxDraftSend( [FromRoute] Guid id, [FromRoute] Guid draftId, [FromBody( EmptyBodyBehavior = EmptyBodyBehavior.Allow )] InboxDraftSendData? request = null )
     {
         _logger.LogDebug( "InboxDraftSend" );
+
+        var reserved = ReservedHeader( request?.Headers );
+
+        if ( reserved != null )
+            return reserved;
 
         return new ObjectId()
         {
             Id = Guid.NewGuid(),
         };
+    }
+
+
+    /// <summary>
+    /// Resend sets these headers itself, so the API rejects them in any letter case.
+    /// </summary>
+    private UnprocessableEntityObjectResult? ReservedHeader( Dictionary<string, string>? headers )
+    {
+        var reserved = new[] { "In-Reply-To", "References", "Reply-To" };
+        var name = headers?.Keys.FirstOrDefault( x => reserved.Contains( x, StringComparer.OrdinalIgnoreCase ) );
+
+        if ( name == null )
+            return null;
+
+        return Invalid( $"The `{name}` header cannot be set on inbox emails." );
     }
 
 

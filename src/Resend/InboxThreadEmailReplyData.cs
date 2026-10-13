@@ -77,6 +77,17 @@ public class InboxThreadEmailReplyData
     public bool? ReplyAll { get; set; }
 
     /// <summary>
+    /// Custom headers to add to the email.
+    /// </summary>
+    /// <remarks>
+    /// The In-Reply-To, References and Reply-To headers are set by Resend and cannot be set
+    /// here. Sending one of them, in any letter case, returns a 422.
+    /// </remarks>
+    [JsonPropertyName( "headers" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public Dictionary<string, string>? Headers { get; set; }
+
+    /// <summary>
     /// Files to attach, as when sending an email.
     /// </summary>
     /// <remarks>
