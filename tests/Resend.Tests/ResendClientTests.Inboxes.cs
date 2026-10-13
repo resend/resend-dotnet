@@ -502,6 +502,23 @@ public partial class ResendClientTests
 
     /// <summary />
     [Fact]
+    public async Task InboxDraftUpdateRejectsAttachmentWithoutContentType()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "note.txt", Content = "hello" },
+            },
+        } ) );
+
+        Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
+        Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task InboxDraftUpdateReplacesAttachments()
     {
         var resp = await _resend.InboxDraftUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxDraftUpdateData()
@@ -514,7 +531,9 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
-        Assert.Equal( "note.txt", Assert.Single( resp.Content.Attachments ).Filename );
+        var attachment = Assert.Single( resp.Content.Attachments );
+        Assert.Equal( "note.txt", attachment.Filename );
+        Assert.Equal( "text/plain", attachment.ContentType );
     }
 
 

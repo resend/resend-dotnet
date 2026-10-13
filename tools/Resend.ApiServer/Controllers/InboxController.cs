@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Resend.Payloads;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 
 namespace Resend.ApiServer.Controllers;
@@ -415,8 +416,10 @@ public class InboxController : ControllerBase
         if ( request.ThreadId.HasValue != request.ReplyToEmailId.HasValue )
             return Invalid( "`thread_id` and `reply_to_email_id` must be provided together." );
 
-        if ( request.Attachments?.Any( x => x.Path != null || x.ContentId != null ) == true )
-            return Invalid( "Draft attachments do not support `path` or `content_id`. Send `content` instead." );
+        var invalid = InvalidAttachments( request.Attachments );
+
+        if ( invalid != null )
+            return invalid;
 
         return StatusCode( (int) HttpStatusCode.Created, new ObjectId()
         {
@@ -466,6 +469,14 @@ public class InboxController : ControllerBase
 
         if ( request.TryGetProperty( "subject", out _ ) == true )
             draft.Subject = data.Subject;
+
+        if ( request.TryGetProperty( "attachments", out var attachments ) == true && attachments.ValueKind != JsonValueKind.Array )
+            return Invalid( "The `attachments` field must be an array." );
+
+        var invalid = InvalidAttachments( data.Attachments );
+
+        if ( invalid != null )
+            return invalid;
 
         if ( data.Attachments != null )
             draft.Attachments = data.Attachments.Select( x => Stored( x ) ).ToList();
@@ -634,7 +645,31 @@ public class InboxController : ControllerBase
             Id = Guid.NewGuid(),
             Filename = attachment.Filename,
             ContentType = attachment.ContentType ?? "",
-            FileSize = attachment.Content?.Length ?? 0,
+            FileSize = attachment.Content switch
+            {
+                null => 0,
+                { IsByteArray: true } content => content.ByteArray!.LongLength,
+                { } content => Encoding.UTF8.GetByteCount( content.AsString() ),
+            },
         };
+    }
+
+
+    /// <summary>
+    /// A draft stores the bytes at once, so each file needs its content, filename and content
+    /// type, and the API rejects a path or a content identifier.
+    /// </summary>
+    private UnprocessableEntityObjectResult? InvalidAttachments( List<EmailAttachment>? attachments )
+    {
+        if ( attachments == null )
+            return null;
+
+        if ( attachments.Any( x => x.Path != null || x.ContentId != null ) == true )
+            return Invalid( "Draft attachments do not support `path` or `content_id`. Send `content` instead." );
+
+        if ( attachments.Any( x => x.Content == null || string.IsNullOrEmpty( x.Filename ) == true || string.IsNullOrEmpty( x.ContentType ) == true ) == true )
+            return Invalid( "Each draft attachment needs `content`, `filename` and `content_type`." );
+
+        return null;
     }
 }
