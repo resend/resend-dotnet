@@ -450,6 +450,9 @@ public class InboxController : ControllerBase
         if ( request.ValueKind != JsonValueKind.Object )
             return Invalid( "At least one draft content field is required." );
 
+        if ( request.TryGetProperty( "attachments", out var attachments ) == true && attachments.ValueKind != JsonValueKind.Array )
+            return Invalid( "The `attachments` field must be an array." );
+
         var data = request.Deserialize<InboxDraftUpdateData>()!;
         var fields = new[] { "to", "cc", "bcc", "subject", "text", "html", "attachments" };
 
@@ -469,9 +472,6 @@ public class InboxController : ControllerBase
 
         if ( request.TryGetProperty( "subject", out _ ) == true )
             draft.Subject = data.Subject;
-
-        if ( request.TryGetProperty( "attachments", out var attachments ) == true && attachments.ValueKind != JsonValueKind.Array )
-            return Invalid( "The `attachments` field must be an array." );
 
         var invalid = InvalidAttachments( data.Attachments );
 
