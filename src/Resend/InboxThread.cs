@@ -64,8 +64,8 @@ public class InboxThread
     /// <summary>
     /// Number of emails in the thread.
     /// </summary>
-    [JsonPropertyName( "message_count" )]
-    public int MessageCount { get; set; }
+    [JsonPropertyName( "email_count" )]
+    public int EmailCount { get; set; }
 
     /// <summary>
     /// Whether the most recent email in the thread has an attachment.

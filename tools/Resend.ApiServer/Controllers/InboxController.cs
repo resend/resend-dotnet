@@ -252,7 +252,7 @@ public class InboxController : ControllerBase
             From = thread.From,
             To = thread.To,
             Labels = thread.Labels,
-            MessageCount = thread.MessageCount,
+            EmailCount = thread.EmailCount,
             HasAttachment = thread.HasAttachment,
             IsRead = thread.IsRead,
             MomentReceived = thread.MomentReceived,
@@ -606,7 +606,7 @@ public class InboxController : ControllerBase
             {
                 new InboxThreadLabel() { Id = Guid.NewGuid(), Name = "Urgent", Color = "#E93D82" },
             },
-            MessageCount = 2,
+            EmailCount = 2,
             HasAttachment = true,
             HasDraft = false,
             IsRead = read == "true",

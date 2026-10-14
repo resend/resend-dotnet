@@ -251,6 +251,7 @@ public partial class ResendClientTests
         Assert.Equal( InboxFolder.Archive, thread.Folder );
         Assert.True( thread.IsRead );
         Assert.Equal( "ada@example.org", thread.From!.Email );
+        Assert.Equal( 2, thread.EmailCount );
         Assert.Equal( "Ada Lovelace", thread.From.DisplayName );
         Assert.Single( thread.Labels );
     }
