@@ -28,10 +28,13 @@ public class InboxAgent
     public string? Instructions { get; set; }
 
     /// <summary>
-    /// Tone the agent writes in, such as <c>friendly and concise</c>.
+    /// Tone the agent writes in.
     /// </summary>
     /// <remarks>
-    /// Null when no tone is set.
+    /// One of the presets <c>concise_professional</c>, <c>concise_casual</c>,
+    /// <c>expanded_professional</c> or <c>expanded_casual</c>, or custom text in the
+    /// owner's own words, such as <c>friendly and concise</c>. Older dashboard values
+    /// such as <c>Concise · Casual</c> are custom text. Null when no tone is set.
     /// </remarks>
     [JsonPropertyName( "tone" )]
     public string? Tone { get; set; }

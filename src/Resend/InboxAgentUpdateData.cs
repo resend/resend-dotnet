@@ -34,10 +34,13 @@ public class InboxAgentUpdateData
     }
 
     /// <summary>
-    /// Tone the agent writes in, such as <c>friendly and concise</c>.
+    /// Tone the agent writes in.
     /// </summary>
     /// <remarks>
-    /// Max 64 characters. Leading and trailing whitespace is trimmed, and the trimmed value
+    /// Use one of the presets <c>concise_professional</c>, <c>concise_casual</c>,
+    /// <c>expanded_professional</c> or <c>expanded_casual</c>, or describe the tone in
+    /// your own words, such as <c>friendly and concise</c>. Custom text is max 64
+    /// characters. Leading and trailing whitespace is trimmed, and the trimmed value
     /// must not be empty. Assign null to clear the tone.
     /// </remarks>
     public string? Tone
