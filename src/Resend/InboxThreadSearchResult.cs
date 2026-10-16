@@ -9,23 +9,14 @@ namespace Resend;
 public class InboxThreadSearchResult : InboxThread
 {
     /// <summary>
-    /// Identifies the email in the thread that matched the search.
+    /// Identifier of the email in the thread that matched the search.
     /// </summary>
     /// <remarks>
     /// When the query has words or phrases, it is the most relevant match. Otherwise, it is
-    /// the newest. The get, reply and forward thread email methods accept it as the email
-    /// identifier, but it is not equal to the <see cref="InboxThreadEmail.Id"/> those
-    /// methods return. Null when the search index returns no matched email for the thread.
+    /// the newest. It is the same <see cref="InboxThreadEmail.Id"/> that the list thread
+    /// emails method returns, so use it with the get, reply and forward thread email
+    /// methods. Null when the search index returns no matched email for the thread.
     /// </remarks>
     [JsonPropertyName( "matched_email_id" )]
     public Guid? MatchedEmailId { get; set; }
-
-    /// <summary>
-    /// Where the query matched the email in <see cref="MatchedEmailId"/>.
-    /// </summary>
-    /// <remarks>
-    /// Empty when the search has no query.
-    /// </remarks>
-    [JsonPropertyName( "highlights" )]
-    public InboxThreadSearchHighlights Highlights { get; set; } = new();
 }

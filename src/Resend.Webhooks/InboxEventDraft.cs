@@ -7,7 +7,7 @@ namespace Resend.Webhooks;
 /// </summary>
 /// <remarks>
 /// It has no body. Fetch the body with
-/// <see cref="IResend.InboxDraftRetrieveAsync(Guid, Guid, CancellationToken)"/>.
+/// <see cref="IResend.InboxDraftRetrieveAsync(InboxIdOrEmail, Guid, CancellationToken)"/>.
 /// </remarks>
 public class InboxEventDraft
 {

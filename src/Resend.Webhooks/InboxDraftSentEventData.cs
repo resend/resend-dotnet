@@ -51,7 +51,7 @@ public class InboxDraftSentEventData : IWebhookData
     /// Email as it is when the webhook is sent, without a body.
     /// </summary>
     /// <remarks>
-    /// Fetch the body with <see cref="IResend.InboxThreadEmailRetrieveAsync(Guid, Guid, Guid, CancellationToken)"/>.
+    /// Fetch the body with <see cref="IResend.InboxThreadEmailRetrieveAsync(InboxIdOrEmail, Guid, Guid, CancellationToken)"/>.
     /// Only set when the email is already on the thread when the webhook is sent.
     /// </remarks>
     [JsonPropertyName( "email" )]
@@ -62,7 +62,7 @@ public class InboxDraftSentEventData : IWebhookData
     /// Draft as it is when the webhook is sent, without a body.
     /// </summary>
     /// <remarks>
-    /// Fetch the body with <see cref="IResend.InboxDraftRetrieveAsync(Guid, Guid, CancellationToken)"/>.
+    /// Fetch the body with <see cref="IResend.InboxDraftRetrieveAsync(InboxIdOrEmail, Guid, CancellationToken)"/>.
     /// Null when the draft no longer exists.
     /// </remarks>
     [JsonPropertyName( "draft" )]

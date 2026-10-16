@@ -133,8 +133,8 @@ public partial class ResendClientTests
         Assert.NotNull( resp.Content );
         Assert.Equal( "inbox_agent", resp.Content.Object );
         Assert.Null( resp.Content.Instructions );
-        Assert.Equal( "friendly and concise", resp.Content.Tone );
-        Assert.Equal( new[] { InboxAgentAction.DraftReply, InboxAgentAction.AddLabels }, resp.Content.EnabledActions );
+        Assert.Equal( InboxAgentTone.ConciseCasual, resp.Content.Tone );
+        Assert.Equal( new[] { InboxAgentAction.DraftReply, InboxAgentAction.Archive }, resp.Content.Actions );
     }
 
 
@@ -145,7 +145,7 @@ public partial class ResendClientTests
         var resp = await _resend.InboxAgentUpdateAsync( Guid.NewGuid(), new InboxAgentUpdateData()
         {
             Instructions = null,
-            EnabledActions = new List<InboxAgentAction>(),
+            Actions = new List<InboxAgentAction>(),
         } );
 
         Assert.NotNull( resp );
@@ -275,8 +275,6 @@ public partial class ResendClientTests
 
         var result = Assert.Single( resp.Content.Data );
         Assert.NotNull( result.MatchedEmailId );
-        Assert.Equal( new[] { "September **invoice**" }, result.Highlights.Subject );
-        Assert.Null( result.Highlights.Body );
     }
 
 
@@ -302,13 +300,11 @@ public partial class ResendClientTests
     public async Task InboxThreadUpdate()
     {
         var threadId = Guid.NewGuid();
-        var labelId = Guid.NewGuid();
 
         var resp = await _resend.InboxThreadUpdateAsync( Guid.NewGuid(), threadId, new InboxThreadUpdateData()
         {
             IsRead = true,
             Folder = InboxMoveFolder.Archive,
-            AddLabelIds = new List<Guid>() { labelId },
         } );
 
         Assert.NotNull( resp );
@@ -317,7 +313,6 @@ public partial class ResendClientTests
         Assert.Equal( threadId, resp.Content.Id );
         Assert.Equal( InboxFolder.Archive, resp.Content.Folder );
         Assert.True( resp.Content.IsRead );
-        Assert.Equal( labelId, Assert.Single( resp.Content.Labels ).Id );
     }
 
 
@@ -334,18 +329,50 @@ public partial class ResendClientTests
 
     /// <summary />
     [Fact]
-    public async Task InboxThreadUpdateRejectsSameLabelAddedAndRemoved()
+    public async Task InboxThreadLabelAdd()
     {
         var labelId = Guid.NewGuid();
 
-        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxThreadUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), new InboxThreadUpdateData()
-        {
-            AddLabelIds = new List<Guid>() { labelId },
-            RemoveLabelIds = new List<Guid>() { labelId },
-        } ) );
+        var resp = await _resend.InboxThreadLabelAddAsync( Guid.NewGuid(), Guid.NewGuid(), new List<Guid>() { labelId } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Equal( labelId, Assert.Single( resp.Content ).Id );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelAddRequiresALabel()
+    {
+        var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxThreadLabelAddAsync( Guid.NewGuid(), Guid.NewGuid(), new List<Guid>() ) );
 
         Assert.Equal( HttpStatusCode.UnprocessableEntity, ex.StatusCode );
         Assert.Equal( ErrorType.ValidationError, ex.ErrorType );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelSetEmptyClears()
+    {
+        var resp = await _resend.InboxThreadLabelSetAsync( Guid.NewGuid(), Guid.NewGuid(), new List<Guid>() );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Empty( resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelRemove()
+    {
+        var resp = await _resend.InboxThreadLabelRemoveAsync( Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Empty( resp.Content );
     }
 
 
@@ -552,9 +579,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
-        var attachment = Assert.Single( resp.Content.Attachments );
-        Assert.Equal( "note.txt", attachment.Filename );
-        Assert.Equal( "text/plain", attachment.ContentType );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -588,7 +613,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
-        Assert.Empty( resp.Content.Attachments );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -603,7 +628,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
-        Assert.Empty( resp.Content.Attachments );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -660,11 +685,7 @@ public partial class ResendClientTests
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
-        Assert.NotNull( resp.Content );
-        Assert.Equal( draftId, resp.Content.Id );
-        Assert.Null( resp.Content.To );
-        Assert.Null( resp.Content.Subject );
-        Assert.NotNull( resp.Content.TextBody );
+        Assert.Equal( draftId, resp.Content );
     }
 
 

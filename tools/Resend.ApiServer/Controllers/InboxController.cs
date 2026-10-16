@@ -129,8 +129,8 @@ public class InboxController : ControllerBase
         {
             Object = "inbox_agent",
             Instructions = null,
-            Tone = "friendly and concise",
-            EnabledActions = new List<InboxAgentAction>() { InboxAgentAction.DraftReply, InboxAgentAction.AddLabels },
+            Tone = InboxAgentTone.ConciseCasual,
+            Actions = new List<InboxAgentAction>() { InboxAgentAction.DraftReply, InboxAgentAction.Archive },
         };
     }
 
@@ -142,10 +142,10 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxAgentUpdate" );
 
-        var fields = new[] { "instructions", "tone", "enabled_actions" };
+        var fields = new[] { "instructions", "tone", "actions" };
 
         if ( request.ValueKind != JsonValueKind.Object || fields.Any( x => request.TryGetProperty( x, out _ ) ) == false )
-            return Invalid( "At least one of `instructions`, `tone`, or `enabled_actions` is required." );
+            return Invalid( "At least one of `instructions`, `tone`, or `actions` is required." );
 
         return new ObjectId()
         {
@@ -258,10 +258,6 @@ public class InboxController : ControllerBase
             MomentReceived = thread.MomentReceived,
             Folder = thread.Folder,
             MatchedEmailId = Guid.NewGuid(),
-            Highlights = new InboxThreadSearchHighlights()
-            {
-                Subject = query == null ? null : new List<string>() { $"September **{query}**" },
-            },
         } );
 
         return new PaginatedResult<InboxThreadSearchResult>() { HasMore = false, Data = list };
@@ -286,14 +282,8 @@ public class InboxController : ControllerBase
     {
         _logger.LogDebug( "InboxThreadUpdate" );
 
-        if ( request.IsRead == null && request.Folder == null && request.AddLabelIds == null && request.RemoveLabelIds == null )
-            return Invalid( "At least one of `read`, `folder`, `add_label_ids`, or `remove_label_ids` is required." );
-
-        var add = request.AddLabelIds ?? new List<Guid>();
-        var remove = request.RemoveLabelIds ?? new List<Guid>();
-
-        if ( add.Intersect( remove ).Any() == true )
-            return Invalid( "A label ID cannot be both added and removed in the same request." );
+        if ( request.IsRead == null && request.Folder == null )
+            return Invalid( "At least one of `read` or `folder` is required." );
 
         var folder = request.Folder switch
         {
@@ -303,10 +293,56 @@ public class InboxController : ControllerBase
             _ => InboxFolder.Inbox,
         };
 
-        var summary = ThreadSummary( threadId, folder, request.IsRead ?? false );
-        summary.Labels = add.Select( x => new InboxThreadLabel() { Id = x, Name = "Urgent", Color = "#E93D82" } ).ToList();
+        return ThreadSummary( threadId, folder, request.IsRead ?? false );
+    }
 
-        return summary;
+
+    /// <summary />
+    [HttpPost]
+    [Route( "inboxes/{id:guid}/threads/{threadId:guid}/labels" )]
+    public ActionResult<ListOf<InboxThreadLabel>> InboxThreadLabelAdd( [FromRoute] Guid id, [FromRoute] Guid threadId, [FromBody] InboxThreadLabelsRequest request )
+    {
+        _logger.LogDebug( "InboxThreadLabelAdd" );
+
+        if ( request.Labels == null || request.Labels.Count < 1 || request.Labels.Count > 10 )
+            return Invalid( "`labels` must have between 1 and 10 label IDs." );
+
+        return ThreadLabels( request.Labels );
+    }
+
+
+    /// <summary />
+    [HttpPut]
+    [Route( "inboxes/{id:guid}/threads/{threadId:guid}/labels" )]
+    public ActionResult<ListOf<InboxThreadLabel>> InboxThreadLabelSet( [FromRoute] Guid id, [FromRoute] Guid threadId, [FromBody] InboxThreadLabelsRequest request )
+    {
+        _logger.LogDebug( "InboxThreadLabelSet" );
+
+        if ( request.Labels == null || request.Labels.Count > 100 )
+            return Invalid( "`labels` must have at most 100 label IDs." );
+
+        return ThreadLabels( request.Labels );
+    }
+
+
+    /// <summary />
+    [HttpDelete]
+    [Route( "inboxes/{id:guid}/threads/{threadId:guid}/labels/{labelId:guid}" )]
+    public ListOf<InboxThreadLabel> InboxThreadLabelRemove( [FromRoute] Guid id, [FromRoute] Guid threadId, [FromRoute] Guid labelId )
+    {
+        _logger.LogDebug( "InboxThreadLabelRemove" );
+
+        return ThreadLabels( new List<Guid>() );
+    }
+
+
+    /// <summary />
+    private static ListOf<InboxThreadLabel> ThreadLabels( List<Guid> labelIds )
+    {
+        return new ListOf<InboxThreadLabel>()
+        {
+            Data = labelIds.Select( x => new InboxThreadLabel() { Id = x, Name = "Urgent", Color = "#E93D82" } ).ToList(),
+        };
     }
 
 
@@ -454,7 +490,7 @@ public class InboxController : ControllerBase
     /// <summary />
     [HttpPatch]
     [Route( "inboxes/{id:guid}/drafts/{draftId:guid}" )]
-    public ActionResult<InboxDraft> InboxDraftUpdate( [FromRoute] Guid id, [FromRoute] Guid draftId, [FromBody] JsonElement request )
+    public ActionResult<ObjectId> InboxDraftUpdate( [FromRoute] Guid id, [FromRoute] Guid draftId, [FromBody] JsonElement request )
     {
         _logger.LogDebug( "InboxDraftUpdate" );
 
@@ -498,7 +534,11 @@ public class InboxController : ControllerBase
             draft.HtmlBody = data.HtmlBody;
         }
 
-        return draft;
+        return new ObjectId()
+        {
+            Object = "inbox_draft",
+            Id = draft.Id,
+        };
     }
 
 

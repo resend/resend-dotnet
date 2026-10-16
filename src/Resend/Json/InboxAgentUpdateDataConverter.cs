@@ -32,11 +32,11 @@ public class InboxAgentUpdateDataConverter : JsonConverter<InboxAgentUpdateData>
                     break;
 
                 case "tone":
-                    value.Tone = JsonSerializer.Deserialize<string?>( ref reader, options );
+                    value.Tone = JsonSerializer.Deserialize<InboxAgentTone?>( ref reader, options );
                     break;
 
-                case "enabled_actions":
-                    value.EnabledActions = JsonSerializer.Deserialize<List<InboxAgentAction>?>( ref reader, options );
+                case "actions":
+                    value.Actions = JsonSerializer.Deserialize<List<InboxAgentAction>?>( ref reader, options );
                     break;
 
                 default:
@@ -66,10 +66,10 @@ public class InboxAgentUpdateDataConverter : JsonConverter<InboxAgentUpdateData>
             JsonSerializer.Serialize( writer, value.Tone, options );
         }
 
-        if ( value.EnabledActions != null )
+        if ( value.Actions != null )
         {
-            writer.WritePropertyName( "enabled_actions" );
-            JsonSerializer.Serialize( writer, value.EnabledActions, options );
+            writer.WritePropertyName( "actions" );
+            JsonSerializer.Serialize( writer, value.Actions, options );
         }
 
         writer.WriteEndObject();

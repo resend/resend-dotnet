@@ -3,11 +3,12 @@ using System.Text.Json.Serialization;
 namespace Resend;
 
 /// <summary>
-/// Request body to update an inbox thread. Provide at least one of <see cref="IsRead"/>,
-/// <see cref="Folder"/>, <see cref="AddLabelIds"/> or <see cref="RemoveLabelIds"/>.
+/// Request body to update an inbox thread. Provide at least one of <see cref="IsRead"/>
+/// or <see cref="Folder"/>.
 /// </summary>
 /// <remarks>
-/// A label identifier cannot be both added and removed in the same request.
+/// To change the labels of a thread, use <see cref="IResend.InboxThreadLabelAddAsync"/>,
+/// <see cref="IResend.InboxThreadLabelSetAsync"/> and <see cref="IResend.InboxThreadLabelRemoveAsync"/>.
 /// </remarks>
 /// <see href="https://resend.com/docs/api-reference/inboxes/update-thread" />
 public class InboxThreadUpdateData
@@ -29,26 +30,4 @@ public class InboxThreadUpdateData
     [JsonPropertyName( "folder" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public InboxMoveFolder? Folder { get; set; }
-
-    /// <summary>
-    /// Label identifiers to apply to the thread.
-    /// </summary>
-    /// <remarks>
-    /// Between 1 and 10 identifiers. A label identifier that does not exist in the inbox
-    /// returns a 404.
-    /// </remarks>
-    [JsonPropertyName( "add_label_ids" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public List<Guid>? AddLabelIds { get; set; }
-
-    /// <summary>
-    /// Label identifiers to remove from the thread.
-    /// </summary>
-    /// <remarks>
-    /// Between 1 and 10 identifiers. The labels themselves are kept. A label identifier that
-    /// does not exist in the inbox returns a 404.
-    /// </remarks>
-    [JsonPropertyName( "remove_label_ids" )]
-    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public List<Guid>? RemoveLabelIds { get; set; }
 }

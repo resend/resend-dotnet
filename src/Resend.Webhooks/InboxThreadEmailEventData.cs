@@ -46,7 +46,7 @@ public class InboxThreadEmailEventData : IWebhookData
     /// Email as it is when the webhook is sent, without a body.
     /// </summary>
     /// <remarks>
-    /// Fetch the body with <see cref="IResend.InboxThreadEmailRetrieveAsync(Guid, Guid, Guid, CancellationToken)"/>.
+    /// Fetch the body with <see cref="IResend.InboxThreadEmailRetrieveAsync(InboxIdOrEmail, Guid, Guid, CancellationToken)"/>.
     /// Null when the email no longer exists.
     /// </remarks>
     [JsonPropertyName( "email" )]

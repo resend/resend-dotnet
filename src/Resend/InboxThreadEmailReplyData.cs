@@ -93,9 +93,9 @@ public class InboxThreadEmailReplyData
     /// Files to attach, as when sending an email.
     /// </summary>
     /// <remarks>
-    /// Each one needs content or a path. Up to 10 files. The content of all files can total
-    /// at most 25 MB. A path file counts toward the 10 files only, because it is fetched
-    /// when the email is sent. An empty file, a blocked file type, or a path that is not an
+    /// Each one needs content or a path. The content of all files can total at most 25 MB.
+    /// A path file does not count toward the 25 MB, because it is fetched when the email is
+    /// sent. An empty file, a blocked file type, or a path that is not an
     /// http or https URL, or that points to localhost, returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]

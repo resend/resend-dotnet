@@ -92,7 +92,7 @@ public class InboxDraftCreateData
     /// </summary>
     /// <remarks>
     /// Use the <see cref="InboxThreadEmail.Id"/> returned by
-    /// <see cref="IResend.InboxThreadEmailListAsync(Guid, Guid, PaginatedQuery?, CancellationToken)"/>.
+    /// <see cref="IResend.InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.
     /// </remarks>
     [JsonPropertyName( "reply_to_email_id" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]

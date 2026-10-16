@@ -50,7 +50,7 @@ public class InboxDraftEventData : IWebhookData
     /// Draft as it is when the webhook is sent, without a body.
     /// </summary>
     /// <remarks>
-    /// Fetch the body with <see cref="IResend.InboxDraftRetrieveAsync(Guid, Guid, CancellationToken)"/>.
+    /// Fetch the body with <see cref="IResend.InboxDraftRetrieveAsync(InboxIdOrEmail, Guid, CancellationToken)"/>.
     /// Null when the draft no longer exists.
     /// </remarks>
     [JsonPropertyName( "draft" )]

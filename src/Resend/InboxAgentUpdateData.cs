@@ -4,7 +4,7 @@ namespace Resend;
 
 /// <summary>
 /// Request body to update the agent settings of an inbox. Provide at least one of
-/// <see cref="Instructions"/>, <see cref="Tone"/> or <see cref="EnabledActions"/>.
+/// <see cref="Instructions"/>, <see cref="Tone"/> or <see cref="Actions"/>.
 /// </summary>
 /// <remarks>
 /// A property that is not assigned is left out of the request and keeps its current value.
@@ -17,7 +17,7 @@ public class InboxAgentUpdateData
 {
     private readonly HashSet<string> _assigned = new();
     private string? _instructions;
-    private string? _tone;
+    private InboxAgentTone? _tone;
 
 
     /// <summary>
@@ -37,13 +37,9 @@ public class InboxAgentUpdateData
     /// Tone the agent writes in.
     /// </summary>
     /// <remarks>
-    /// Use one of the presets <c>concise_professional</c>, <c>concise_casual</c>,
-    /// <c>expanded_professional</c> or <c>expanded_casual</c>, or describe the tone in
-    /// your own words, such as <c>friendly and concise</c>. Custom text is max 64
-    /// characters. Leading and trailing whitespace is trimmed, and the trimmed value
-    /// must not be empty. Assign null to clear the tone.
+    /// Assign null to clear the tone.
     /// </remarks>
-    public string? Tone
+    public InboxAgentTone? Tone
     {
         get => _tone;
         set { _tone = value; _assigned.Add( "tone" ); }
@@ -56,7 +52,7 @@ public class InboxAgentUpdateData
     /// Duplicates are removed. Assign an empty list to disable all actions. Null is left out
     /// of the request.
     /// </remarks>
-    public List<InboxAgentAction>? EnabledActions { get; set; }
+    public List<InboxAgentAction>? Actions { get; set; }
 
 
     /// <summary />

@@ -42,12 +42,12 @@ public enum InboxAgentAction
     /// <summary>
     /// Archives the thread.
     /// </summary>
-    [JsonStringValue( "archive_thread" )]
-    ArchiveThread,
+    [JsonStringValue( "archive" )]
+    Archive,
 
     /// <summary>
-    /// Deletes the thread.
+    /// Moves the thread to trash.
     /// </summary>
-    [JsonStringValue( "delete_thread" )]
-    DeleteThread,
+    [JsonStringValue( "move_to_trash" )]
+    MoveToTrash,
 }

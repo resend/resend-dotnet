@@ -6,7 +6,7 @@ namespace Resend;
 /// Inbox, as returned by the list endpoint.
 /// </summary>
 /// <remarks>
-/// Retrieve an inbox with <see cref="IResend.InboxRetrieveAsync(Guid, CancellationToken)"/>
+/// Retrieve an inbox with <see cref="IResend.InboxRetrieveAsync(InboxIdOrEmail, CancellationToken)"/>
 /// to get all its fields.
 /// </remarks>
 /// <see href="https://resend.com/docs/api-reference/inboxes/list-inboxes" />
@@ -54,4 +54,18 @@ public class InboxSummary
     [JsonPropertyName( "last_received" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
     public DateTime? MomentLastReceived { get; set; }
+
+    /// <summary>
+    /// Moment when the inbox was created.
+    /// </summary>
+    [JsonPropertyName( "created_at" )]
+    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
+    public DateTime MomentCreated { get; set; }
+
+    /// <summary>
+    /// Moment when the inbox was last updated.
+    /// </summary>
+    [JsonPropertyName( "updated_at" )]
+    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
+    public DateTime MomentUpdated { get; set; }
 }

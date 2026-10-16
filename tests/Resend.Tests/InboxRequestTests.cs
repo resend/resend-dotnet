@@ -120,7 +120,7 @@ public class InboxRequestTests
         var body = Assert.Single( _handler.Bodies ).RootElement;
         Assert.Equal( JsonValueKind.Null, body.GetProperty( "instructions" ).ValueKind );
         Assert.False( body.TryGetProperty( "tone", out _ ) );
-        Assert.False( body.TryGetProperty( "enabled_actions", out _ ) );
+        Assert.False( body.TryGetProperty( "actions", out _ ) );
     }
 
 
@@ -130,14 +130,14 @@ public class InboxRequestTests
     {
         await _resend.InboxAgentUpdateAsync( InboxId, new InboxAgentUpdateData()
         {
-            Tone = "friendly and concise",
-            EnabledActions = new List<InboxAgentAction>() { InboxAgentAction.DraftReply, InboxAgentAction.MarkAsSpam },
+            Tone = InboxAgentTone.ConciseCasual,
+            Actions = new List<InboxAgentAction>() { InboxAgentAction.DraftReply, InboxAgentAction.Archive, InboxAgentAction.MoveToTrash },
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
         Assert.False( body.TryGetProperty( "instructions", out _ ) );
-        Assert.Equal( "friendly and concise", body.GetProperty( "tone" ).GetString() );
-        Assert.Equal( new[] { "draft_reply", "mark_as_spam" }, body.GetProperty( "enabled_actions" ).EnumerateArray().Select( x => x.GetString() ) );
+        Assert.Equal( "concise_casual", body.GetProperty( "tone" ).GetString() );
+        Assert.Equal( new[] { "draft_reply", "archive", "move_to_trash" }, body.GetProperty( "actions" ).EnumerateArray().Select( x => x.GetString() ) );
     }
 
 
@@ -150,12 +150,12 @@ public class InboxRequestTests
         await _resend.InboxAgentUpdateAsync( InboxId, new InboxAgentUpdateData()
         {
             Tone = null,
-            EnabledActions = null,
+            Actions = null,
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
         Assert.Equal( JsonValueKind.Null, body.GetProperty( "tone" ).ValueKind );
-        Assert.False( body.TryGetProperty( "enabled_actions", out _ ) );
+        Assert.False( body.TryGetProperty( "actions", out _ ) );
     }
 
 
@@ -165,11 +165,11 @@ public class InboxRequestTests
     {
         await _resend.InboxAgentUpdateAsync( InboxId, new InboxAgentUpdateData()
         {
-            EnabledActions = new List<InboxAgentAction>(),
+            Actions = new List<InboxAgentAction>(),
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
-        Assert.Equal( 0, body.GetProperty( "enabled_actions" ).GetArrayLength() );
+        Assert.Equal( 0, body.GetProperty( "actions" ).GetArrayLength() );
     }
 
 
@@ -265,7 +265,6 @@ public class InboxRequestTests
         await _resend.InboxThreadUpdateAsync( InboxId, ThreadId, new InboxThreadUpdateData()
         {
             Folder = InboxMoveFolder.Archive,
-            AddLabelIds = new List<Guid>() { LabelId },
         } );
 
         var req = Assert.Single( _handler.Requests );
@@ -274,10 +273,81 @@ public class InboxRequestTests
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
         Assert.Equal( "archive", body.GetProperty( "folder" ).GetString() );
-        Assert.Equal( LabelId, body.GetProperty( "add_label_ids" )[ 0 ].GetGuid() );
         Assert.False( body.TryGetProperty( "read", out _ ) );
-        Assert.False( body.TryGetProperty( "label_id", out _ ) );
+        Assert.False( body.TryGetProperty( "add_label_ids", out _ ) );
         Assert.False( body.TryGetProperty( "remove_label_ids", out _ ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelAdd_Path_Body()
+    {
+        await _resend.InboxThreadLabelAddAsync( InboxId, ThreadId, new List<Guid>() { LabelId } );
+
+        var req = Assert.Single( _handler.Requests );
+        Assert.Equal( HttpMethod.Post, req.Method );
+        Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/labels", req.RequestUri!.AbsolutePath );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( LabelId, body.GetProperty( "labels" )[ 0 ].GetGuid() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelSet_Empty_Path_Body()
+    {
+        await _resend.InboxThreadLabelSetAsync( InboxId, ThreadId, new List<Guid>() );
+
+        var req = Assert.Single( _handler.Requests );
+        Assert.Equal( HttpMethod.Put, req.Method );
+        Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/labels", req.RequestUri!.AbsolutePath );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        Assert.Equal( 0, body.GetProperty( "labels" ).GetArrayLength() );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxThreadLabelRemove_Path()
+    {
+        await _resend.InboxThreadLabelRemoveAsync( InboxId, ThreadId, LabelId );
+
+        var req = Assert.Single( _handler.Requests );
+        Assert.Equal( HttpMethod.Delete, req.Method );
+        Assert.Equal( $"/inboxes/{InboxId}/threads/{ThreadId}/labels/{LabelId}", req.RequestUri!.AbsolutePath );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxRoutes_ByEmail_Escaped()
+    {
+        const string address = "support@example.com";
+        const string path = "/inboxes/support%40example.com";
+
+        await _resend.InboxUpdateAsync( address, new InboxUpdateData() { Name = "Support" } );
+        await _resend.InboxDeleteAsync( address );
+        await _resend.InboxAgentRetrieveAsync( address );
+        await _resend.InboxLabelListAsync( address );
+        await _resend.InboxThreadListAsync( address );
+        await _resend.InboxThreadLabelAddAsync( address, ThreadId, new List<Guid>() { LabelId } );
+        await _resend.InboxThreadEmailListAsync( address, ThreadId );
+        await _resend.InboxDraftListAsync( address );
+
+        Assert.Equal( new[]
+        {
+            $"PATCH {path}",
+            $"DELETE {path}",
+            $"GET {path}/agent",
+            $"GET {path}/labels",
+            $"GET {path}/threads",
+            $"POST {path}/threads/{ThreadId}/labels",
+            $"GET {path}/threads/{ThreadId}/emails",
+            $"GET {path}/drafts",
+        }, _handler.Requests.Select( x => $"{x.Method} {x.RequestUri!.AbsolutePath}" ) );
     }
 
 

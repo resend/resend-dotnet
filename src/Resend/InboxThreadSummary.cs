@@ -7,7 +7,7 @@ namespace Resend;
 /// </summary>
 /// <remarks>
 /// The emails in the thread are listed with
-/// <see cref="IResend.InboxThreadEmailListAsync(Guid, Guid, PaginatedQuery?, CancellationToken)"/>.
+/// <see cref="IResend.InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.
 /// </remarks>
 /// <see href="https://resend.com/docs/api-reference/inboxes/get-thread" />
 public class InboxThreadSummary

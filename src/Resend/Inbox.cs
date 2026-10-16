@@ -91,4 +91,11 @@ public class Inbox
     [JsonPropertyName( "created_at" )]
     [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
     public DateTime MomentCreated { get; set; }
+
+    /// <summary>
+    /// Moment when the inbox was last updated.
+    /// </summary>
+    [JsonPropertyName( "updated_at" )]
+    [JsonConverter( typeof( JsonUtcDateTimeConverter ) )]
+    public DateTime MomentUpdated { get; set; }
 }
