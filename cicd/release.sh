@@ -33,6 +33,13 @@ if [[ ${GITHUB_REF} != refs/tags/v* ]]; then die "Script only works for tags"; f
 export VERSION=${GITHUB_REF##*/v}
 echo ${VERSION}
 
+# The tag version overrides the project version below, so a mistyped tag would
+# publish a version nobody bumped.
+PROJECT_VERSION=$(dotnet msbuild src/Resend/Resend.csproj -getProperty:Version)
+if [[ "${PROJECT_VERSION}" != "${VERSION}" ]]; then
+  die "Tag v${VERSION} does not match Directory.Build.props version ${PROJECT_VERSION}"
+fi
+
 
 #
 # Build
