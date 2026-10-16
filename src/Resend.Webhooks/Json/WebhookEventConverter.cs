@@ -152,6 +152,87 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
 
             value.Data = data;
         }
+        else if ( category == WebhookEventTypeCategory.Inbox )
+        {
+            var data = rawData.Deserialize<InboxEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxDeleted )
+        {
+            var data = rawData.Deserialize<InboxDeletedEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxThreadEmail )
+        {
+            var data = rawData.Deserialize<InboxThreadEmailEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxThreadFolder )
+        {
+            var data = rawData.Deserialize<InboxThreadFolderUpdatedEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxThreadAssigned )
+        {
+            var data = rawData.Deserialize<InboxThreadAssignedEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxThreadUnassigned )
+        {
+            var data = rawData.Deserialize<InboxThreadUnassignedEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxThreadLabels )
+        {
+            var data = rawData.Deserialize<InboxThreadLabelsUpdatedEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxDraft )
+        {
+            var data = rawData.Deserialize<InboxDraftEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
+        else if ( category == WebhookEventTypeCategory.InboxDraftSent )
+        {
+            var data = rawData.Deserialize<InboxDraftSentEventData>( options );
+
+            if ( data == null )
+                throw new JsonException( "Expected non-null data" );
+
+            value.Data = data;
+        }
         else
         {
             throw new NotSupportedException( $"Unexpected '{value.EventType}' event type" );
@@ -231,6 +312,69 @@ public class WebhookEventConverter : JsonConverter<WebhookEvent>
             var o6 = (JsonConverter<TopicEventData>) options.GetConverter( t6 );
 
             o6.Write( writer, value.DataAs<TopicEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.Inbox )
+        {
+            var t7 = typeof( InboxEventData );
+            var o7 = (JsonConverter<InboxEventData>) options.GetConverter( t7 );
+
+            o7.Write( writer, value.DataAs<InboxEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxDeleted )
+        {
+            var t8 = typeof( InboxDeletedEventData );
+            var o8 = (JsonConverter<InboxDeletedEventData>) options.GetConverter( t8 );
+
+            o8.Write( writer, value.DataAs<InboxDeletedEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxThreadEmail )
+        {
+            var t9 = typeof( InboxThreadEmailEventData );
+            var o9 = (JsonConverter<InboxThreadEmailEventData>) options.GetConverter( t9 );
+
+            o9.Write( writer, value.DataAs<InboxThreadEmailEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxThreadFolder )
+        {
+            var t10 = typeof( InboxThreadFolderUpdatedEventData );
+            var o10 = (JsonConverter<InboxThreadFolderUpdatedEventData>) options.GetConverter( t10 );
+
+            o10.Write( writer, value.DataAs<InboxThreadFolderUpdatedEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxThreadAssigned )
+        {
+            var t11 = typeof( InboxThreadAssignedEventData );
+            var o11 = (JsonConverter<InboxThreadAssignedEventData>) options.GetConverter( t11 );
+
+            o11.Write( writer, value.DataAs<InboxThreadAssignedEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxThreadUnassigned )
+        {
+            var t12 = typeof( InboxThreadUnassignedEventData );
+            var o12 = (JsonConverter<InboxThreadUnassignedEventData>) options.GetConverter( t12 );
+
+            o12.Write( writer, value.DataAs<InboxThreadUnassignedEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxThreadLabels )
+        {
+            var t13 = typeof( InboxThreadLabelsUpdatedEventData );
+            var o13 = (JsonConverter<InboxThreadLabelsUpdatedEventData>) options.GetConverter( t13 );
+
+            o13.Write( writer, value.DataAs<InboxThreadLabelsUpdatedEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxDraft )
+        {
+            var t14 = typeof( InboxDraftEventData );
+            var o14 = (JsonConverter<InboxDraftEventData>) options.GetConverter( t14 );
+
+            o14.Write( writer, value.DataAs<InboxDraftEventData>(), options );
+        }
+        else if ( value.EventType.Category() == WebhookEventTypeCategory.InboxDraftSent )
+        {
+            var t15 = typeof( InboxDraftSentEventData );
+            var o15 = (JsonConverter<InboxDraftSentEventData>) options.GetConverter( t15 );
+
+            o15.Write( writer, value.DataAs<InboxDraftSentEventData>(), options );
         }
         else
         {

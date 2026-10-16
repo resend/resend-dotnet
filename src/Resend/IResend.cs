@@ -1540,4 +1540,538 @@ public interface IResend
     Task<ResendResponse<EventSendResult>> EventSendAsync( EventSendData data, CancellationToken cancellationToken = default );
 
     #endregion
+
+    #region Inboxes
+
+    /// <summary>
+    /// Creates an inbox that sends and receives email at an address on one of your domains.
+    /// </summary>
+    /// <param name="data">Inbox address and settings.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New inbox identifier.</returns>
+    /// <remarks>
+    /// The domain must belong to the team. Without <see cref="InboxCreateData.Forwarding"/>,
+    /// the domain must have receiving enabled, with DKIM and SPF verified and the inbound MX
+    /// record verified or pending. With forwarding, the domain only needs DKIM and SPF
+    /// verified for sending, and Resend generates a receiving address on the team inbound
+    /// domain. A domain that does not meet these rules returns a 422 validation_error. An
+    /// address or receiving address that is already in use returns a 409. A team that has
+    /// reached the inbox limit of its plan returns a 403 validation_error. A blocked account
+    /// returns a 451.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/create-inbox"/>
+    Task<ResendResponse<Guid>> InboxCreateAsync( InboxCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists the inboxes of the team, newest first.
+    /// </summary>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of inboxes.</returns>
+    /// <remarks>
+    /// The list items carry fewer fields than a single inbox. Use
+    /// <see cref="InboxRetrieveAsync(InboxIdOrEmail, CancellationToken)"/> to get all its fields. The
+    /// cursors take an inbox identifier. A value that is not a UUID returns a 422, and an
+    /// unknown identifier returns a 404.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/list-inboxes"/>
+    Task<ResendResponse<PaginatedResult<InboxSummary>>> InboxListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Inbox.</returns>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/get-inbox"/>
+    Task<ResendResponse<Inbox>> InboxRetrieveAsync( InboxIdOrEmail inboxId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates the internal name of an inbox, or the name recipients see when mail is sent
+    /// from it.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="data">Fields to update. At least one of name or from name is required.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Inbox identifier.</returns>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/update-inbox"/>
+    Task<ResendResponse<Guid>> InboxUpdateAsync( InboxIdOrEmail inboxId, InboxUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Removes an inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Deletion confirmation.</returns>
+    /// <remarks>
+    /// An inbox that does not exist or was already removed returns a 404 not_found.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/delete-inbox"/>
+    Task<ResendResponse<InboxDeleteResult>> InboxDeleteAsync( InboxIdOrEmail inboxId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves the agent settings of an inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Agent settings.</returns>
+    /// <remarks>
+    /// An inbox without a configured agent returns empty settings.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/get-agent"/>
+    Task<ResendResponse<InboxAgent>> InboxAgentRetrieveAsync( InboxIdOrEmail inboxId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates the agent settings of an inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="data">Fields to update. Omitted fields keep their current value.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Inbox agent identifier.</returns>
+    /// <remarks>
+    /// The agent is created when the inbox has none.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/update-agent"/>
+    Task<ResendResponse<Guid>> InboxAgentUpdateAsync( InboxIdOrEmail inboxId, InboxAgentUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists every label on an inbox, oldest first.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of labels.</returns>
+    /// <remarks>
+    /// The list is not paginated.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/list-labels"/>
+    Task<ResendResponse<List<InboxLabel>>> InboxLabelListAsync( InboxIdOrEmail inboxId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates a label on an inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="data">Label name and color.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>New label identifier.</returns>
+    /// <remarks>
+    /// An inbox can have at most 100 labels. Label names are unique per inbox, compared
+    /// without case. A duplicate name or a full inbox returns a 422 validation_error.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/create-label"/>
+    Task<ResendResponse<Guid>> InboxLabelCreateAsync( InboxIdOrEmail inboxId, InboxLabelCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Renames or recolors an inbox label.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="labelId">Label identifier.</param>
+    /// <param name="data">Fields to update. Omitted fields keep their current value.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Label identifier.</returns>
+    /// <remarks>
+    /// A new name must not match another label on the inbox, compared without case, or the
+    /// request returns a 422 validation_error.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/update-label"/>
+    Task<ResendResponse<Guid>> InboxLabelUpdateAsync( InboxIdOrEmail inboxId, Guid labelId, InboxLabelUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Deletes an inbox label and removes it from every thread that carries it.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="labelId">Label identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Deletion confirmation.</returns>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/delete-label"/>
+    Task<ResendResponse<InboxLabelDeleteResult>> InboxLabelDeleteAsync( InboxIdOrEmail inboxId, Guid labelId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists the threads in an inbox, most recently active first.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="query">Filters and pagination.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of threads.</returns>
+    /// <remarks>
+    /// A thread is a conversation made up of one or more emails. The cursors take a thread
+    /// identifier, and only one of them can be passed. A date cursor returns a 422
+    /// validation_error. A cursor thread that is not in the selected folders returns a 404.
+    /// To find threads by text, sender, recipient, attachment, or date,
+    /// use <see cref="InboxThreadSearchAsync"/>.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/list-threads"/>
+    Task<ResendResponse<PaginatedResult<InboxThread>>> InboxThreadListAsync( InboxIdOrEmail inboxId, InboxThreadListQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Searches the threads of an inbox by the text of their emails, who sent or received
+    /// them, whether they have attachments, and their dates.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="query">Search filters and pagination.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of matching threads.</returns>
+    /// <remarks>
+    /// Results are ordered by latest activity, newest first, and paginate like
+    /// <see cref="InboxThreadListAsync"/>. Search can be up to about a minute behind new
+    /// emails. When more than 10,000 threads match, search covers the 10,000 with the newest
+    /// matching email.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/search-threads"/>
+    Task<ResendResponse<PaginatedResult<InboxThreadSearchResult>>> InboxThreadSearchAsync( InboxIdOrEmail inboxId, InboxThreadSearchQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves the summary of a single inbox thread.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Thread summary.</returns>
+    /// <remarks>
+    /// The emails in the thread are listed with
+    /// <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/get-thread"/>
+    Task<ResendResponse<InboxThreadSummary>> InboxThreadRetrieveAsync( InboxIdOrEmail inboxId, Guid threadId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Marks an inbox thread read or unread, moves it to a folder, or adds and removes
+    /// labels.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="data">Fields to update. At least one field is required.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Updated thread summary.</returns>
+    /// <remarks>
+    /// A label identifier cannot be both added and removed in the same request. Removing a
+    /// label from a thread keeps the label itself. Moving a thread out of trash restores it
+    /// and clears its deletion deadline. The changes apply in this order: read, folder,
+    /// added labels, removed labels. They are not atomic, so a 404 for a label leaves the
+    /// earlier changes applied.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/update-thread"/>
+    Task<ResendResponse<InboxThreadSummary>> InboxThreadUpdateAsync( InboxIdOrEmail inboxId, Guid threadId, InboxThreadUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Moves an inbox thread to trash and schedules it for deletion in 30 days.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Removal outcome.</returns>
+    /// <remarks>
+    /// This is reversible. To restore the thread, update its folder to inbox, archive, or
+    /// spam, which also clears the deletion deadline.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/delete-thread"/>
+    Task<ResendResponse<InboxThreadDeleteResult>> InboxThreadDeleteAsync( InboxIdOrEmail inboxId, Guid threadId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Applies one or more labels to an inbox thread.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="labelIds">Between 1 and 10 label identifiers, each a label of the inbox.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Every label on the thread after the change.</returns>
+    /// <remarks>
+    /// Labels already on the thread stay on it. A label identifier that is not a label of the
+    /// inbox returns a 404, and nothing changes. To replace the labels of the thread, use
+    /// <see cref="InboxThreadLabelSetAsync"/>.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/add-thread-labels"/>
+    Task<ResendResponse<List<InboxThreadLabel>>> InboxThreadLabelAddAsync( InboxIdOrEmail inboxId, Guid threadId, List<Guid> labelIds, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Replaces every label on an inbox thread with the given labels, in one atomic change.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="labelIds">Up to 100 label identifiers, each a label of the inbox.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Every label on the thread after the change.</returns>
+    /// <remarks>
+    /// The labels themselves are kept. An empty list takes every label off the thread. A label
+    /// identifier that is not a label of the inbox returns a 404, and nothing changes.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/set-thread-labels"/>
+    Task<ResendResponse<List<InboxThreadLabel>>> InboxThreadLabelSetAsync( InboxIdOrEmail inboxId, Guid threadId, List<Guid> labelIds, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Takes one label off an inbox thread.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="labelId">Label identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Every label on the thread after the change.</returns>
+    /// <remarks>
+    /// The label itself is kept, and stays on every other thread that carries it. A label that
+    /// is not on the thread returns the current labels. To delete the label, use
+    /// <see cref="InboxLabelDeleteAsync"/>.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/remove-thread-label"/>
+    Task<ResendResponse<List<InboxThreadLabel>>> InboxThreadLabelRemoveAsync( InboxIdOrEmail inboxId, Guid threadId, Guid labelId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists the emails of an inbox thread, oldest first.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of emails.</returns>
+    /// <remarks>
+    /// Pass the identifier of the last email as the after cursor to get the next, newer
+    /// page. Pass the identifier of the first email as the before cursor to get the
+    /// previous, older page. You cannot combine the two cursors. A cursor that is not an
+    /// email of the thread returns a 404.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/list-thread-emails"/>
+    Task<ResendResponse<PaginatedResult<InboxThreadEmail>>> InboxThreadEmailListAsync( InboxIdOrEmail inboxId, Guid threadId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single email of an inbox thread.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Email identifier, as returned by <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Thread email.</returns>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/get-thread-email"/>
+    Task<ResendResponse<InboxThreadEmail>> InboxThreadEmailRetrieveAsync( InboxIdOrEmail inboxId, Guid threadId, Guid emailId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a reply to an email of an inbox thread, from the inbox address, right away.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to reply to, as returned by <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Reply content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The to recipients come from the message you reply to. For a
+    /// message the inbox received, the reply goes to its Reply-To addresses, or to its
+    /// sender when it has no Reply-To. For a message the inbox sent, the reply goes to that
+    /// message's to recipients. Set <see cref="InboxThreadEmailReplyData.ReplyAll"/> to also
+    /// copy the other recipients of the message. The reply threads under the message
+    /// through the In-Reply-To and References headers.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/reply-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailReplyAsync( InboxIdOrEmail inboxId, Guid threadId, Guid emailId, InboxThreadEmailReplyData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a reply to an email of an inbox thread using idempotency key, such that retries do
+    /// not yield duplicate submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to reply to, as returned by <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Reply content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The to recipients come from the message you reply to. For a
+    /// message the inbox received, the reply goes to its Reply-To addresses, or to its
+    /// sender when it has no Reply-To. For a message the inbox sent, the reply goes to that
+    /// message's to recipients. Set <see cref="InboxThreadEmailReplyData.ReplyAll"/> to also
+    /// copy the other recipients of the message. The reply threads under the message
+    /// through the In-Reply-To and References headers.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/reply-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailReplyAsync( string idempotencyKey, InboxIdOrEmail inboxId, Guid threadId, Guid emailId, InboxThreadEmailReplyData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Forwards an email of an inbox thread, from the inbox address, right away.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to forward, as returned by <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Recipients and optional note.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The original message is quoted under a forwarded-message banner,
+    /// below the optional note. The attachments of the original message are sent with the
+    /// forward, together with any attachments you add. The request fails when they exceed
+    /// 25 MB of content in total. An original attachment that was sent from a
+    /// URL cannot be forwarded, and the request returns a 422.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( InboxIdOrEmail inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Forwards an email of an inbox thread using idempotency key, such that retries do not
+    /// yield duplicate submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="threadId">Thread identifier.</param>
+    /// <param name="emailId">Identifier of the email to forward, as returned by <see cref="InboxThreadEmailListAsync(InboxIdOrEmail, Guid, PaginatedQuery?, CancellationToken)"/>.</param>
+    /// <param name="data">Recipients and optional note.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// No draft is stored. The original message is quoted under a forwarded-message banner,
+    /// below the optional note. The attachments of the original message are sent with the
+    /// forward, together with any attachments you add. The request fails when they exceed
+    /// 25 MB of content in total. An original attachment that was sent from a
+    /// URL cannot be forwarded, and the request returns a 422.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/forward-thread-email"/>
+    Task<ResendResponse<Guid>> InboxThreadEmailForwardAsync( string idempotencyKey, InboxIdOrEmail inboxId, Guid threadId, Guid emailId, InboxThreadEmailForwardData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Lists the unsent drafts on an inbox, most recently updated first.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="query">Pagination query.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Page of drafts.</returns>
+    /// <remarks>
+    /// The cursors take a draft identifier from the current page. A cursor that is not an
+    /// unsent draft on this inbox returns a 404.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/list-drafts"/>
+    Task<ResendResponse<PaginatedResult<InboxDraftSummary>>> InboxDraftListAsync( InboxIdOrEmail inboxId, PaginatedQuery? query = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates an unsent draft on an inbox.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="data">Draft content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Draft identifier.</returns>
+    /// <remarks>
+    /// Attachments are stored on the draft, so each one needs content, a filename and a
+    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// request for an email that already has one returns the identifier of the existing
+    /// draft. That request ignores every other field, except attachments, which replace the
+    /// attachments of the existing draft. A reply draft created without a subject stores an
+    /// empty subject and gets no <c>Re:</c> prefix, so set one before you send it.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftCreateAsync( InboxIdOrEmail inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Creates an unsent draft on an inbox using idempotency key, such that retries do not
+    /// yield duplicate drafts.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="data">Draft content.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Draft identifier.</returns>
+    /// <remarks>
+    /// Attachments are stored on the draft, so each one needs content, a filename and a
+    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// request for an email that already has one returns the identifier of the existing
+    /// draft. That request ignores every other field, except attachments, which replace the
+    /// attachments of the existing draft. A reply draft created without a subject stores an
+    /// empty subject and gets no <c>Re:</c> prefix, so set one before you send it.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/create-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftCreateAsync( string idempotencyKey, InboxIdOrEmail inboxId, InboxDraftCreateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Retrieves a single draft.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Draft.</returns>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/get-draft"/>
+    Task<ResendResponse<InboxDraft>> InboxDraftRetrieveAsync( InboxIdOrEmail inboxId, Guid draftId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Updates the content of an unsent draft.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="data">Fields to update. Fields that are not assigned are left unchanged.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Draft identifier.</returns>
+    /// <remarks>
+    /// Assigning attachments replaces every attachment on the draft. A draft that was
+    /// already sent, or that changed during the request, returns a 409.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/update-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftUpdateAsync( InboxIdOrEmail inboxId, Guid draftId, InboxDraftUpdateData data, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Discards an unsent draft.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Deletion confirmation.</returns>
+    /// <remarks>
+    /// A draft that was already sent, or that changed during the request, returns a 409.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/delete-draft"/>
+    Task<ResendResponse<InboxDraftDeleteResult>> InboxDraftDeleteAsync( InboxIdOrEmail inboxId, Guid draftId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a draft from the inbox address.
+    /// </summary>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="data">Optional custom headers. Without it, the request has no body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// A reply draft is sent in its thread. A draft without a thread starts a new thread.
+    /// The draft must have at least one to recipient, a non-empty subject, and an HTML or
+    /// plain text body, or the request returns a 422. A draft that was already sent returns
+    /// a 409.
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftSendAsync( InboxIdOrEmail inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Sends a draft using idempotency key, such that retries do not yield duplicate
+    /// submissions.
+    /// </summary>
+    /// <param name="idempotencyKey">Idempotency key. Between 1 and 256 characters.</param>
+    /// <param name="inboxId">Inbox identifier or email address.</param>
+    /// <param name="draftId">Draft identifier.</param>
+    /// <param name="data">Optional custom headers. Without it, the request has no body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Identifier of the sent email.</returns>
+    /// <remarks>
+    /// A reply draft is sent in its thread. A draft without a thread starts a new thread.
+    /// The draft must have at least one to recipient, a non-empty subject, and an HTML or
+    /// plain text body, or the request returns a 422. A draft that was already sent returns
+    /// a 409.
+    /// <para>
+    /// A retry with the same key within 24 hours returns the first successful response, with
+    /// the <c>idempotent-replayed: true</c> header. A failed request is not stored, so you
+    /// can retry it with the same key. Reusing the key with a different body, or while the
+    /// first request is still running, returns a 409.
+    /// </para>
+    /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/inboxes/send-draft"/>
+    Task<ResendResponse<Guid>> InboxDraftSendAsync( string idempotencyKey, InboxIdOrEmail inboxId, Guid draftId, InboxDraftSendData? data = null, CancellationToken cancellationToken = default );
+
+    #endregion
 }
