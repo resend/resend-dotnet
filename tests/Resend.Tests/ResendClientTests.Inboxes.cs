@@ -533,13 +533,31 @@ public partial class ResendClientTests
 
     /// <summary />
     [Fact]
-    public async Task InboxDraftCreateRejectsPathAttachment()
+    public async Task InboxDraftCreateAcceptsPathAttachment()
+    {
+        var resp = await _resend.InboxDraftCreateAsync( Guid.NewGuid(), new InboxDraftCreateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "receipt.pdf", Path = "https://example.com/receipt.pdf" },
+            },
+        } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftCreateRejectsContentIdAttachment()
     {
         var ex = await Assert.ThrowsAsync<ResendException>( () => _resend.InboxDraftCreateAsync( Guid.NewGuid(), new InboxDraftCreateData()
         {
             Attachments = new List<EmailAttachment>()
             {
-                new EmailAttachment() { Filename = "receipt.pdf", Path = "https://example.com/receipt.pdf" },
+                new EmailAttachment() { Filename = "logo.png", Content = "aGVsbG8=", ContentType = "image/png", ContentId = "logo" },
             },
         } ) );
 

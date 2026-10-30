@@ -71,10 +71,13 @@ public class InboxDraftCreateData
     /// Files to store on the draft.
     /// </summary>
     /// <remarks>
-    /// Each one needs <see cref="EmailAttachment.Content"/>, <see cref="EmailAttachment.Filename"/>
-    /// and <see cref="EmailAttachment.ContentType"/>. A path or a content identifier returns
-    /// a 422. The files on a draft can total at most 25 MB. An empty file or a blocked file
-    /// type returns a 422.
+    /// Each one needs a <see cref="EmailAttachment.Filename"/> and either
+    /// <see cref="EmailAttachment.Content"/> with a <see cref="EmailAttachment.ContentType"/>,
+    /// or a <see cref="EmailAttachment.Path"/> URL. A path file is downloaded when the request
+    /// is made and stored on the draft, and its content type defaults to the one of the
+    /// downloaded file. A content identifier returns a 422. The files on a draft, downloaded
+    /// ones included, can total at most 25 MB. An empty file, a blocked file type, or a path
+    /// that cannot be downloaded returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]

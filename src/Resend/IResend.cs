@@ -1957,8 +1957,8 @@ public interface IResend
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Draft identifier.</returns>
     /// <remarks>
-    /// Attachments are stored on the draft, so each one needs content, a filename and a
-    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// Attachments are stored on the draft, so a path file is downloaded when the request is
+    /// made. Only one unsent reply draft can target an email, so a reply draft
     /// request for an email that already has one returns the identifier of the existing
     /// draft. That request ignores every other field, except attachments, which replace the
     /// attachments of the existing draft. A reply draft created without a subject stores an
@@ -1977,8 +1977,8 @@ public interface IResend
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Draft identifier.</returns>
     /// <remarks>
-    /// Attachments are stored on the draft, so each one needs content, a filename and a
-    /// content type. Only one unsent reply draft can target an email, so a reply draft
+    /// Attachments are stored on the draft, so a path file is downloaded when the request is
+    /// made. Only one unsent reply draft can target an email, so a reply draft
     /// request for an email that already has one returns the identifier of the existing
     /// draft. That request ignores every other field, except attachments, which replace the
     /// attachments of the existing draft. A reply draft created without a subject stores an

@@ -735,20 +735,23 @@ public class InboxController : ControllerBase
 
 
     /// <summary>
-    /// A draft stores the bytes at once, so each file needs its content, filename and content
-    /// type, and the API rejects a path or a content identifier. The API has no file-count
-    /// limit for drafts, only a 25 MB total.
+    /// A draft stores the bytes at once: the API downloads a path file during the request,
+    /// takes its content type from the download when none is given, and rejects a content
+    /// identifier. The API has no file-count limit for drafts, only a 25 MB total.
     /// </summary>
     private UnprocessableEntityObjectResult? InvalidAttachments( List<EmailAttachment>? attachments )
     {
         if ( attachments == null )
             return null;
 
-        if ( attachments.Any( x => x.Path != null || x.ContentId != null ) == true )
-            return Invalid( "Draft attachments do not support `path` or `content_id`. Send `content` instead." );
+        if ( attachments.Any( x => x.ContentId != null ) == true )
+            return Invalid( "Draft attachments do not support `content_id`." );
 
-        if ( attachments.Any( x => x.Content == null || x.Content.Value.Length == 0 || string.IsNullOrEmpty( x.Filename ) == true || string.IsNullOrEmpty( x.ContentType ) == true ) == true )
-            return Invalid( "Each draft attachment needs non-empty `content`, a `filename` and a `content_type`." );
+        if ( attachments.Any( x => x.Content == null && x.Path?.StartsWith( "http" ) != true ) == true )
+            return Invalid( "Attachment path should contain `http` or `https`." );
+
+        if ( attachments.Any( x => string.IsNullOrEmpty( x.Filename ) == true || ( x.Content != null && ( x.Content.Value.Length == 0 || string.IsNullOrEmpty( x.ContentType ) == true ) ) ) == true )
+            return Invalid( "filename and content_type are required" );
 
         return null;
     }
