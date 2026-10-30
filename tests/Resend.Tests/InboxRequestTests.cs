@@ -498,14 +498,14 @@ public class InboxRequestTests
         {
             Attachments = new List<EmailAttachment>()
             {
-                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://resend.com/static/sample/invoice.pdf" },
+                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://example.com/invoice.pdf" },
             },
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
         var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
         Assert.Equal( "invoice.pdf", attachment.GetProperty( "filename" ).GetString() );
-        Assert.Equal( "https://resend.com/static/sample/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
+        Assert.Equal( "https://example.com/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
         Assert.False( attachment.TryGetProperty( "content", out _ ) );
         Assert.False( attachment.TryGetProperty( "content_type", out _ ) );
     }
@@ -519,13 +519,13 @@ public class InboxRequestTests
         {
             Attachments = new List<EmailAttachment>()
             {
-                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://resend.com/static/sample/invoice.pdf", ContentType = "application/pdf" },
+                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://example.com/invoice.pdf", ContentType = "application/pdf" },
             },
         } );
 
         var body = Assert.Single( _handler.Bodies ).RootElement;
         var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
-        Assert.Equal( "https://resend.com/static/sample/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
+        Assert.Equal( "https://example.com/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
         Assert.Equal( "application/pdf", attachment.GetProperty( "content_type" ).GetString() );
     }
 
