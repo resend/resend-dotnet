@@ -76,8 +76,8 @@ public class InboxDraftCreateData
     /// or a <see cref="EmailAttachment.Path"/> URL. A path file is downloaded when the request
     /// is made and stored on the draft, and its content type defaults to the one of the
     /// downloaded file. A content identifier returns a 422. The files on a draft, downloaded
-    /// ones included, can total at most 25 MB. An empty file, a blocked file type, or a path
-    /// that cannot be downloaded returns a 422.
+    /// ones included, can total at most 25 MB. An empty file, a blocked file type, a path that
+    /// is not an `http` or `https` URL, or a path that cannot be downloaded returns a 422.
     /// </remarks>
     [JsonPropertyName( "attachments" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
