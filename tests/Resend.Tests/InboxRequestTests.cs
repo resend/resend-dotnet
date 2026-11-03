@@ -492,6 +492,46 @@ public class InboxRequestTests
 
     /// <summary />
     [Fact]
+    public async Task InboxDraftCreate_PathAttachment()
+    {
+        await _resend.InboxDraftCreateAsync( InboxId, new InboxDraftCreateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://example.com/invoice.pdf" },
+            },
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
+        Assert.Equal( "invoice.pdf", attachment.GetProperty( "filename" ).GetString() );
+        Assert.Equal( "https://example.com/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
+        Assert.False( attachment.TryGetProperty( "content", out _ ) );
+        Assert.False( attachment.TryGetProperty( "content_type", out _ ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task InboxDraftUpdate_PathAttachment()
+    {
+        await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
+        {
+            Attachments = new List<EmailAttachment>()
+            {
+                new EmailAttachment() { Filename = "invoice.pdf", Path = "https://example.com/invoice.pdf", ContentType = "application/pdf" },
+            },
+        } );
+
+        var body = Assert.Single( _handler.Bodies ).RootElement;
+        var attachment = Assert.Single( body.GetProperty( "attachments" ).EnumerateArray() );
+        Assert.Equal( "https://example.com/invoice.pdf", attachment.GetProperty( "path" ).GetString() );
+        Assert.Equal( "application/pdf", attachment.GetProperty( "content_type" ).GetString() );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task InboxDraftUpdate_EmptyAttachments_Sent()
     {
         await _resend.InboxDraftUpdateAsync( InboxId, DraftId, new InboxDraftUpdateData()
