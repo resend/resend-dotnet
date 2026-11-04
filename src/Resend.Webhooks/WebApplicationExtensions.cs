@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Resend.Webhooks;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -35,7 +37,16 @@ public static class WebApplicationExtensions
     public static IApplicationBuilder MapResendWebhook<T>( this WebApplication app, string path )
         where T : notnull, IWebhookHandler
     {
-        app.MapPost( path, WebhookSink<T>.ExecuteAsync );
+        app.MapPost( path, async ( context ) =>
+        {
+            var logger = context.RequestServices.GetRequiredService<ILogger<WebhookSink<T>>>();
+            var handler = context.RequestServices.GetRequiredService<T>();
+            var validator = context.RequestServices.GetRequiredService<WebhookValidator>();
+
+            var result = await WebhookSink<T>.ExecuteAsync( context.Request, logger, handler, validator, context.RequestAborted );
+
+            await result.ExecuteAsync( context );
+        } );
 
         return app;
     }

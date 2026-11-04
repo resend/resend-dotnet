@@ -30,7 +30,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Topic>, PaginatedResult<Topic>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Topic>, PaginatedResult<Topic>>( req, ResendJson.PaginatedResultTopic, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,9 +38,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> TopicCreateAsync( TopicData topic, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/topics" );
-        req.Content = JsonContent.Create( topic );
+        req.Content = JsonContent.Create( topic, ResendJson.TopicData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -50,7 +50,7 @@ public partial class ResendClient
         var path = $"/topics/{topicId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Topic, Topic>( req, ( x ) => x, cancellationToken );
+        return Execute<Topic, Topic>( req, ResendJson.Topic, ( x ) => x, cancellationToken );
     }
 
 
@@ -58,7 +58,7 @@ public partial class ResendClient
     public Task<ResendResponse> TopicUpdateAsync( Guid topicId, TopicData topic, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/topics/{topicId}" );
-        req.Content = JsonContent.Create( topic );
+        req.Content = JsonContent.Create( topic, ResendJson.TopicData );
 
         return Execute( req, cancellationToken );
     }

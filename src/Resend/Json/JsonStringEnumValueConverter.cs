@@ -1,10 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Resend;
 
 /// <summary />
-public class JsonStringEnumValueConverter<T> : JsonConverter<T>
+public class JsonStringEnumValueConverter<
+    [DynamicallyAccessedMembers( DynamicallyAccessedMemberTypes.PublicFields )] T> : JsonConverter<T>
     where T : struct, Enum
 {
     /// <inheritdoc />

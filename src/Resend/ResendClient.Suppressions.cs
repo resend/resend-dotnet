@@ -13,9 +13,10 @@ public partial class ResendClient
         req.Content = JsonContent.Create( new SuppressionAddRequest()
         {
             Email = email,
-        } );
+        },
+            ResendJson.SuppressionAddRequest );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -46,7 +47,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<SuppressionSummary>, PaginatedResult<SuppressionSummary>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<SuppressionSummary>, PaginatedResult<SuppressionSummary>>( req, ResendJson.PaginatedResultSuppressionSummary, ( x ) => x, cancellationToken );
     }
 
 
@@ -61,7 +62,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, $"/suppressions/{Uri.EscapeDataString( suppressionIdOrEmail )}" );
 
-        return Execute<Suppression, Suppression>( req, ( x ) => x, cancellationToken );
+        return Execute<Suppression, Suppression>( req, ResendJson.Suppression, ( x ) => x, cancellationToken );
     }
 
 
@@ -72,7 +73,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/suppressions/{Uri.EscapeDataString( suppressionIdOrEmail )}" );
 
-        return Execute<SuppressionRemoveResult, SuppressionRemoveResult>( req, ( x ) => x, cancellationToken );
+        return Execute<SuppressionRemoveResult, SuppressionRemoveResult>( req, ResendJson.SuppressionRemoveResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -83,9 +84,10 @@ public partial class ResendClient
         req.Content = JsonContent.Create( new SuppressionBatchAddRequest()
         {
             Emails = emails.ToList(),
-        } );
+        },
+            ResendJson.SuppressionBatchAddRequest );
 
-        return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+        return Execute<ListOf<ObjectId>, List<Guid>>( req, ResendJson.ListOfObjectId, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
     }
 
 
@@ -113,8 +115,8 @@ public partial class ResendClient
     private Task<ResendResponse<List<SuppressionRemoveResult>>> SuppressionBatchRemoveAsync( SuppressionBatchRemoveRequest data, CancellationToken cancellationToken )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/suppressions/batch/remove" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.SuppressionBatchRemoveRequest );
 
-        return Execute<ListOf<SuppressionRemoveResult>, List<SuppressionRemoveResult>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<SuppressionRemoveResult>, List<SuppressionRemoveResult>>( req, ResendJson.ListOfSuppressionRemoveResult, ( x ) => x.Data, cancellationToken );
     }
 }

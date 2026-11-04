@@ -13,9 +13,10 @@ public partial class ResendClient
         {
             DomainName = domainName,
             Region = region,
-        } );
+        },
+            ResendJson.DomainClaimData );
 
-        return Execute<DomainClaim, DomainClaim>( req, ( x ) => x, cancellationToken );
+        return Execute<DomainClaim, DomainClaim>( req, ResendJson.DomainClaim, ( x ) => x, cancellationToken );
     }
 
 
@@ -24,9 +25,9 @@ public partial class ResendClient
     {
         var path = $"/domains/claim";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.DomainClaimData );
 
-        return Execute<DomainClaim, DomainClaim>( req, ( x ) => x, cancellationToken );
+        return Execute<DomainClaim, DomainClaim>( req, ResendJson.DomainClaim, ( x ) => x, cancellationToken );
     }
 
 
@@ -36,7 +37,7 @@ public partial class ResendClient
         var path = $"/domains/{domainId}/claim";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<DomainClaim, DomainClaim>( req, ( x ) => x, cancellationToken );
+        return Execute<DomainClaim, DomainClaim>( req, ResendJson.DomainClaim, ( x ) => x, cancellationToken );
     }
 
 
@@ -46,6 +47,6 @@ public partial class ResendClient
         var path = $"/domains/{domainId}/claim/verify";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
 
-        return Execute<DomainClaim, DomainClaim>( req, ( x ) => x, cancellationToken );
+        return Execute<DomainClaim, DomainClaim>( req, ResendJson.DomainClaim, ( x ) => x, cancellationToken );
     }
 }
