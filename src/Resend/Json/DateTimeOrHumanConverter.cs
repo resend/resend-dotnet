@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -68,7 +69,7 @@ public class DateTimeOrHumanConverter : JsonConverter<DateTimeOrHuman>
     {
         if ( value.IsMoment == true )
         {
-            writer.WriteStringValue( value.Moment!.Value.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ" ) );
+            writer.WriteStringValue( value.Moment!.Value.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture ) );
         }
         else
         {

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Resend;
@@ -48,6 +49,6 @@ public class JsonUtcDateTimeConverter : JsonConverter<DateTime>
     /// <inheritdoc/>
     public override void Write( Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options )
     {
-        writer.WriteStringValue( value.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ" ) );
+        writer.WriteStringValue( value.ToUniversalTime().ToString( "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture ) );
     }
 }
