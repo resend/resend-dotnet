@@ -16,6 +16,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment: release
+    permissions:
+      contents: write   # gh release create
+      id-token: write   # OIDC token for nuget.org trusted publishing
+
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -32,8 +37,15 @@ jobs:
           path: .nuget
           key: nuget-${{ hashFiles('**/*.csproj','**/packages.lock.json') }}
 
+      # Exchanges the workflow's OIDC token for a short-lived nuget.org API key.
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Run release.sh
         run: ./cicd/release.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+          NUGET_APIKEY: ${{ steps.login.outputs.NUGET_API_KEY }}
