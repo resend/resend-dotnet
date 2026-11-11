@@ -153,7 +153,7 @@ public class WebhookValidator
         /*
          * 
          */
-        s.Event = JsonSerializer.Deserialize<WebhookEvent>( s.Payload );
+        s.Event = JsonSerializer.Deserialize( s.Payload, WebhookJsonContext.Default.WebhookEvent );
 
 
         /*

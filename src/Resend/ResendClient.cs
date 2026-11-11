@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Resend;
 
@@ -72,9 +73,9 @@ public partial class ResendClient : IResend
     public Task<ResendResponse<Guid>> EmailSendAsync( EmailMessage email, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
-        req.Content = JsonContent.Create( email );
+        req.Content = JsonContent.Create( email, ResendJson.EmailMessage );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -82,10 +83,10 @@ public partial class ResendClient : IResend
     public Task<ResendResponse<Guid>> EmailSendAsync( string idempotencyKey, EmailMessage email, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/emails" );
-        req.Content = JsonContent.Create( email );
+        req.Content = JsonContent.Create( email, ResendJson.EmailMessage );
         req.Headers.Add( IdempotencyKey, idempotencyKey );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -95,7 +96,7 @@ public partial class ResendClient : IResend
         var path = $"/emails/{emailId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<EmailReceipt, EmailReceipt>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailReceipt, EmailReceipt>( req, ResendJson.EmailReceipt, ( x ) => x, cancellationToken );
     }
 
 
@@ -123,7 +124,7 @@ public partial class ResendClient : IResend
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<EmailReceipt>, PaginatedResult<EmailReceipt>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<EmailReceipt>, PaginatedResult<EmailReceipt>>( req, ResendJson.PaginatedResultEmailReceipt, ( x ) => x, cancellationToken );
     }
 
 
@@ -132,10 +133,10 @@ public partial class ResendClient : IResend
     {
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( emails );
+        req.Content = JsonContent.Create( emails, ResendJson.IEnumerableEmailMessage );
         req.Headers.Add( "x-batch-validation", "strict" );
 
-        return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+        return Execute<ListOf<ObjectId>, List<Guid>>( req, ResendJson.ListOfObjectId, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
     }
 
 
@@ -144,11 +145,11 @@ public partial class ResendClient : IResend
     {
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( emails );
+        req.Content = JsonContent.Create( emails, ResendJson.IEnumerableEmailMessage );
         req.Headers.Add( IdempotencyKey, idempotencyKey );
         req.Headers.Add( "x-batch-validation", "strict" );
 
-        return Execute<ListOf<ObjectId>, List<Guid>>( req, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
+        return Execute<ListOf<ObjectId>, List<Guid>>( req, ResendJson.ListOfObjectId, ( x ) => x.Data.Select( y => y.Id ).ToList(), cancellationToken );
     }
 
 
@@ -164,10 +165,10 @@ public partial class ResendClient : IResend
 
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( emails );
+        req.Content = JsonContent.Create( emails, ResendJson.IEnumerableEmailMessage );
         req.Headers.Add( "x-batch-validation", mode );
 
-        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ResendJson.EmailBatchResponse, ( x ) => x, cancellationToken );
     }
 
 
@@ -183,11 +184,11 @@ public partial class ResendClient : IResend
 
         var path = $"/emails/batch";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( emails );
+        req.Content = JsonContent.Create( emails, ResendJson.IEnumerableEmailMessage );
         req.Headers.Add( IdempotencyKey, idempotencyKey );
         req.Headers.Add( "x-batch-validation", mode );
 
-        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailBatchResponse, EmailBatchResponse>( req, ResendJson.EmailBatchResponse, ( x ) => x, cancellationToken );
     }
 
 
@@ -199,7 +200,8 @@ public partial class ResendClient : IResend
         req.Content = JsonContent.Create( new EmailRescheduleRequest()
         {
             MomentSchedule = rescheduleFor,
-        } );
+        },
+            ResendJson.EmailRescheduleRequest );
 
         return Execute( req, cancellationToken );
     }
@@ -223,9 +225,10 @@ public partial class ResendClient : IResend
         req.Content = JsonContent.Create( new EmailShareRequest()
         {
             ExpiresIn = expiresIn,
-        } );
+        },
+            ResendJson.EmailShareRequest );
 
-        return Execute<EmailShareResult, EmailShareResult>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailShareResult, EmailShareResult>( req, ResendJson.EmailShareResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -271,7 +274,7 @@ public partial class ResendClient : IResend
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<EmailMetrics, EmailMetrics>( req, ( x ) => x, cancellationToken );
+        return Execute<EmailMetrics, EmailMetrics>( req, ResendJson.EmailMetrics, ( x ) => x, cancellationToken );
     }
 
     private static string ToUtcQueryValue( DateTime value )
@@ -290,9 +293,10 @@ public partial class ResendClient : IResend
         {
             DomainName = domainName,
             Region = region,
-        } );
+        },
+            ResendJson.DomainAddData );
 
-        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+        return Execute<Domain, Domain>( req, ResendJson.Domain, ( x ) => x, cancellationToken );
     }
 
 
@@ -301,9 +305,9 @@ public partial class ResendClient : IResend
     {
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.DomainAddData );
 
-        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+        return Execute<Domain, Domain>( req, ResendJson.Domain, ( x ) => x, cancellationToken );
     }
 
 
@@ -313,7 +317,7 @@ public partial class ResendClient : IResend
         var path = $"/domains/{domainId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Domain, Domain>( req, ( x ) => x, cancellationToken );
+        return Execute<Domain, Domain>( req, ResendJson.Domain, ( x ) => x, cancellationToken );
     }
 
 
@@ -322,7 +326,7 @@ public partial class ResendClient : IResend
     {
         var path = $"/domains/{domainId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.DomainUpdateData );
 
         return Execute( req, cancellationToken );
     }
@@ -344,7 +348,7 @@ public partial class ResendClient : IResend
         var path = $"/domains";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ListOf<Domain>, List<Domain>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Domain>, List<Domain>>( req, ResendJson.ListOfDomain, ( x ) => x.Data, cancellationToken );
     }
 
 
@@ -368,9 +372,10 @@ public partial class ResendClient : IResend
             Name = keyName,
             Permission = permission,
             DomainId = domainId,
-        } );
+        },
+            ResendJson.ApiKeyCreateRequest );
 
-        return Execute<ApiKeyData, ApiKeyData>( req, ( x ) => x, cancellationToken );
+        return Execute<ApiKeyData, ApiKeyData>( req, ResendJson.ApiKeyData, ( x ) => x, cancellationToken );
     }
 
 
@@ -382,9 +387,10 @@ public partial class ResendClient : IResend
         req.Content = JsonContent.Create( new ApiKeyUpdateRequest()
         {
             Name = name,
-        } );
+        },
+            ResendJson.ApiKeyUpdateRequest );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -394,7 +400,7 @@ public partial class ResendClient : IResend
         var path = $"/api-keys";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ListOf<ApiKey>, List<ApiKey>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<ApiKey>, List<ApiKey>>( req, ResendJson.ListOfApiKey, ( x ) => x.Data, cancellationToken );
     }
 
 
@@ -416,9 +422,10 @@ public partial class ResendClient : IResend
         req.Content = JsonContent.Create( new AudienceAddRequest()
         {
             Name = name
-        } );
+        },
+            ResendJson.AudienceAddRequest );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -428,7 +435,7 @@ public partial class ResendClient : IResend
         var path = $"/audiences/{audienceId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Audience, Audience>( req, ( x ) => x, cancellationToken );
+        return Execute<Audience, Audience>( req, ResendJson.Audience, ( x ) => x, cancellationToken );
     }
 
 
@@ -448,7 +455,7 @@ public partial class ResendClient : IResend
         var path = $"/audiences";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ListOf<Audience>, List<Audience>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Audience>, List<Audience>>( req, ResendJson.ListOfAudience, ( x ) => x.Data, cancellationToken );
     }
 
 
@@ -457,9 +464,9 @@ public partial class ResendClient : IResend
     {
         var path = $"/broadcasts";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.BroadcastData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -469,7 +476,7 @@ public partial class ResendClient : IResend
         var path = $"/broadcasts/{broadcastId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Broadcast, Broadcast>( req, ( x ) => x, cancellationToken );
+        return Execute<Broadcast, Broadcast>( req, ResendJson.Broadcast, ( x ) => x, cancellationToken );
     }
 
 
@@ -478,7 +485,7 @@ public partial class ResendClient : IResend
     {
         var path = $"/broadcasts/{broadcastId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.BroadcastUpdateData );
 
         return Execute( req, cancellationToken );
     }
@@ -491,7 +498,8 @@ public partial class ResendClient : IResend
         var req = new HttpRequestMessage( HttpMethod.Post, path );
         req.Content = JsonContent.Create( new BroadcastScheduleRequest()
         {
-        } );
+        },
+            ResendJson.BroadcastScheduleRequest );
 
         return Execute( req, cancellationToken );
     }
@@ -505,7 +513,8 @@ public partial class ResendClient : IResend
         req.Content = JsonContent.Create( new BroadcastScheduleRequest()
         {
             MomentSchedule = scheduleFor,
-        } );
+        },
+            ResendJson.BroadcastScheduleRequest );
 
         return Execute( req, cancellationToken );
     }
@@ -527,7 +536,7 @@ public partial class ResendClient : IResend
         var path = $"/broadcasts/{broadcastId}/duplicate";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -537,7 +546,7 @@ public partial class ResendClient : IResend
         var path = $"/broadcasts";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<ListOf<Broadcast>, List<Broadcast>>( req, ( x ) => x.Data, cancellationToken );
+        return Execute<ListOf<Broadcast>, List<Broadcast>>( req, ResendJson.ListOfBroadcast, ( x ) => x.Data, cancellationToken );
     }
 
 
@@ -578,7 +587,7 @@ public partial class ResendClient : IResend
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<BroadcastRecipient>, PaginatedResult<BroadcastRecipient>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<BroadcastRecipient>, PaginatedResult<BroadcastRecipient>>( req, ResendJson.PaginatedResultBroadcastRecipient, ( x ) => x, cancellationToken );
     }
 
 
@@ -616,7 +625,7 @@ public partial class ResendClient : IResend
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<BroadcastClickedLink>, PaginatedResult<BroadcastClickedLink>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<BroadcastClickedLink>, PaginatedResult<BroadcastClickedLink>>( req, ResendJson.PaginatedResultBroadcastClickedLink, ( x ) => x, cancellationToken );
     }
 
 
@@ -662,7 +671,7 @@ public partial class ResendClient : IResend
 
             try
             {
-                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken ).ConfigureAwait( false );
+                err = await resp.Content.ReadFromJsonAsync( ResendJson.ErrorResponse, cancellationToken ).ConfigureAwait( false );
             }
             catch ( Exception iex )
             {
@@ -697,6 +706,7 @@ public partial class ResendClient : IResend
 
     /// <summary />
     private async Task<ResendResponse<T2>> Execute<T1, T2>( HttpRequestMessage req,
+        JsonTypeInfo<T1> typeInfo,
         Func<T1, T2> map,
         CancellationToken cancellationToken )
     {
@@ -739,7 +749,7 @@ public partial class ResendClient : IResend
 
             try
             {
-                err = await resp.Content.ReadFromJsonAsync<ErrorResponse>( cancellationToken ).ConfigureAwait( false );
+                err = await resp.Content.ReadFromJsonAsync( ResendJson.ErrorResponse, cancellationToken ).ConfigureAwait( false );
             }
             catch ( TaskCanceledException )
             {
@@ -776,7 +786,7 @@ public partial class ResendClient : IResend
 
         try
         {
-            obj = await resp.Content.ReadFromJsonAsync<T1>( cancellationToken ).ConfigureAwait( false );
+            obj = await resp.Content.ReadFromJsonAsync( typeInfo, cancellationToken ).ConfigureAwait( false );
         }
         catch ( TaskCanceledException )
         {

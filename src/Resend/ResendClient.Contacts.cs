@@ -14,9 +14,9 @@ public partial class ResendClient
 
         var path = $"/contacts";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.ContactData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -26,7 +26,7 @@ public partial class ResendClient
         var path = $"/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
+        return Execute<Contact, Contact>( req, ResendJson.Contact, ( x ) => x, cancellationToken );
     }
 
 
@@ -36,7 +36,7 @@ public partial class ResendClient
         var path = $"/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<Contact, Contact>( req, ( x ) => x, cancellationToken );
+        return Execute<Contact, Contact>( req, ResendJson.Contact, ( x ) => x, cancellationToken );
     }
 
 
@@ -45,7 +45,7 @@ public partial class ResendClient
     {
         var path = $"/contacts/{contactId}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.ContactData );
 
         return Execute( req, cancellationToken );
     }
@@ -56,7 +56,7 @@ public partial class ResendClient
     {
         var path = $"/contacts/{email}";
         var req = new HttpRequestMessage( HttpMethod.Patch, path );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.ContactData );
 
         return Execute( req, cancellationToken );
     }
@@ -106,7 +106,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Contact>, PaginatedResult<Contact>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Contact>, PaginatedResult<Contact>>( req, ResendJson.PaginatedResultContact, ( x ) => x, cancellationToken );
     }
 
 
@@ -134,7 +134,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<Segment>, PaginatedResult<Segment>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<Segment>, PaginatedResult<Segment>>( req, ResendJson.PaginatedResultSegment, ( x ) => x, cancellationToken );
     }
 
 
@@ -182,7 +182,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<TopicSubscription>, PaginatedResult<TopicSubscription>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<TopicSubscription>, PaginatedResult<TopicSubscription>>( req, ResendJson.PaginatedResultTopicSubscription, ( x ) => x, cancellationToken );
     }
 
 
@@ -191,7 +191,7 @@ public partial class ResendClient
     {
         var url = $"/contacts/{contactId}/topics";
         var req = new HttpRequestMessage( HttpMethod.Patch, url );
-        req.Content = JsonContent.Create( topics );
+        req.Content = JsonContent.Create( topics, ResendJson.ListTopicSubscription );
 
         return Execute( req, cancellationToken );
     }

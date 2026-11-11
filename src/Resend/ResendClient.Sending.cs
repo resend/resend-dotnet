@@ -28,7 +28,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<SentEmailAttachment>, PaginatedResult<SentEmailAttachment>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<SentEmailAttachment>, PaginatedResult<SentEmailAttachment>>( req, ResendJson.PaginatedResultSentEmailAttachment, ( x ) => x, cancellationToken );
     }
 
 
@@ -38,6 +38,6 @@ public partial class ResendClient
         var path = $"/emails/{emailId}/attachments/{attachmentId}";
         var req = new HttpRequestMessage( HttpMethod.Get, path );
 
-        return Execute<SentEmailAttachment, SentEmailAttachment>( req, ( x ) => x, cancellationToken );
+        return Execute<SentEmailAttachment, SentEmailAttachment>( req, ResendJson.SentEmailAttachment, ( x ) => x, cancellationToken );
     }
 }

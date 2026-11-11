@@ -29,7 +29,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<OAuthGrant>, PaginatedResult<OAuthGrant>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<OAuthGrant>, PaginatedResult<OAuthGrant>>( req, ResendJson.PaginatedResultOAuthGrant, ( x ) => x, cancellationToken );
     }
 
 
@@ -39,6 +39,6 @@ public partial class ResendClient
         var path = $"/oauth/grants/{oauthGrantId}";
         var req = new HttpRequestMessage( HttpMethod.Delete, path );
 
-        return Execute<OAuthGrantRevoked, OAuthGrantRevoked>( req, ( x ) => x, cancellationToken );
+        return Execute<OAuthGrantRevoked, OAuthGrantRevoked>( req, ResendJson.OAuthGrantRevoked, ( x ) => x, cancellationToken );
     }
 }

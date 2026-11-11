@@ -7,6 +7,6 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, "/usage" );
 
-        return Execute<Usage, Usage>( req, ( x ) => x, cancellationToken );
+        return Execute<Usage, Usage>( req, ResendJson.Usage, ( x ) => x, cancellationToken );
     }
 }

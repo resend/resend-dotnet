@@ -10,9 +10,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> EventCreateAsync( EventCreateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/events" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.EventCreateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -21,7 +21,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/events/{eventId}" );
 
-        return Execute<EventResource, EventResource>( req, ( x ) => x, cancellationToken );
+        return Execute<EventResource, EventResource>( req, ResendJson.EventResource, ( x ) => x, cancellationToken );
     }
 
 
@@ -30,7 +30,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Get, $"/events/{Uri.EscapeDataString( eventIdOrName )}" );
 
-        return Execute<EventResource, EventResource>( req, ( x ) => x, cancellationToken );
+        return Execute<EventResource, EventResource>( req, ResendJson.EventResource, ( x ) => x, cancellationToken );
     }
 
 
@@ -58,7 +58,7 @@ public partial class ResendClient
 
         var req = new HttpRequestMessage( HttpMethod.Get, url );
 
-        return Execute<PaginatedResult<EventResource>, PaginatedResult<EventResource>>( req, ( x ) => x, cancellationToken );
+        return Execute<PaginatedResult<EventResource>, PaginatedResult<EventResource>>( req, ResendJson.PaginatedResultEventResource, ( x ) => x, cancellationToken );
     }
 
 
@@ -66,9 +66,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> EventUpdateAsync( Guid eventId, EventUpdateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/events/{eventId}" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.EventUpdateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -76,9 +76,9 @@ public partial class ResendClient
     public Task<ResendResponse<Guid>> EventUpdateAsync( string eventIdOrName, EventUpdateData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Patch, $"/events/{Uri.EscapeDataString( eventIdOrName )}" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.EventUpdateData );
 
-        return Execute<ObjectId, Guid>( req, ( x ) => x.Id, cancellationToken );
+        return Execute<ObjectId, Guid>( req, ResendJson.ObjectId, ( x ) => x.Id, cancellationToken );
     }
 
 
@@ -87,7 +87,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/events/{eventId}" );
 
-        return Execute<EventDeleteResult, EventDeleteResult>( req, ( x ) => x, cancellationToken );
+        return Execute<EventDeleteResult, EventDeleteResult>( req, ResendJson.EventDeleteResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -96,7 +96,7 @@ public partial class ResendClient
     {
         var req = new HttpRequestMessage( HttpMethod.Delete, $"/events/{Uri.EscapeDataString( eventIdOrName )}" );
 
-        return Execute<EventDeleteResult, EventDeleteResult>( req, ( x ) => x, cancellationToken );
+        return Execute<EventDeleteResult, EventDeleteResult>( req, ResendJson.EventDeleteResult, ( x ) => x, cancellationToken );
     }
 
 
@@ -104,8 +104,8 @@ public partial class ResendClient
     public Task<ResendResponse<EventSendResult>> EventSendAsync( EventSendData data, CancellationToken cancellationToken = default )
     {
         var req = new HttpRequestMessage( HttpMethod.Post, "/events/send" );
-        req.Content = JsonContent.Create( data );
+        req.Content = JsonContent.Create( data, ResendJson.EventSendData );
 
-        return Execute<EventSendResult, EventSendResult>( req, ( x ) => x, cancellationToken );
+        return Execute<EventSendResult, EventSendResult>( req, ResendJson.EventSendResult, ( x ) => x, cancellationToken );
     }
 }
