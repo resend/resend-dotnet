@@ -1,0 +1,38 @@
+<Solution>
+  <Folder Name="/cicd/">
+    <File Path="cicd/ci.sh" />
+    <File Path="cicd/release.sh" />
+  </Folder>
+  <Folder Name="/examples/">
+    <File Path="examples/README.md" />
+    <Project Path="examples/AsyncHangfire/AsyncHangfire.csproj" />
+    <Project Path="examples/AsyncTemporal/AsyncTemporal.csproj" />
+    <Project Path="examples/ConsoleCalendar/ConsoleCalendar.csproj" />
+    <Project Path="examples/ConsoleNoDi/ConsoleNoDi.csproj" />
+    <Project Path="examples/RenderLiquid/RenderLiquid.csproj" />
+    <Project Path="examples/RenderRazor/RenderRazor.csproj" />
+    <Project Path="examples/WebControllerApi/WebControllerApi.csproj" />
+    <Project Path="examples/WebMinimalApi/WebMinimalApi.csproj" />
+    <Project Path="examples/WebRazor/WebRazor.csproj" />
+  </Folder>
+  <Folder Name="/global/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Resend.FluentEmail/Resend.FluentEmail.csproj" />
+    <Project Path="src/Resend.Webhooks/Resend.Webhooks.csproj" />
+    <Project Path="src/Resend/Resend.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Resend.FluentEmail.Tests/Resend.FluentEmail.Tests.csproj" />
+    <Project Path="tests/Resend.Tests/Resend.Tests.csproj" />
+    <Project Path="tests/Resend.Webhooks.Tests/Resend.Webhooks.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Resend.ApiServer/Resend.ApiServer.csproj" />
+    <Project Path="tools/Resend.DocsCheck/Resend.DocsCheck.csproj" />
+  </Folder>
+</Solution>
