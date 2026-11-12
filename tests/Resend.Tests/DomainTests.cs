@@ -49,6 +49,37 @@ public class DomainTests
 
     /// <summary />
     [Fact]
+    public void DomainUpdateData_serializes_forge_return_path()
+    {
+        var data = new DomainUpdateData()
+        {
+            ForgeReturnPath = "outbound",
+        };
+
+        var json = JsonSerializer.Serialize( data );
+        Assert.Contains( "\"forge_return_path\":\"outbound\"", json );
+
+        var without = JsonSerializer.Serialize( new DomainUpdateData() );
+        Assert.DoesNotContain( "forge_return_path", without );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DomainVerifyData_serializes_forge_scope()
+    {
+        var data = new DomainVerifyData()
+        {
+            Scope = new List<DomainVerificationScope>() { DomainVerificationScope.Forge },
+        };
+
+        var json = JsonSerializer.Serialize( data );
+        Assert.Equal( "{\"scope\":[\"forge\"]}", json );
+    }
+
+
+    /// <summary />
+    [Fact]
     public void Domain_deserializes_tracking_and_capabilities()
     {
         const string json = """

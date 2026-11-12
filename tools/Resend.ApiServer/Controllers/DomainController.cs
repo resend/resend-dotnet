@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Resend.Payloads;
 
 namespace Resend.ApiServer.Controllers;
@@ -95,9 +96,12 @@ public class DomainController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "domains/{id}/verify" )]
-    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id )
+    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id, [FromBody( EmptyBodyBehavior = EmptyBodyBehavior.Allow )] DomainVerifyData? request = null )
     {
         _logger.LogDebug( "DomainVerify" );
+
+        if ( request != null && ( request.Scope == null || request.Scope.Count != 1 || request.Scope[ 0 ] != DomainVerificationScope.Forge ) )
+            return BadRequest();
 
         return Ok( new ObjectId()
         {
@@ -245,30 +249,6 @@ public class DomainController : ControllerBase
     }
 
 
-    /// <summary />
-    [HttpPatch]
-    [Route( "domains/{id}/forge" )]
-    public Domain DomainForgeUpdate( [FromRoute] Guid id, [FromBody] DomainForgeData request )
-    {
-        _logger.LogDebug( "DomainForgeUpdate" );
-
-        return ForgeDomain( id, request.ReturnPath ?? "send" );
-    }
-
-
-    /// <summary />
-    [HttpPost]
-    [Route( "domains/{id}/forge/verify" )]
-    public ActionResult<ObjectId> DomainForgeVerify( [FromRoute] Guid id )
-    {
-        _logger.LogDebug( "DomainForgeVerify" );
-
-        return Ok( new ObjectId()
-        {
-            Object = "domain",
-            Id = id,
-        } );
-    }
 
 
     private static Domain ForgeDomain( Guid id, string returnPath )

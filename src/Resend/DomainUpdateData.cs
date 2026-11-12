@@ -41,6 +41,21 @@ public class DomainUpdateData
     [JsonPropertyName( "tracking_subdomain" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public string? TrackingSubdomain { get; set; }
+
+    /// <summary>
+    /// Move the domain's Forge return path to another host.
+    /// </summary>
+    /// <remarks>
+    /// Only possible while the Forge record is still verifying. Moving the path
+    /// does not start verification: fetch the new record with
+    /// <see cref="IResend.DomainRetrieveAsync(Guid, CancellationToken)"/>, add it
+    /// to your DNS, then call
+    /// <see cref="IResend.DomainVerifyAsync(Guid, IEnumerable{DomainVerificationScope}, CancellationToken)"/>
+    /// with <see cref="DomainVerificationScope.Forge"/>.
+    /// </remarks>
+    [JsonPropertyName( "forge_return_path" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public string? ForgeReturnPath { get; set; }
 }
 
 
