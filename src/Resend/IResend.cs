@@ -409,6 +409,67 @@ public interface IResend
     /// <see href="https://resend.com/docs/api-reference/domains/verify-domain-claim"/>
     Task<ResendResponse<DomainClaim>> DomainClaimVerifyAsync( Guid domainId, CancellationToken cancellationToken = default );
 
+    /// <summary>
+    /// Enable Forge on an existing domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Domain identifier.
+    /// </param>
+    /// <param name="returnPath">
+    /// Subdomain used for the `Return-Path` address. When omitted, the API picks
+    /// a suggested label based on the domain's current return path.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain.
+    /// </returns>
+    /// <remarks>
+    /// Idempotent on the API side: enabling an already-migrated domain returns
+    /// its current state.
+    /// </remarks>
+    Task<ResendResponse<Domain>> DomainForgeEnableAsync( Guid domainId, string? returnPath = null, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Update the Forge return path of an existing domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Domain identifier.
+    /// </param>
+    /// <param name="returnPath">
+    /// Subdomain used for the `Return-Path` address.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain.
+    /// </returns>
+    /// <remarks>
+    /// Moves the return path and re-verifies. After the domain verifies, the API
+    /// refuses this with a 422 `return_path_unavailable` error.
+    /// </remarks>
+    Task<ResendResponse<Domain>> DomainForgeUpdateAsync( Guid domainId, string returnPath, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Trigger Forge DNS verification for an existing domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Domain identifier.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Task.
+    /// </returns>
+    /// <remarks>
+    /// Starts an asynchronous verification process, like <see cref="DomainVerifyAsync(Guid, CancellationToken)"/>.
+    /// Poll <see cref="DomainRetrieveAsync(Guid, CancellationToken)"/> to follow the status.
+    /// </remarks>
+    Task<ResendResponse> DomainForgeVerifyAsync( Guid domainId, CancellationToken cancellationToken = default );
+
     #endregion
 
     #region Api Keys

@@ -232,4 +232,66 @@ public class DomainController : ControllerBase
             MomentExpires = DateTime.UtcNow.AddDays( 7 ),
         };
     }
+
+
+    /// <summary />
+    [HttpPost]
+    [Route( "domains/{id}/forge" )]
+    public Domain DomainForgeEnable( [FromRoute] Guid id, [FromBody] DomainForgeData request )
+    {
+        _logger.LogDebug( "DomainForgeEnable" );
+
+        return ForgeDomain( id, request.ReturnPath ?? "send" );
+    }
+
+
+    /// <summary />
+    [HttpPatch]
+    [Route( "domains/{id}/forge" )]
+    public Domain DomainForgeUpdate( [FromRoute] Guid id, [FromBody] DomainForgeData request )
+    {
+        _logger.LogDebug( "DomainForgeUpdate" );
+
+        return ForgeDomain( id, request.ReturnPath ?? "send" );
+    }
+
+
+    /// <summary />
+    [HttpPost]
+    [Route( "domains/{id}/forge/verify" )]
+    public ActionResult<ObjectId> DomainForgeVerify( [FromRoute] Guid id )
+    {
+        _logger.LogDebug( "DomainForgeVerify" );
+
+        return Ok( new ObjectId()
+        {
+            Object = "domain",
+            Id = id,
+        } );
+    }
+
+
+    private static Domain ForgeDomain( Guid id, string returnPath )
+    {
+        return new Domain()
+        {
+            Id = id,
+            Name = "example.com",
+            Region = DeliveryRegion.UsEast1,
+            Status = DomainStatus.Pending,
+            MomentCreated = DateTime.UtcNow,
+            Records = new List<DomainRecord>()
+            {
+                new DomainRecord()
+                {
+                    Record = "SPF",
+                    RecordType = "CNAME",
+                    Name = returnPath,
+                    TimeToLive = "Auto",
+                    Status = DomainRecordStatus.Pending,
+                    Value = "send.mta.resend.com",
+                },
+            },
+        };
+    }
 }
