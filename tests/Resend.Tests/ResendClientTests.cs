@@ -233,6 +233,7 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         {
             TrackClicks = true,
             TrackOpen = true,
+            ForgeReturnPath = "outbound",
         } );
 
         Assert.NotNull( resp );
@@ -246,6 +247,17 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         var resp = await _resend.DomainVerifyAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task DomainVerifyWithForgeScope()
+    {
+        var resp = await _resend.DomainVerifyAsync( Guid.NewGuid(), new[] { DomainVerificationScope.Forge } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
     }
 
 

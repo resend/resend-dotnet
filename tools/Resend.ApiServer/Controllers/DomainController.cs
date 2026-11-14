@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Resend.Payloads;
 
 namespace Resend.ApiServer.Controllers;
@@ -95,9 +96,12 @@ public class DomainController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "domains/{id}/verify" )]
-    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id )
+    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id, [FromBody( EmptyBodyBehavior = EmptyBodyBehavior.Allow )] DomainVerifyData? request = null )
     {
         _logger.LogDebug( "DomainVerify" );
+
+        if ( request != null && ( request.Scope == null || request.Scope.Count != 1 || request.Scope[ 0 ] != DomainVerificationScope.Forge ) )
+            return BadRequest();
 
         return Ok( new ObjectId()
         {
@@ -230,6 +234,44 @@ public class DomainController : ControllerBase
             },
             MomentCreated = DateTime.UtcNow,
             MomentExpires = DateTime.UtcNow.AddDays( 7 ),
+        };
+    }
+
+
+    /// <summary />
+    [HttpPost]
+    [Route( "domains/{id}/forge" )]
+    public Domain DomainForgeEnable( [FromRoute] Guid id, [FromBody] DomainForgeData request )
+    {
+        _logger.LogDebug( "DomainForgeEnable" );
+
+        return ForgeDomain( id, request.ReturnPath ?? "send" );
+    }
+
+
+
+
+    private static Domain ForgeDomain( Guid id, string returnPath )
+    {
+        return new Domain()
+        {
+            Id = id,
+            Name = "example.com",
+            Region = DeliveryRegion.UsEast1,
+            Status = DomainStatus.Pending,
+            MomentCreated = DateTime.UtcNow,
+            Records = new List<DomainRecord>()
+            {
+                new DomainRecord()
+                {
+                    Record = "SPF",
+                    RecordType = "CNAME",
+                    Name = returnPath,
+                    TimeToLive = "Auto",
+                    Status = DomainRecordStatus.Pending,
+                    Value = "send.mta.resend.com",
+                },
+            },
         };
     }
 }

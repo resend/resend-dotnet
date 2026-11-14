@@ -322,6 +322,26 @@ public interface IResend
     Task<ResendResponse> DomainVerifyAsync( Guid domainId, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Verify specific records of an existing domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Domain identifier.
+    /// </param>
+    /// <param name="scope">
+    /// Records to check. Pass <see cref="DomainVerificationScope.Forge"/> to verify
+    /// only the Forge record and leave the other records untouched. Requires Forge
+    /// to be enabled on the domain.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Task.
+    /// </returns>
+    /// <see href="https://resend.com/docs/api-reference/domains/verify-domain"/>
+    Task<ResendResponse> DomainVerifyAsync( Guid domainId, IEnumerable<DomainVerificationScope> scope, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Remove an existing domain.
     /// </summary>
     /// <param name="domainId">
@@ -408,6 +428,28 @@ public interface IResend
     /// </remarks>
     /// <see href="https://resend.com/docs/api-reference/domains/verify-domain-claim"/>
     Task<ResendResponse<DomainClaim>> DomainClaimVerifyAsync( Guid domainId, CancellationToken cancellationToken = default );
+
+    /// <summary>
+    /// Enable Forge on an existing domain.
+    /// </summary>
+    /// <param name="domainId">
+    /// Domain identifier.
+    /// </param>
+    /// <param name="returnPath">
+    /// Subdomain used for the `Return-Path` address. When omitted, the API picks
+    /// a suggested label based on the domain's current return path.
+    /// </param>
+    /// <param name="cancellationToken">
+    /// Cancellation token.
+    /// </param>
+    /// <returns>
+    /// Domain.
+    /// </returns>
+    /// <remarks>
+    /// Idempotent on the API side: enabling an already-migrated domain returns
+    /// its current state.
+    /// </remarks>
+    Task<ResendResponse<Domain>> DomainForgeEnableAsync( Guid domainId, string? returnPath = null, CancellationToken cancellationToken = default );
 
     #endregion
 

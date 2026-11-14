@@ -339,6 +339,20 @@ public partial class ResendClient : IResend
 
 
     /// <inheritdoc />
+    public Task<ResendResponse> DomainVerifyAsync( Guid domainId, IEnumerable<DomainVerificationScope> scope, CancellationToken cancellationToken = default )
+    {
+        var path = $"/domains/{domainId}/verify";
+        var req = new HttpRequestMessage( HttpMethod.Post, path );
+        req.Content = JsonContent.Create( new DomainVerifyData()
+        {
+            Scope = scope.ToList(),
+        } );
+
+        return Execute( req, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
     public Task<ResendResponse<List<Domain>>> DomainListAsync( CancellationToken cancellationToken = default )
     {
         var path = $"/domains";
