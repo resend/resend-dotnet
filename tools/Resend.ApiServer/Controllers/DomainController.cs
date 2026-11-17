@@ -100,7 +100,7 @@ public class DomainController : ControllerBase
     {
         _logger.LogDebug( "DomainVerify" );
 
-        if ( request != null && ( request.Scope == null || request.Scope.Count != 1 || request.Scope[ 0 ] != DomainVerificationScope.Forge ) )
+        if ( request?.Scope != null && ( request.Scope.Count != 1 || request.Scope[ 0 ] != DomainVerificationScope.Forge ) )
             return BadRequest();
 
         return Ok( new ObjectId()
@@ -245,7 +245,7 @@ public class DomainController : ControllerBase
     {
         _logger.LogDebug( "DomainForgeEnable" );
 
-        return ForgeDomain( id, request.ReturnPath ?? "send" );
+        return ForgeDomain( id, request.CustomReturnPath ?? "picked" );
     }
 
 

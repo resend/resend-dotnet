@@ -233,7 +233,6 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
         {
             TrackClicks = true,
             TrackOpen = true,
-            ForgeReturnPath = "outbound",
         } );
 
         Assert.NotNull( resp );

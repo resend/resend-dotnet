@@ -49,18 +49,15 @@ public class DomainTests
 
     /// <summary />
     [Fact]
-    public void DomainUpdateData_serializes_forge_return_path()
+    public void DomainForgeData_serializes_custom_return_path()
     {
-        var data = new DomainUpdateData()
+        var data = new DomainForgeData()
         {
-            ForgeReturnPath = "outbound",
+            CustomReturnPath = "outbound",
         };
 
-        var json = JsonSerializer.Serialize( data );
-        Assert.Contains( "\"forge_return_path\":\"outbound\"", json );
-
-        var without = JsonSerializer.Serialize( new DomainUpdateData() );
-        Assert.DoesNotContain( "forge_return_path", without );
+        Assert.Equal( "{\"custom_return_path\":\"outbound\"}", JsonSerializer.Serialize( data ) );
+        Assert.Equal( "{}", JsonSerializer.Serialize( new DomainForgeData() ) );
     }
 
 

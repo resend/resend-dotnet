@@ -74,5 +74,4 @@ public class Domain
     [JsonPropertyName( "records" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public List<DomainRecord>? Records { get; set; }
-
 }

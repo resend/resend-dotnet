@@ -435,9 +435,9 @@ public interface IResend
     /// <param name="domainId">
     /// Domain identifier.
     /// </param>
-    /// <param name="returnPath">
-    /// Subdomain used for the `Return-Path` address. When omitted, the API picks
-    /// a suggested label based on the domain's current return path.
+    /// <param name="customReturnPath">
+    /// Overrides the default value of `Return-Path`. When omitted, the API picks
+    /// a free label. Set once, it cannot be changed afterwards.
     /// </param>
     /// <param name="cancellationToken">
     /// Cancellation token.
@@ -449,7 +449,7 @@ public interface IResend
     /// Idempotent on the API side: enabling an already-migrated domain returns
     /// its current state.
     /// </remarks>
-    Task<ResendResponse<Domain>> DomainForgeEnableAsync( Guid domainId, string? returnPath = null, CancellationToken cancellationToken = default );
+    Task<ResendResponse<Domain>> DomainForgeEnableAsync( Guid domainId, string? customReturnPath = null, CancellationToken cancellationToken = default );
 
     #endregion
 

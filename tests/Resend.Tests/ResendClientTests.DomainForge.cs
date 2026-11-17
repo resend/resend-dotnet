@@ -16,13 +16,13 @@ public partial class ResendClientTests
         Assert.NotNull( resp.Content );
         Assert.Equal( domainId, resp.Content.Id );
         Assert.NotNull( resp.Content.Records );
-        Assert.Equal( "send", resp.Content.Records![ 0 ].Name );
+        Assert.Equal( "picked", resp.Content.Records![ 0 ].Name );
     }
 
 
     /// <summary />
     [Fact]
-    public async Task DomainForgeEnableWithReturnPath()
+    public async Task DomainForgeEnableWithCustomReturnPath()
     {
         var domainId = Guid.NewGuid();
 

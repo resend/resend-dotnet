@@ -8,13 +8,13 @@ namespace Resend;
 public class DomainForgeData
 {
     /// <summary>
-    /// Subdomain used for the `Return-Path` address.
+    /// Overrides the default value of `Return-Path`.
     /// </summary>
     /// <remarks>
-    /// When omitted, the server picks a free DNS label based on the domain's
-    /// current return path.
+    /// When omitted, the server picks a free DNS label. Set once, it cannot be
+    /// changed afterwards.
     /// </remarks>
-    [JsonPropertyName( "return_path" )]
+    [JsonPropertyName( "custom_return_path" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-    public string? ReturnPath { get; set; }
+    public string? CustomReturnPath { get; set; }
 }
