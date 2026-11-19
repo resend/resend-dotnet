@@ -151,6 +151,38 @@ public enum ErrorType
     [JsonStringValue( "concurrent_idempotent_requests" )]
     ConcurrentIdempotentRequests,
 
+    /// <summary>
+    /// Forge is not available for the domain, for example because it does not send,
+    /// uses a dedicated IP, or was verified with a legacy DKIM setup.
+    /// </summary>
+    [JsonStringValue( "forge_unavailable" )]
+    ForgeUnavailable,
+
+    /// <summary>
+    /// Forge is not enabled on the domain. Enable Forge before a Forge-scoped verify.
+    /// </summary>
+    [JsonStringValue( "forge_not_enabled" )]
+    ForgeNotEnabled,
+
+    /// <summary>
+    /// The requested Forge return path cannot be used, because it equals the current
+    /// return path or the host already has DNS records.
+    /// </summary>
+    [JsonStringValue( "return_path_unavailable" )]
+    ReturnPathUnavailable,
+
+    /// <summary>
+    /// The DNS lookup for the domain failed. Retry in a few seconds.
+    /// </summary>
+    [JsonStringValue( "dns_lookup_failed" )]
+    DnsLookupFailed,
+
+    /// <summary>
+    /// The service is not available right now. Retry later.
+    /// </summary>
+    [JsonStringValue( "service_unavailable" )]
+    ServiceUnavailable,
+
 
 
     /// <summary>

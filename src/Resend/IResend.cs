@@ -449,6 +449,7 @@ public interface IResend
     /// Idempotent on the API side: enabling an already-migrated domain returns
     /// its current state.
     /// </remarks>
+    /// <see href="https://resend.com/docs/api-reference/domains/enable-forge"/>
     Task<ResendResponse<Domain>> DomainForgeEnableAsync( Guid domainId, string? customReturnPath = null, CancellationToken cancellationToken = default );
 
     #endregion

@@ -343,7 +343,7 @@ public partial class ResendClient : IResend
     {
         var path = $"/domains/{domainId}/verify";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( new DomainVerifyData()
+        req.Content = JsonContent.Create( new DomainVerifyRequest()
         {
             Scope = scope.ToList(),
         } );

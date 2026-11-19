@@ -1,3 +1,4 @@
+using Resend.Payloads;
 using System.Net.Http.Json;
 
 namespace Resend;
@@ -9,7 +10,7 @@ public partial class ResendClient
     {
         var path = $"/domains/{domainId}/forge";
         var req = new HttpRequestMessage( HttpMethod.Post, path );
-        req.Content = JsonContent.Create( new DomainForgeData()
+        req.Content = JsonContent.Create( new DomainForgeEnableRequest()
         {
             CustomReturnPath = customReturnPath,
         } );

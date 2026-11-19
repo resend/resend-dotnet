@@ -96,7 +96,7 @@ public class DomainController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "domains/{id}/verify" )]
-    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id, [FromBody( EmptyBodyBehavior = EmptyBodyBehavior.Allow )] DomainVerifyData? request = null )
+    public ActionResult<ObjectId> DomainVerify( [FromRoute] Guid id, [FromBody( EmptyBodyBehavior = EmptyBodyBehavior.Allow )] DomainVerifyRequest? request = null )
     {
         _logger.LogDebug( "DomainVerify" );
 
@@ -241,14 +241,12 @@ public class DomainController : ControllerBase
     /// <summary />
     [HttpPost]
     [Route( "domains/{id}/forge" )]
-    public Domain DomainForgeEnable( [FromRoute] Guid id, [FromBody] DomainForgeData request )
+    public Domain DomainForgeEnable( [FromRoute] Guid id, [FromBody] DomainForgeEnableRequest request )
     {
         _logger.LogDebug( "DomainForgeEnable" );
 
         return ForgeDomain( id, request.CustomReturnPath ?? "picked" );
     }
-
-
 
 
     private static Domain ForgeDomain( Guid id, string returnPath )

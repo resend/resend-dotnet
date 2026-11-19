@@ -1,3 +1,4 @@
+using Resend.Payloads;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -49,23 +50,23 @@ public class DomainTests
 
     /// <summary />
     [Fact]
-    public void DomainForgeData_serializes_custom_return_path()
+    public void DomainForgeEnableRequest_serializes_custom_return_path()
     {
-        var data = new DomainForgeData()
+        var data = new DomainForgeEnableRequest()
         {
             CustomReturnPath = "outbound",
         };
 
         Assert.Equal( "{\"custom_return_path\":\"outbound\"}", JsonSerializer.Serialize( data ) );
-        Assert.Equal( "{}", JsonSerializer.Serialize( new DomainForgeData() ) );
+        Assert.Equal( "{}", JsonSerializer.Serialize( new DomainForgeEnableRequest() ) );
     }
 
 
     /// <summary />
     [Fact]
-    public void DomainVerifyData_serializes_forge_scope()
+    public void DomainVerifyRequest_serializes_forge_scope()
     {
-        var data = new DomainVerifyData()
+        var data = new DomainVerifyRequest()
         {
             Scope = new List<DomainVerificationScope>() { DomainVerificationScope.Forge },
         };
