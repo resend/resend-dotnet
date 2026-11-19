@@ -1,3 +1,4 @@
+using Resend.Payloads;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -44,6 +45,34 @@ public class DomainTests
         Assert.Contains( "\"click_tracking\":true", json );
         Assert.Contains( "\"tracking_subdomain\":\"links\"", json );
         Assert.DoesNotContain( "open_tracking", json );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DomainForgeEnableRequest_serializes_custom_return_path()
+    {
+        var data = new DomainForgeEnableRequest()
+        {
+            CustomReturnPath = "outbound",
+        };
+
+        Assert.Equal( "{\"custom_return_path\":\"outbound\"}", JsonSerializer.Serialize( data ) );
+        Assert.Equal( "{}", JsonSerializer.Serialize( new DomainForgeEnableRequest() ) );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public void DomainVerifyRequest_serializes_forge_scope()
+    {
+        var data = new DomainVerifyRequest()
+        {
+            Scope = new List<DomainVerificationScope>() { DomainVerificationScope.Forge },
+        };
+
+        var json = JsonSerializer.Serialize( data );
+        Assert.Equal( "{\"scope\":[\"forge\"]}", json );
     }
 
 

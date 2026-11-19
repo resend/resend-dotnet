@@ -251,6 +251,17 @@ public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Pro
 
     /// <summary />
     [Fact]
+    public async Task DomainVerifyWithForgeScope()
+    {
+        var resp = await _resend.DomainVerifyAsync( Guid.NewGuid(), new[] { DomainVerificationScope.Forge } );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task DomainRetrieve()
     {
         var resp = await _resend.DomainRetrieveAsync( Guid.NewGuid() );
