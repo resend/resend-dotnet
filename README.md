@@ -30,6 +30,7 @@ Send email with:
 * [ASP.NET - Minimal API](https://github.com/resend/resend-dotnet/tree/master/examples/WebMinimalApi) - Send email from an API
 * [ASP.NET - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/WebRazor) - Send email from a Razor web application
 * [Console app](https://github.com/resend/resend-dotnet/tree/master/examples/ConsoleNoDi) - Send email from console app (without dependency injection)
+* [Worker Service](https://github.com/resend/resend-dotnet/tree/master/examples/WorkerService) - Send email from a background worker service
 * [Async - Hangfire](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncHangfire) - Send email as a background job using [Hangfire](https://www.hangfire.io/)
 * [Async - Temporal](https://github.com/resend/resend-dotnet/tree/master/examples/AsyncTemporal) - Send email in durable workflow using [Temporal](https://temporal.io/)
 * [Render - Razor](https://github.com/resend/resend-dotnet/tree/master/examples/RenderRazor) - Render an HTML body using Razor views

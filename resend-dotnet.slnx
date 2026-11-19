@@ -14,6 +14,7 @@
     <Project Path="examples/WebControllerApi/WebControllerApi.csproj" />
     <Project Path="examples/WebMinimalApi/WebMinimalApi.csproj" />
     <Project Path="examples/WebRazor/WebRazor.csproj" />
+    <Project Path="examples/WorkerService/WorkerService.csproj" />
   </Folder>
   <Folder Name="/global/">
     <File Path=".editorconfig" />
