@@ -62,7 +62,11 @@ public class EmailWorker : BackgroundService
         }
         catch ( ResendException ex )
         {
-            _logger.LogError( "Failed to send email: {ErrorType} - {Message}", ex.ErrorType, ex.Message );
+            _logger.LogError( ex, "Failed to send email: {ErrorType}", ex.ErrorType );
+        }
+        catch ( OperationCanceledException ex ) when ( !cancellationToken.IsCancellationRequested )
+        {
+            _logger.LogError( ex, "Failed to send email: request timed out" );
         }
     }
 }
