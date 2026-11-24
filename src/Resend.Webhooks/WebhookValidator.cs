@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Svix.Exceptions;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -119,11 +118,11 @@ public class WebhookValidator
         /*
          * 
          */
-        Svix.Webhook wh;
+        StandardWebhooks.Webhook wh;
 
         try
         {
-            wh = new Svix.Webhook( _options.Secret );
+            wh = new StandardWebhooks.Webhook( _options.Secret );
         }
         catch
         {
@@ -136,7 +135,7 @@ public class WebhookValidator
         {
             wh.Verify( payload, h );
         }
-        catch ( WebhookVerificationException )
+        catch ( StandardWebhooks.Exceptions.WebhookVerificationException )
         {
             s.Exception = new WebhookException( "RWH202", "Signature validation failed" );
 
