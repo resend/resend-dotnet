@@ -70,37 +70,37 @@ public class WebhookValidator
         /*
          * 
          */
-        if ( request.Headers.ContainsKey( "svix-id" ) == false )
+        if ( request.Headers.ContainsKey( "webhook-id" ) == false )
         {
-            s.Exception = new WebhookException( "RWH101", "Missing required header 'svix-id'" );
+            s.Exception = new WebhookException( "RWH101", "Missing required header 'webhook-id'" );
 
             return s;
         }
 
-        if ( request.Headers.ContainsKey( "svix-timestamp" ) == false )
+        if ( request.Headers.ContainsKey( "webhook-timestamp" ) == false )
         {
-            s.Exception = new WebhookException( "RWH102", "Missing required header 'svix-timestamp'" );
+            s.Exception = new WebhookException( "RWH102", "Missing required header 'webhook-timestamp'" );
 
             return s;
         }
 
-        if ( request.Headers.ContainsKey( "svix-signature" ) == false )
+        if ( request.Headers.ContainsKey( "webhook-signature" ) == false )
         {
-            s.Exception = new WebhookException( "RWH103", "Missing required header 'svix-signature'" );
+            s.Exception = new WebhookException( "RWH103", "Missing required header 'webhook-signature'" );
 
             return s;
         }
 
-        if ( long.TryParse( request.Headers[ "svix-timestamp" ].ToString(), out var ts ) == false )
+        if ( long.TryParse( request.Headers[ "webhook-timestamp" ].ToString(), out var ts ) == false )
         {
-            s.Exception = new WebhookException( "RWH104", "Invalid value 'svix-timestamp', expected long" );
+            s.Exception = new WebhookException( "RWH104", "Invalid value 'webhook-timestamp', expected long" );
 
             return s;
         }
 
-        s.MessageId = request.Headers[ "svix-id" ].ToString();
+        s.MessageId = request.Headers[ "webhook-id" ].ToString();
         s.Timestamp = ts;
-        s.Signature = request.Headers[ "svix-signature" ].ToString();
+        s.Signature = request.Headers[ "webhook-signature" ].ToString();
         s.Payload = payload;
 
 
@@ -109,9 +109,9 @@ public class WebhookValidator
          */
         var h = new WebHeaderCollection
         {
-            { "svix-id", s.MessageId },
-            { "svix-timestamp", s.Timestamp.ToString() },
-            { "svix-signature", s.Signature }
+            { "webhook-id", s.MessageId },
+            { "webhook-timestamp", s.Timestamp.ToString() },
+            { "webhook-signature", s.Signature }
         };
 
 
