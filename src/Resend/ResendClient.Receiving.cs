@@ -7,6 +7,20 @@ public partial class ResendClient
     /// <inheritdoc />
     public Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default )
     {
+        return ReceivedEmailList( query, cancellationToken );
+    }
+
+
+    /// <inheritdoc />
+    public Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( ReceivedEmailListQuery? query, CancellationToken cancellationToken = default )
+    {
+        return ReceivedEmailList( query, cancellationToken );
+    }
+
+
+    /// <summary />
+    private Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailList( PaginatedQuery? query, CancellationToken cancellationToken )
+    {
         var baseUrl = "/emails/receiving";
         var url = baseUrl;
 
@@ -22,6 +36,19 @@ public partial class ResendClient
 
             if ( query.After != null )
                 qs.Add( "after", query.After );
+
+            if ( query is ReceivedEmailListQuery filters )
+            {
+                // The API rejects a repeated `to`, so the values travel as one comma-joined parameter.
+                if ( filters.To != null && filters.To.Count > 0 )
+                    qs.Add( "to", string.Join( ",", filters.To ) );
+
+                if ( filters.StartDate != null )
+                    qs.Add( "start_date", filters.StartDate );
+
+                if ( filters.EndDate != null )
+                    qs.Add( "end_date", filters.EndDate );
+            }
 
             url = QueryHelpers.AddQueryString( baseUrl, qs );
         }
