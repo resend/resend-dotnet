@@ -954,6 +954,14 @@ public interface IResend
     Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( PaginatedQuery? query = null, CancellationToken cancellationToken = default );
 
     /// <summary>
+    /// Lists received emails, filtered by recipient and received date.
+    /// </summary>
+    /// <param name="query">Filters and pagination.</param>
+    /// <param name="cancellationToken">Cancelation token.</param>
+    /// <returns>List of received emails.</returns>
+    Task<ResendResponse<PaginatedResult<ReceivedEmail>>> ReceivedEmailListAsync( ReceivedEmailListQuery? query, CancellationToken cancellationToken = default );
+
+    /// <summary>
     /// Retrieves a received email.
     /// </summary>
     /// <param name="emailId"></param>
