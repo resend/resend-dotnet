@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using StandardWebhooks.Exceptions;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -70,42 +71,43 @@ public class WebhookValidator
         /*
          * 
          */
-        if ( request.Headers.ContainsKey( "webhook-id" ) == false )
+        if ( request.Headers.ContainsKey( "svix-id" ) == false )
         {
-            s.Exception = new WebhookException( "RWH101", "Missing required header 'webhook-id'" );
+            s.Exception = new WebhookException( "RWH101", "Missing required header 'svix-id'" );
 
             return s;
         }
 
-        if ( request.Headers.ContainsKey( "webhook-timestamp" ) == false )
+        if ( request.Headers.ContainsKey( "svix-timestamp" ) == false )
         {
-            s.Exception = new WebhookException( "RWH102", "Missing required header 'webhook-timestamp'" );
+            s.Exception = new WebhookException( "RWH102", "Missing required header 'svix-timestamp'" );
 
             return s;
         }
 
-        if ( request.Headers.ContainsKey( "webhook-signature" ) == false )
+        if ( request.Headers.ContainsKey( "svix-signature" ) == false )
         {
-            s.Exception = new WebhookException( "RWH103", "Missing required header 'webhook-signature'" );
+            s.Exception = new WebhookException( "RWH103", "Missing required header 'svix-signature'" );
 
             return s;
         }
 
-        if ( long.TryParse( request.Headers[ "webhook-timestamp" ].ToString(), out var ts ) == false )
+        if ( long.TryParse( request.Headers[ "svix-timestamp" ].ToString(), out var ts ) == false )
         {
-            s.Exception = new WebhookException( "RWH104", "Invalid value 'webhook-timestamp', expected long" );
+            s.Exception = new WebhookException( "RWH104", "Invalid value 'svix-timestamp', expected long" );
 
             return s;
         }
 
-        s.MessageId = request.Headers[ "webhook-id" ].ToString();
+        s.MessageId = request.Headers[ "svix-id" ].ToString();
         s.Timestamp = ts;
-        s.Signature = request.Headers[ "webhook-signature" ].ToString();
+        s.Signature = request.Headers[ "svix-signature" ].ToString();
         s.Payload = payload;
 
 
         /*
-         * 
+         * Resend sends svix-branded headers, but the Standard Webhooks
+         * library only reads the unbranded names.
          */
         var h = new WebHeaderCollection
         {
@@ -135,7 +137,7 @@ public class WebhookValidator
         {
             wh.Verify( payload, h );
         }
-        catch ( StandardWebhooks.Exceptions.WebhookVerificationException )
+        catch ( WebhookVerificationException )
         {
             s.Exception = new WebhookException( "RWH202", "Signature validation failed" );
 
