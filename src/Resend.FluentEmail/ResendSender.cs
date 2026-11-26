@@ -176,6 +176,7 @@ public class ResendSender : ISender
                     {
                         Filename = x.Filename,
                         ContentType = x.ContentType,
+                        ContentId = x.ContentId,
                         Content = ms.ToArray(),
                     };
                 }
@@ -185,6 +186,7 @@ public class ResendSender : ISender
                     {
                         Filename = x.Filename,
                         ContentType = x.ContentType,
+                        ContentId = x.ContentId,
                         Content = ms.ToArray(),
                     };
                 }
