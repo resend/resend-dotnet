@@ -197,8 +197,11 @@ public class ResendSender : ISender
 
 
     /// <summary />
-    private static bool AsText( string contentType )
+    private static bool AsText( string? contentType )
     {
+        if ( contentType == null )
+            return false;
+
         if ( contentType.StartsWith( "text/" ) == true )
             return true;
 
