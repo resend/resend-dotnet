@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Svix.Exceptions;
+using StandardWebhooks.Exceptions;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -106,24 +106,25 @@ public class WebhookValidator
 
 
         /*
-         * 
+         * Resend sends svix-branded headers, but the Standard Webhooks
+         * library only reads the unbranded names.
          */
         var h = new WebHeaderCollection
         {
-            { "svix-id", s.MessageId },
-            { "svix-timestamp", s.Timestamp.ToString() },
-            { "svix-signature", s.Signature }
+            { "webhook-id", s.MessageId },
+            { "webhook-timestamp", s.Timestamp.ToString() },
+            { "webhook-signature", s.Signature }
         };
 
 
         /*
          * 
          */
-        Svix.Webhook wh;
+        StandardWebhooks.Webhook wh;
 
         try
         {
-            wh = new Svix.Webhook( _options.Secret );
+            wh = new StandardWebhooks.Webhook( _options.Secret );
         }
         catch
         {

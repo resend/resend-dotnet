@@ -15,7 +15,7 @@ public class WebhookSigner
     /// <summary />
     public string Sign( string messageId, DateTimeOffset dateTimeOffset, string payload )
     {
-        var wh = new Svix.Webhook( _secret );
+        var wh = new StandardWebhooks.Webhook( _secret );
 
         return wh.Sign( messageId, dateTimeOffset, payload );
     }
